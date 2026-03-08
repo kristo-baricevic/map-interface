@@ -35,6 +35,7 @@ import {
   IconPalette,
   IconBarbell,
   IconScissors,
+  IconCompass,
 } from "@tabler/icons-react";
 import type { Map as MapboxMap } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -83,6 +84,48 @@ const TABLER_ICONS = {
 const CARNEGIE_HILL_CENTER = { lng: -73.95607, lat: 40.784726 };
 const INITIAL_ZOOM = 15;
 const PAN_PX = 80;
+
+/** Compass that resets bearing to Manhattan grid (avenues vertical) instead of true north. */
+function GridCompass() {
+  const { current: mapRef } = useMap();
+
+  const resetToGrid = useCallback(() => {
+    const map = mapRef?.getMap();
+    if (!map) return;
+    map.easeTo({ bearing: MANHATTAN_GRID_BEARING, pitch: 0, duration: 300 });
+  }, [mapRef]);
+
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        resetToGrid();
+      }}
+      aria-label="Reset to grid north"
+      title="Reset map so avenues run up/down"
+      style={{
+        position: "absolute",
+        top: 120,
+        right: 10,
+        zIndex: 5,
+        width: 30,
+        height: 30,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#fff",
+        border: "none",
+        borderRadius: 4,
+        boxShadow: "0 0 0 2px rgba(0,0,0,.1)",
+        cursor: "pointer",
+        padding: 0,
+      }}
+    >
+      <IconCompass size={20} stroke={1.5} />
+    </button>
+  );
+}
 
 /** Pan arrows overlay (Mapbox). useMap() returns { current } (map ref), not { map }. */
 function PanControlsMapbox() {
@@ -203,11 +246,14 @@ function StoreMarkerMapbox({
   );
 }
 
+/** Manhattan's grid is ~29° east of true north; rotate map so avenues run straight up/down. */
+const MANHATTAN_GRID_BEARING = 29;
+
 const INITIAL_VIEW_STATE = {
   longitude: CARNEGIE_HILL_CENTER.lng,
   latitude: CARNEGIE_HILL_CENTER.lat,
   zoom: INITIAL_ZOOM,
-  bearing: 0,
+  bearing: MANHATTAN_GRID_BEARING,
   pitch: 0,
   padding: { top: 0, bottom: 0, left: 0, right: 0 },
 };
@@ -217,23 +263,16 @@ export default function MapViewMapbox({
   stores,
 }: MapViewMapboxProps) {
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
-  const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
 
   const handleMapClick = useCallback(() => {
     setSelectedStore(null);
   }, []);
 
-  /** Sync view state on every move so pan/zoom/trackpad stay smooth and compass stays in sync. */
-  const handleMove = useCallback(
-    (evt: { viewState: typeof INITIAL_VIEW_STATE }) => {
-      setViewState(evt.viewState);
-    },
-    [],
-  );
-
-  /** Remove only POI/business label layers; keep street names and other road/place labels. */
+  /** Force north-up (Park Ave straight up/down) and remove POI label layers. */
   const handleMapLoad = useCallback((e: { target: MapboxMap }) => {
     const map = e.target;
+    map.setBearing(MANHATTAN_GRID_BEARING);
+    map.setPitch(0);
     const style = map.getStyle();
     if (!style?.layers) return;
     const poiLabelLayerIds = style.layers
@@ -257,15 +296,15 @@ export default function MapViewMapbox({
     <div className="map-container">
       <Map
         mapboxAccessToken={mapboxToken}
-        viewState={viewState as Parameters<typeof Map>[0]["viewState"]}
-        onMove={handleMove}
+        initialViewState={INITIAL_VIEW_STATE}
         style={{ width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/streets-v12"
         onClick={handleMapClick}
         onLoad={handleMapLoad}
         reuseMaps={false}
       >
-        <NavigationControl position="top-right" showCompass showZoom />
+        <NavigationControl position="top-right" showCompass={false} showZoom />
+        <GridCompass />
         <PanControlsMapbox />
         {stores.map((store) => (
           <Marker
