@@ -1,0 +1,32 @@
+[
+  {
+    "id": "store-1",
+    "name": "Lexington Coffee",
+    "address": "1234 Lexington Ave, New York, NY 10028",
+    "hours": "Mon–Fri 7am–7pm, Sat–Sun 8am–6pm",
+    "deal": "10% off one drink",
+    "iconUrl": "/icons/coffee.png",
+    "lng": -73.966,
+    "lat": 40.769
+  },
+  {
+    "id": "store-2",
+    "name": "Madison Bakes",
+    "address": "891 Madison Ave, New York, NY 10021",
+    "hours": "Daily 6am–8pm",
+    "deal": "Buy 2 pastries, get 1 free",
+    "iconUrl": "/icons/bakery.png",
+    "lng": -73.962,
+    "lat": 40.772
+  },
+  {
+    "id": "store-3",
+    "name": "Park Ave Pantry",
+    "address": "456 Park Ave, New York, NY 10022",
+    "hours": "Mon–Fri 6am–10pm",
+    "deal": "15% off first order",
+    "iconUrl": "/icons/store.png",
+    "lng": -73.971,
+    "lat": 40.761
+  }
+]
