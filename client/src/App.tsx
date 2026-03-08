@@ -83,7 +83,12 @@ export default function App() {
     <main className="app">
       <header className="app-header">
         <div className="app-header-row">
-          <h1 className="app-title">Upper East Side</h1>
+          <img
+            src="https://www.92ny.org/getmedia/cc83767a-db0c-486a-abe5-54ef56da7c91/logo_1.svg"
+            alt="92nd Street Y"
+            className="app-header-logo"
+          />
+          <h1 className="app-title">Spring Down Madison</h1>
         </div>
         <p className="app-subtitle">Tap a pin for store details</p>
       </header>

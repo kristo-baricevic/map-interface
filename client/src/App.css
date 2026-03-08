@@ -3,16 +3,21 @@
 .app {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   flex: 1;
   min-height: 0;
   height: 100%;
+  font-family: "Theinhardt Pan", sans-serif !important;
 }
 
 .app-header {
   flex-shrink: 0;
   padding: 0.75rem 1rem;
+  width: 100%;
   background: #fff;
-  border-bottom: 1px solid #e0e0e0;
+  /* border-bottom: 12px solid #e0e0e0; */
+  margin-bottom: 12px;
   padding-left: max(1rem, env(safe-area-inset-left));
   padding-right: max(1rem, env(safe-area-inset-right));
   padding-top: max(0.75rem, env(safe-area-inset-top));
@@ -24,6 +29,12 @@
   justify-content: space-between;
   gap: 0.75rem;
   flex-wrap: wrap;
+}
+
+.app-header-logo {
+  height: 28px;
+  width: auto;
+  display: block;
 }
 
 .app-title {
@@ -74,7 +85,10 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: relative;
+  min-width: 90%;
 }
 
 .app-map-wrap {
@@ -98,6 +112,8 @@
 .map-container {
   flex: 1;
   min-height: 200px;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   position: relative;
   background: #e0e0e0;

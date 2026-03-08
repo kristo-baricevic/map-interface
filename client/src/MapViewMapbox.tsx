@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Map, { Marker, Popup, NavigationControl, useMap } from "react-map-gl";
 import {
   IconChevronUp,
@@ -84,9 +84,17 @@ const TABLER_ICONS = {
 const CARNEGIE_HILL_CENTER = { lng: -73.95607, lat: 40.784726 };
 const INITIAL_ZOOM = 15;
 const PAN_PX = 80;
+/** Pixel height of marker icon; used to offset popup when shown above. */
+const MARKER_PIXEL_HEIGHT = 40;
+/** Fraction of viewport width: beyond these the tooltip flips to the side to avoid being cut off. */
+const POPUP_EDGE_MARGIN = 0.25;
 
 /** Custom compass: click and drag to rotate (bearing) and tilt (pitch) the map. */
-function CompassControl({ mapRef }: { mapRef: React.RefObject<MapboxMap | null> }) {
+function CompassControl({
+  mapRef,
+}: {
+  mapRef: React.RefObject<MapboxMap | null>;
+}) {
   const [dragging, setDragging] = useState(false);
   const dragRef = useRef<{
     startX: number;
@@ -138,8 +146,8 @@ function CompassControl({ mapRef }: { mapRef: React.RefObject<MapboxMap | null> 
       aria-label="Compass: drag to rotate and tilt map"
       style={{
         position: "absolute",
-        top: 74,
-        right: 10,
+        top: 80,
+        right: 11,
         zIndex: 10,
         width: 30,
         height: 30,
@@ -301,7 +309,53 @@ export default function MapViewMapbox({
   stores,
 }: MapViewMapboxProps) {
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+  const [popupAnchor, setPopupAnchor] = useState<
+    | "top"
+    | "bottom"
+    | "top-left"
+    | "top-right"
+    | "bottom-left"
+    | "bottom-right"
+    | "left"
+    | "right"
+  >("bottom");
+  const [popupLngLat, setPopupLngLat] = useState<{
+    lng: number;
+    lat: number;
+  } | null>(null);
   const mapInstanceRef = useRef<MapboxMap | null>(null);
+
+  /** Position tooltip so it never covers the icon and doesn’t get cut off at map edges. */
+  useEffect(() => {
+    if (!selectedStore || !mapInstanceRef.current) return;
+    const map = mapInstanceRef.current;
+    const point = map.project([selectedStore.lng, selectedStore.lat]);
+    const container = map.getContainer();
+    const width = container?.clientWidth ?? 400;
+    const height = container?.clientHeight ?? 400;
+    const inTopHalf = point.y < height / 2;
+    const inLeftZone = point.x < width * POPUP_EDGE_MARGIN;
+    const inRightZone = point.x > width * (1 - POPUP_EDGE_MARGIN);
+    let anchor: typeof popupAnchor;
+    if (inLeftZone) {
+      anchor = inTopHalf ? "top-left" : "bottom-left";
+    } else if (inRightZone) {
+      anchor = inTopHalf ? "top-right" : "bottom-right";
+    } else {
+      anchor = inTopHalf ? "top" : "bottom";
+    }
+    setPopupAnchor(anchor);
+    const anchorIsAbove =
+      anchor === "bottom" ||
+      anchor === "bottom-left" ||
+      anchor === "bottom-right";
+    if (anchorIsAbove) {
+      const topOfIcon = map.unproject([point.x, point.y - MARKER_PIXEL_HEIGHT]);
+      setPopupLngLat({ lng: topOfIcon.lng, lat: topOfIcon.lat });
+    } else {
+      setPopupLngLat({ lng: selectedStore.lng, lat: selectedStore.lat });
+    }
+  }, [selectedStore]);
 
   const handleMapClick = useCallback(() => {
     setSelectedStore(null);
@@ -365,12 +419,15 @@ export default function MapViewMapbox({
           </Marker>
         ))}
 
-        {selectedStore && (
+        {selectedStore && popupLngLat && (
           <Popup
-            longitude={selectedStore.lng}
-            latitude={selectedStore.lat}
-            anchor="bottom"
-            onClose={() => setSelectedStore(null)}
+            longitude={popupLngLat.lng}
+            latitude={popupLngLat.lat}
+            anchor={popupAnchor}
+            onClose={() => {
+              setSelectedStore(null);
+              setPopupLngLat(null);
+            }}
             closeButton
             closeOnClick={false}
             className="store-popup"
