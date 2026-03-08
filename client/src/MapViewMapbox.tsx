@@ -5,10 +5,11 @@ import Map, {
   NavigationControl,
   useMap,
 } from "react-map-gl";
-import { IconMapPin, IconChevronUp, IconChevronDown, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { IconChevronUp, IconChevronDown, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import type { Map as MapboxMap } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import type { Store } from "./types";
-import { getLocalIconUrl } from "./types";
+import { getLocalIconUrl, getStoreMarkerIconUrl, DEFAULT_MARKER_ICON } from "./types";
 
 const UES_CENTER = { lng: -73.966, lat: 40.769 };
 const UES_ZOOM = 14;
@@ -55,9 +56,10 @@ function StoreMarkerMapbox({
   onSelect: () => void;
   isSelected: boolean;
 }) {
-  const [iconError, setIconError] = useState(false);
-  const iconSrc = store.icon != null ? getLocalIconUrl(store.icon) : store.iconUrl;
-  const usePlaceholder = !iconSrc || iconError;
+  const [useDefaultIcon, setUseDefaultIcon] = useState(false);
+  const iconSrc = useDefaultIcon
+    ? getLocalIconUrl(DEFAULT_MARKER_ICON)
+    : getStoreMarkerIconUrl(store);
 
   return (
     <button
@@ -76,20 +78,14 @@ function StoreMarkerMapbox({
         cursor: "pointer",
       }}
     >
-      {usePlaceholder ? (
-        <span className="store-marker-placeholder" aria-hidden>
-          <IconMapPin size={36} stroke={2} color="#0d6efd" />
-        </span>
-      ) : (
-        <img
-          src={iconSrc}
-          alt=""
-          width={40}
-          height={40}
-          onError={() => setIconError(true)}
-          style={{ display: "block", objectFit: "contain" }}
-        />
-      )}
+      <img
+        src={iconSrc}
+        alt=""
+        width={40}
+        height={40}
+        onError={() => setUseDefaultIcon(true)}
+        style={{ display: "block", objectFit: "contain" }}
+      />
     </button>
   );
 }
@@ -99,6 +95,27 @@ export default function MapViewMapbox({ mapboxToken, stores }: MapViewMapboxProp
 
   const handleMapClick = useCallback(() => {
     setSelectedStore(null);
+  }, []);
+
+  /** Remove only POI/business label layers; keep street names and other road/place labels. */
+  const handleMapLoad = useCallback((e: { target: MapboxMap }) => {
+    const map = e.target;
+    const style = map.getStyle();
+    if (!style?.layers) return;
+    const poiLabelLayerIds = style.layers
+      .filter(
+        (layer) =>
+          layer.type === "symbol" &&
+          (layer.id.toLowerCase().includes("poi") || layer.id.toLowerCase().includes("point-of-interest"))
+      )
+      .map((layer) => layer.id);
+    poiLabelLayerIds.forEach((id) => {
+      try {
+        map.removeLayer(id);
+      } catch {
+        // ignore if already removed
+      }
+    });
   }, []);
 
   return (
@@ -113,6 +130,7 @@ export default function MapViewMapbox({ mapboxToken, stores }: MapViewMapboxProp
         style={{ width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/streets-v12"
         onClick={handleMapClick}
+        onLoad={handleMapLoad}
         reuseMaps
       >
         <NavigationControl position="top-right" showCompass showZoom />

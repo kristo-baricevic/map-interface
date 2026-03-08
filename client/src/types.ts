@@ -19,6 +19,16 @@ export const LOCAL_ICON_NAMES = [
   'restaurant', 'rocket', 'shop', 'square', 'star', 'suitcase', 'triangle',
 ] as const;
 
+/** Default marker icon when a store has no icon/iconUrl (uses your assets). */
+export const DEFAULT_MARKER_ICON = 'shop';
+
 export function getLocalIconUrl(name: string): string {
   return `/assets/icons/${name}.svg`;
+}
+
+/** Resolve the image URL for a store marker: prefer local icon, then iconUrl, else default. */
+export function getStoreMarkerIconUrl(store: Store): string {
+  if (store.icon != null) return getLocalIconUrl(store.icon);
+  if (store.iconUrl) return store.iconUrl;
+  return getLocalIconUrl(DEFAULT_MARKER_ICON);
 }

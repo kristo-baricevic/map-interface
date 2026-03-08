@@ -1,36 +1,31 @@
 import { useCallback, useState } from "react";
 import Map, { Marker, Popup, NavigationControl, useMap } from "react-map-gl/maplibre";
-import { IconMapPin, IconChevronUp, IconChevronDown, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { IconChevronUp, IconChevronDown, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Store } from "./types";
-import { getLocalIconUrl } from "./types";
+import { getLocalIconUrl, getStoreMarkerIconUrl, DEFAULT_MARKER_ICON } from "./types";
 
 const UES_CENTER = { lng: -73.966, lat: 40.769 };
 const UES_ZOOM = 14;
 
-/** Basemap with fewer labels (Alidade Smooth – muted, fewer POIs; Stadia, free on localhost). */
-const FREE_STYLE = {
+/** Vector style so we can remove label layers (Stadia, free on localhost). Fallback raster if vector fails. */
+const STADIA_VECTOR_STYLE = "https://tiles.stadiamaps.com/styles/alidade_smooth.json";
+
+/** Raster fallback when vector style is unavailable (labels are baked in). */
+const FALLBACK_RASTER_STYLE = {
   version: 8 as const,
-  name: 'Alidade Smooth',
+  name: "Alidade Smooth (raster)",
   sources: {
-    'osm-raster': {
-      type: 'raster' as const,
-      tiles: [
-        'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}.png',
-      ],
+    "osm-raster": {
+      type: "raster" as const,
+      tiles: ["https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}.png"],
       tileSize: 256,
       attribution:
         '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     },
   },
   layers: [
-    {
-      id: 'osm-raster-layer',
-      type: 'raster' as const,
-      source: 'osm-raster',
-      minzoom: 0,
-      maxzoom: 20,
-    },
+    { id: "osm-raster-layer", type: "raster" as const, source: "osm-raster", minzoom: 0, maxzoom: 20 },
   ],
 };
 
@@ -96,10 +91,10 @@ function StoreMarker({
   onSelect: () => void;
   isSelected: boolean;
 }) {
-  const [iconError, setIconError] = useState(false);
-  const iconSrc =
-    store.icon != null ? getLocalIconUrl(store.icon) : store.iconUrl;
-  const usePlaceholder = !iconSrc || iconError;
+  const [useDefaultIcon, setUseDefaultIcon] = useState(false);
+  const iconSrc = useDefaultIcon
+    ? getLocalIconUrl(DEFAULT_MARKER_ICON)
+    : getStoreMarkerIconUrl(store);
 
   return (
     <button
@@ -118,29 +113,46 @@ function StoreMarker({
         cursor: "pointer",
       }}
     >
-      {usePlaceholder ? (
-        <span className="store-marker-placeholder" aria-hidden>
-          <IconMapPin size={36} stroke={2} color="#0d6efd" />
-        </span>
-      ) : (
-        <img
-          src={iconSrc}
-          alt=""
-          width={40}
-          height={40}
-          onError={() => setIconError(true)}
-          style={{ display: "block", objectFit: "contain" }}
-        />
-      )}
+      <img
+        src={iconSrc}
+        alt=""
+        width={40}
+        height={40}
+        onError={() => setUseDefaultIcon(true)}
+        style={{ display: "block", objectFit: "contain" }}
+      />
     </button>
   );
 }
 
 export default function MapView({ stores }: MapViewProps) {
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+  const [style, setStyle] = useState<string | typeof FALLBACK_RASTER_STYLE>(STADIA_VECTOR_STYLE);
 
   const handleMapClick = useCallback(() => {
     setSelectedStore(null);
+  }, []);
+
+  /** Remove all basemap label layers so only our markers show. Runs when vector style loads. */
+  const handleMapLoad = useCallback((e: { target: { getStyle: () => { layers?: { id: string; type: string }[] }; removeLayer: (id: string) => void } }) => {
+    const map = e.target;
+    const styleObj = map.getStyle();
+    if (!styleObj?.layers) return;
+    const symbolLayerIds = styleObj.layers
+      .filter((layer) => layer.type === "symbol")
+      .map((layer) => layer.id);
+    symbolLayerIds.forEach((id) => {
+      try {
+        map.removeLayer(id);
+      } catch {
+        // ignore
+      }
+    });
+  }, []);
+
+  /** If vector style fails to load (e.g. 403), fall back to raster (labels will still show). */
+  const handleMapError = useCallback(() => {
+    setStyle(FALLBACK_RASTER_STYLE);
   }, []);
 
   return (
@@ -152,8 +164,10 @@ export default function MapView({ stores }: MapViewProps) {
           zoom: UES_ZOOM,
         }}
         style={{ width: "100%", height: "100%" }}
-        mapStyle={FREE_STYLE}
+        mapStyle={style}
         onClick={handleMapClick}
+        onLoad={handleMapLoad}
+        onError={handleMapError}
         reuseMaps
       >
         <NavigationControl position="top-right" showCompass showZoom />
