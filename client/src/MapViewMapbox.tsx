@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import Map, { Marker, Popup, NavigationControl, useMap } from "react-map-gl";
 import {
   IconChevronUp,
@@ -85,30 +85,62 @@ const CARNEGIE_HILL_CENTER = { lng: -73.95607, lat: 40.784726 };
 const INITIAL_ZOOM = 15;
 const PAN_PX = 80;
 
-/** Compass that resets bearing to Manhattan grid (avenues vertical) instead of true north. */
-function GridCompass() {
-  const { current: mapRef } = useMap();
+/** Custom compass: click and drag to rotate (bearing) and tilt (pitch) the map. */
+function CompassControl({ mapRef }: { mapRef: React.RefObject<MapboxMap | null> }) {
+  const [dragging, setDragging] = useState(false);
+  const dragRef = useRef<{
+    startX: number;
+    startY: number;
+    startBearing: number;
+    startPitch: number;
+  } | null>(null);
 
-  const resetToGrid = useCallback(() => {
-    const map = mapRef?.getMap();
-    if (!map) return;
-    map.easeTo({ bearing: MANHATTAN_GRID_BEARING, pitch: 0, duration: 300 });
-  }, [mapRef]);
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      const map = mapRef.current;
+      if (!map) return;
+      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+      setDragging(true);
+      dragRef.current = {
+        startX: e.clientX,
+        startY: e.clientY,
+        startBearing: map.getBearing(),
+        startPitch: map.getPitch(),
+      };
+    },
+    [mapRef],
+  );
+
+  const onPointerMove = useCallback(
+    (e: React.PointerEvent) => {
+      const map = mapRef.current;
+      const drag = dragRef.current;
+      if (!map || !drag) return;
+      const dx = e.clientX - drag.startX;
+      const dy = e.clientY - drag.startY;
+      const bearing = drag.startBearing + dx;
+      const pitch = Math.max(0, Math.min(60, drag.startPitch + dy));
+      map.setBearing(bearing);
+      map.setPitch(pitch);
+    },
+    [mapRef],
+  );
+
+  const onPointerUp = useCallback((e: React.PointerEvent) => {
+    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    setDragging(false);
+    dragRef.current = null;
+  }, []);
 
   return (
-    <button
-      type="button"
-      onClick={(e) => {
-        e.stopPropagation();
-        resetToGrid();
-      }}
-      aria-label="Reset to grid north"
-      title="Reset map so avenues run up/down"
+    <div
+      role="group"
+      aria-label="Compass: drag to rotate and tilt map"
       style={{
         position: "absolute",
-        top: 120,
+        top: 74,
         right: 10,
-        zIndex: 5,
+        zIndex: 10,
         width: 30,
         height: 30,
         display: "flex",
@@ -118,12 +150,18 @@ function GridCompass() {
         border: "none",
         borderRadius: 4,
         boxShadow: "0 0 0 2px rgba(0,0,0,.1)",
-        cursor: "pointer",
+        cursor: dragging ? "grabbing" : "grab",
         padding: 0,
+        touchAction: "none",
       }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerLeave={onPointerUp}
+      onPointerCancel={onPointerUp}
     >
-      <IconCompass size={20} stroke={1.5} />
-    </button>
+      <IconCompass size={20} stroke={1.5} style={{ pointerEvents: "none" }} />
+    </div>
   );
 }
 
@@ -263,14 +301,16 @@ export default function MapViewMapbox({
   stores,
 }: MapViewMapboxProps) {
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+  const mapInstanceRef = useRef<MapboxMap | null>(null);
 
   const handleMapClick = useCallback(() => {
     setSelectedStore(null);
   }, []);
 
-  /** Force north-up (Park Ave straight up/down) and remove POI label layers. */
+  /** Store map ref for compass, force grid bearing, and remove POI label layers. */
   const handleMapLoad = useCallback((e: { target: MapboxMap }) => {
     const map = e.target;
+    mapInstanceRef.current = map;
     map.setBearing(MANHATTAN_GRID_BEARING);
     map.setPitch(0);
     const style = map.getStyle();
@@ -304,7 +344,6 @@ export default function MapViewMapbox({
         reuseMaps={false}
       >
         <NavigationControl position="top-right" showCompass={false} showZoom />
-        <GridCompass />
         <PanControlsMapbox />
         {stores.map((store) => (
           <Marker
@@ -359,6 +398,7 @@ export default function MapViewMapbox({
           </Popup>
         )}
       </Map>
+      <CompassControl mapRef={mapInstanceRef} />
     </div>
   );
 }
