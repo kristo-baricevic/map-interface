@@ -8,6 +8,8 @@ export interface Store {
   icon?: string;
   /** URL to PNG/svg for the pindrop (used if icon is not set). */
   iconUrl?: string;
+  /** Tabler icon name (e.g. "Coffee") – shown on map when set. */
+  iconTabler?: string;
   lng: number;
   lat: number;
 }

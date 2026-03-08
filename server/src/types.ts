@@ -5,7 +5,9 @@ export interface Store {
   hours: string;
   deal: string;
   /** URL to PNG icon for the pindrop */
-  iconUrl: string;
+  iconUrl?: string;
+  /** Tabler icon name (e.g. "Coffee") for map marker */
+  iconTabler?: string;
   /** Longitude (e.g. -73.966) */
   lng: number;
   /** Latitude (e.g. 40.769) */
