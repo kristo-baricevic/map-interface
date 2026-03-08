@@ -121,15 +121,23 @@ export default function App() {
       </header>
 
       <div id="map-panel" role="tabpanel" aria-labelledby={mapMode === 'local' ? 'tab-local' : 'tab-mapbox'} className="app-map-panel">
-        {mapMode === 'local' && <MapView stores={stores} />}
-        {mapMode === 'mapbox' && canUseMapbox && (
-          <MapViewMapbox mapboxToken={mapboxToken} stores={stores} />
+        {/* Keep both maps mounted and toggle visibility to avoid Marker cleanup errors when switching tabs */}
+        <div className={`app-map-wrap ${mapMode === 'local' ? 'active' : 'hidden'}`}>
+          <MapView stores={stores} />
+        </div>
+        {canUseMapbox && (
+          <div className={`app-map-wrap ${mapMode === 'mapbox' ? 'active' : 'hidden'}`}>
+            <MapViewMapbox mapboxToken={mapboxToken} stores={stores} />
+          </div>
         )}
         {mapMode === 'mapbox' && !canUseMapbox && (
           <div className="app-map-unavailable">
             <p>Mapbox needs an access token.</p>
             <p className="app-map-unavailable-hint">Run the API server with <code>MAPBOX_ACCESS_TOKEN</code> set, or switch to Local map.</p>
           </div>
+        )}
+        {stores.length === 0 && mapMode === 'local' && (
+          <p className="app-no-stores-hint">No stores loaded. Add data to <code>public/stores.json</code> or run the API.</p>
         )}
       </div>
     </main>
