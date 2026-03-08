@@ -418,7 +418,36 @@ export default function MapViewMapbox({
             />
           </Marker>
         ))}
-
+        {/* 
+        <div
+          className="map-floral-frame"
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 48,
+            width: "min(240px, 38vw)",
+            height: "auto",
+            pointerEvents: "none",
+            zIndex: 1,
+            background: "transparent",
+          }}
+        >
+          <img
+            src="/flowers-frame.png"
+            alt=""
+            className="map-floral-frame-img"
+            style={{
+              display: "block",
+              width: "100%",
+              height: "auto",
+              transform: "scaleX(-1)",
+              objectFit: "contain",
+              objectPosition: "top right",
+              background: "transparent",
+            }}
+          />
+        </div> */}
         {selectedStore && popupLngLat && (
           <Popup
             longitude={popupLngLat.lng}

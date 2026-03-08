@@ -126,6 +126,15 @@
   min-height: 200px;
 }
 
+/* Floral frame overlay: on top of map, blend so light/checkered areas show map through */
+.map-floral-frame,
+.map-floral-frame img {
+  background: transparent !important;
+}
+.map-floral-frame-img {
+  mix-blend-mode: multiply;
+}
+
 /* Pan arrows (up/down/left/right) */
 .map-pan-controls {
   position: absolute;
