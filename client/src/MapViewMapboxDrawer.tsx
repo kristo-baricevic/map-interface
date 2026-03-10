@@ -307,6 +307,8 @@ export default function MapViewMapboxDrawer({
   stores,
 }: MapViewMapboxDrawerProps) {
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+  /** Last store selected (by click or nav); keeps that marker highlighted when drawer is closed. */
+  const [highlightedStore, setHighlightedStore] = useState<Store | null>(null);
   const mapInstanceRef = useRef<MapboxMap | null>(null);
   const storesByMadison = useStoresByMadison(stores);
 
@@ -321,6 +323,11 @@ export default function MapViewMapboxDrawer({
     currentIndex >= 0 && currentIndex < storesByMadison.length - 1
       ? storesByMadison[currentIndex + 1]!
       : (storesByMadison[0] ?? null);
+
+  const handleSelectStore = useCallback((store: Store | null) => {
+    setSelectedStore(store);
+    if (store) setHighlightedStore(store);
+  }, []);
 
   const handleMapClick = useCallback(() => {
     setSelectedStore(null);
@@ -409,9 +416,9 @@ export default function MapViewMapboxDrawer({
             >
               <StoreMarkerMapbox
                 store={store}
-                isSelected={selectedStore?.id === store.id}
+                isSelected={(selectedStore ?? highlightedStore)?.id === store.id}
                 onSelect={() =>
-                  setSelectedStore(
+                  handleSelectStore(
                     selectedStore?.id === store.id ? null : store,
                   )
                 }
@@ -432,7 +439,7 @@ export default function MapViewMapboxDrawer({
               type="button"
               className="store-drawer-close"
               onClick={() => setSelectedStore(null)}
-              aria-label="Close"
+              aria-label="Close drawer (marker stays highlighted)"
             >
               <IconX size={24} stroke={2} />
             </button>
@@ -501,7 +508,7 @@ export default function MapViewMapboxDrawer({
                 <button
                   type="button"
                   className="store-drawer-nav-btn"
-                  onClick={() => prevStore && setSelectedStore(prevStore)}
+                  onClick={() => prevStore && handleSelectStore(prevStore)}
                   aria-label="Previous (down Madison)"
                   title="Previous (down Madison)"
                 >
@@ -510,7 +517,7 @@ export default function MapViewMapboxDrawer({
                 <button
                   type="button"
                   className="store-drawer-nav-btn"
-                  onClick={() => nextStore && setSelectedStore(nextStore)}
+                  onClick={() => nextStore && handleSelectStore(nextStore)}
                   aria-label="Next (up Madison)"
                   title="Next (up Madison)"
                 >
