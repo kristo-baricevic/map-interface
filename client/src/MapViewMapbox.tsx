@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { Marker, Popup, NavigationControl, useMap } from "react-map-gl";
 import {
   IconChevronUp,
@@ -38,6 +38,7 @@ import {
   IconCompass,
   IconBrandInstagram,
   IconBrandFacebook,
+  IconX,
 } from "@tabler/icons-react";
 import type { Map as MapboxMap } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -88,8 +89,93 @@ const INITIAL_ZOOM = 15;
 const PAN_PX = 80;
 /** Pixel height of marker icon; used to offset popup when shown above. */
 const MARKER_PIXEL_HEIGHT = 40;
-/** Fraction of viewport width: beyond these the tooltip flips to the side to avoid being cut off. */
-const POPUP_EDGE_MARGIN = 0.25;
+/** Padding (px) from map container edge so popup is never flush against it. */
+const POPUP_CONTAINER_PADDING = 12;
+/** Estimated popup dimensions for fit checks – use CSS max so we never assume it's smaller than it is. */
+const POPUP_ESTIMATED_WIDTH = 320;
+const POPUP_ESTIMATED_HEIGHT = 400;
+/** Extra margin inside container; treat popup as off-screen if within this of the edge. */
+const POPUP_SAFETY_MARGIN = 24;
+
+/** Breakpoint below which we show the bottom-sheet popup instead of the map-anchored one. */
+const MOBILE_MAX_WIDTH_PX = 768;
+
+/** Stores ordered for Madison (lat then lng) for prev/next nav. */
+function useStoresByMadison(stores: Store[]): Store[] {
+  return useMemo(
+    () => [...stores].sort((a, b) => a.lat - b.lat || a.lng - b.lng),
+    [stores],
+  );
+}
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH_PX}px)`).matches : false
+  );
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH_PX}px)`);
+    const handler = () => setIsMobile(mql.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+  return isMobile;
+}
+
+/** Shared tooltip body for popup and mobile bottom sheet. */
+function StoreTooltipBody({ store }: { store: Store }) {
+  return (
+    <div className="store-tooltip">
+      <h3 className="store-tooltip-name">{store.name}</h3>
+      <p className="store-tooltip-address">{store.address}</p>
+      <p className="store-tooltip-hours">{store.hours}</p>
+      <p className="store-tooltip-deal">{store.deal}</p>
+      {(store.instagram ?? store.facebook) && (
+        <p className="store-tooltip-social">
+          {store.instagram && (
+            <a
+              href={`https://www.instagram.com/${store.instagram.replace(/^@/, "")}/`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Instagram: ${store.instagram}`}
+            >
+              <IconBrandInstagram size={20} stroke={1.5} />
+              <span>{store.instagram}</span>
+            </a>
+          )}
+          {store.facebook && (
+            <a
+              href={`https://www.facebook.com/${store.facebook}/`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Facebook: ${store.facebook}`}
+            >
+              <IconBrandFacebook size={20} stroke={1.5} />
+              <span>{store.facebook}</span>
+            </a>
+          )}
+        </p>
+      )}
+      {(store.iconUrl ?? store.icon) && (
+        <p className="store-tooltip-link">
+          <a
+            href={store.iconUrl ?? getLocalIconUrl(store.icon!)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            File / link
+          </a>
+        </p>
+      )}
+      <p className="store-tooltip-vip">
+        Get your Spring Down Madison VIP Pass{" "}
+        <a href="https://92ny.org" target="_blank" rel="noopener noreferrer">
+          here
+        </a>{" "}
+        to unlock exclusive experiences &amp; shopping incentives. Proceeds support The 92nd Street Y, New York.
+      </p>
+    </div>
+  );
+}
 
 /** Custom compass: click and drag to rotate (bearing) and tilt (pitch) the map. */
 function CompassControl({
@@ -310,6 +396,8 @@ export default function MapViewMapbox({
   mapboxToken,
   stores,
 }: MapViewMapboxProps) {
+  const isMobile = useIsMobile();
+  const storesByMadison = useStoresByMadison(stores);
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
   const [popupAnchor, setPopupAnchor] = useState<
     | "top"
@@ -327,37 +415,152 @@ export default function MapViewMapbox({
   } | null>(null);
   const mapInstanceRef = useRef<MapboxMap | null>(null);
 
+  const currentIndex = selectedStore
+    ? storesByMadison.findIndex((s) => s.id === selectedStore.id)
+    : -1;
+  const prevStore =
+    currentIndex > 0
+      ? storesByMadison[currentIndex - 1]!
+      : (storesByMadison[storesByMadison.length - 1] ?? null);
+  const nextStore =
+    currentIndex >= 0 && currentIndex < storesByMadison.length - 1
+      ? storesByMadison[currentIndex + 1]!
+      : (storesByMadison[0] ?? null);
+
   /** Position tooltip so it never covers the icon and doesn’t get cut off at map edges. */
   useEffect(() => {
-    if (!selectedStore || !mapInstanceRef.current) return;
+    if (!selectedStore || !mapInstanceRef.current || isMobile) return;
     const map = mapInstanceRef.current;
     const point = map.project([selectedStore.lng, selectedStore.lat]);
     const container = map.getContainer();
     const width = container?.clientWidth ?? 400;
     const height = container?.clientHeight ?? 400;
-    const inTopHalf = point.y < height / 2;
-    const inLeftZone = point.x < width * POPUP_EDGE_MARGIN;
-    const inRightZone = point.x > width * (1 - POPUP_EDGE_MARGIN);
+    const pad = POPUP_CONTAINER_PADDING;
+    const margin = POPUP_SAFETY_MARGIN;
+    const popupH = Math.min(POPUP_ESTIMATED_HEIGHT, Math.floor(height * 0.7));
+    const popupW = Math.min(POPUP_ESTIMATED_WIDTH, width - 2 * (pad + margin));
+    const halfW = popupW / 2;
+
+    const spaceBelow = height - point.y - pad;
+    const spaceAbove = point.y - pad;
+    const spaceLeft = point.x - pad;
+    const spaceRight = width - point.x - pad;
+
+    const fitsBelow = spaceBelow >= popupH;
+    const fitsAbove = spaceAbove >= popupH;
+    const preferBelow = fitsBelow;
+    const showAbove = !preferBelow && fitsAbove;
+
+    const useLeft = spaceRight < halfW || (spaceLeft < halfW && spaceLeft < spaceRight);
+    const useRight = spaceLeft < halfW || (spaceRight < halfW && spaceRight < spaceLeft);
+
     let anchor: typeof popupAnchor;
-    if (inLeftZone) {
-      anchor = inTopHalf ? "top-left" : "bottom-left";
-    } else if (inRightZone) {
-      anchor = inTopHalf ? "top-right" : "bottom-right";
+    if (showAbove) {
+      anchor = useRight ? "bottom-right" : useLeft ? "bottom-left" : "bottom";
     } else {
-      anchor = inTopHalf ? "top" : "bottom";
+      anchor = useRight ? "top-right" : useLeft ? "top-left" : "top";
     }
-    setPopupAnchor(anchor);
+
+    function popupRect(
+      px: number,
+      py: number,
+      w: number,
+      h: number,
+      a: typeof popupAnchor,
+    ): { left: number; right: number; top: number; bottom: number } {
+      switch (a) {
+        case "top":
+          return { left: px - w / 2, right: px + w / 2, top: py, bottom: py + h };
+        case "bottom":
+          return { left: px - w / 2, right: px + w / 2, top: py - h, bottom: py };
+        case "top-left":
+          return { left: px, right: px + w, top: py, bottom: py + h };
+        case "top-right":
+          return { left: px - w, right: px, top: py, bottom: py + h };
+        case "bottom-left":
+          return { left: px, right: px + w, top: py - h, bottom: py };
+        case "bottom-right":
+          return { left: px - w, right: px, top: py - h, bottom: py };
+        default:
+          return { left: px - w / 2, right: px + w / 2, top: py, bottom: py + h };
+      }
+    }
+
     const anchorIsAbove =
       anchor === "bottom" ||
       anchor === "bottom-left" ||
       anchor === "bottom-right";
-    if (anchorIsAbove) {
-      const topOfIcon = map.unproject([point.x, point.y - MARKER_PIXEL_HEIGHT]);
-      setPopupLngLat({ lng: topOfIcon.lng, lat: topOfIcon.lat });
+    const anchorPointY = anchorIsAbove ? point.y - MARKER_PIXEL_HEIGHT : point.y;
+
+    const rect = popupRect(point.x, anchorPointY, popupW, popupH, anchor);
+    const minX = pad + margin;
+    const maxX = width - pad - margin;
+    const minY = pad + margin;
+    const maxY = height - pad - margin;
+
+    const needsPan =
+      rect.left < minX ||
+      rect.right > maxX ||
+      rect.top < minY ||
+      rect.bottom > maxY;
+
+    const targetX = width / 2;
+    const targetY = Math.max(
+      minY + 20,
+      Math.min(height / 3, height - popupH - pad - margin),
+    );
+
+    const setPopupState = () => {
+      setPopupAnchor(anchor);
+      if (anchorIsAbove) {
+        const topOfIcon = map.unproject([point.x, point.y - MARKER_PIXEL_HEIGHT]);
+        setPopupLngLat({ lng: topOfIcon.lng, lat: topOfIcon.lat });
+      } else {
+        setPopupLngLat({ lng: selectedStore.lng, lat: selectedStore.lat });
+      }
+    };
+
+    if (needsPan) {
+      setPopupLngLat(null);
+      const dx = point.x - targetX;
+      const dy = point.y - targetY;
+      map.panBy([dx, dy], { duration: 300 });
+      map.once("moveend", setPopupState);
     } else {
-      setPopupLngLat({ lng: selectedStore.lng, lat: selectedStore.lat });
+      setPopupState();
     }
-  }, [selectedStore]);
+  }, [selectedStore, isMobile]);
+
+  /** Mobile only: pan so the selected marker is in the top 1/3 when using arrows. */
+  useEffect(() => {
+    if (!isMobile || !selectedStore || !mapInstanceRef.current) return;
+    const map = mapInstanceRef.current;
+    const container = map.getContainer();
+    const width = container?.clientWidth ?? 400;
+    const height = container?.clientHeight ?? 400;
+    const pad = POPUP_CONTAINER_PADDING;
+    const topThirdY = height / 3;
+
+    const runPan = () => {
+      const m = mapInstanceRef.current;
+      if (!m) return;
+      const point = m.project([selectedStore.lng, selectedStore.lat]);
+      const dy = point.y - topThirdY;
+      let dx = 0;
+      const minX = pad;
+      const maxX = width - pad;
+      if (point.x < minX) dx = point.x - minX;
+      else if (point.x > maxX) dx = point.x - maxX;
+      if (dx !== 0 || dy !== 0) {
+        m.panBy([dx, dy], { duration: 300 });
+      }
+    };
+
+    const id = requestAnimationFrame(() => {
+      runPan();
+    });
+    return () => cancelAnimationFrame(id);
+  }, [selectedStore, isMobile]);
 
   const handleMapClick = useCallback(() => {
     setSelectedStore(null);
@@ -450,7 +653,7 @@ export default function MapViewMapbox({
             }}
           />
         </div>
-        {selectedStore && popupLngLat && (
+        {!isMobile && selectedStore && popupLngLat && (
           <Popup
             longitude={popupLngLat.lng}
             latitude={popupLngLat.lat}
@@ -463,62 +666,85 @@ export default function MapViewMapbox({
             closeOnClick={false}
             className="store-popup"
           >
-            <div className="store-tooltip">
-              <h3 className="store-tooltip-name">{selectedStore.name}</h3>
-              <p className="store-tooltip-address">{selectedStore.address}</p>
-              <p className="store-tooltip-hours">{selectedStore.hours}</p>
-              <p className="store-tooltip-deal">{selectedStore.deal}</p>
-              {(selectedStore.instagram ?? selectedStore.facebook) && (
-                <p className="store-tooltip-social">
-                  {selectedStore.instagram && (
-                    <a
-                      href={`https://www.instagram.com/${selectedStore.instagram.replace(/^@/, "")}/`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Instagram: ${selectedStore.instagram}`}
-                    >
-                      <IconBrandInstagram size={20} stroke={1.5} />
-                      <span>{selectedStore.instagram}</span>
-                    </a>
-                  )}
-                  {selectedStore.facebook && (
-                    <a
-                      href={`https://www.facebook.com/${selectedStore.facebook}/`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Facebook: ${selectedStore.facebook}`}
-                    >
-                      <IconBrandFacebook size={20} stroke={1.5} />
-                      <span>{selectedStore.facebook}</span>
-                    </a>
-                  )}
-                </p>
-              )}
-              {(selectedStore.iconUrl ?? selectedStore.icon) && (
-                <p className="store-tooltip-link">
-                  <a
-                    href={
-                      selectedStore.iconUrl ??
-                      getLocalIconUrl(selectedStore.icon!)
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    File / link
-                  </a>
-                </p>
-              )}
-              <p className="store-tooltip-vip">
-                Get your Spring Down Madison VIP Pass{" "}
-                <a href="https://92ny.org" target="_blank" rel="noopener noreferrer">
-                  here
-                </a>{" "}
-                to unlock exclusive experiences &amp; shopping incentives. Proceeds support The 92nd Street Y, New York.
-              </p>
+            <StoreTooltipBody store={selectedStore} />
+            <div className="store-popup-footer">
+              <div className="store-drawer-nav">
+                <button
+                  type="button"
+                  className="store-drawer-nav-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (prevStore) setSelectedStore(prevStore);
+                  }}
+                  aria-label="Previous (down Madison)"
+                  title="Previous (down Madison)"
+                >
+                  <IconChevronLeft size={24} stroke={2} />
+                </button>
+                <button
+                  type="button"
+                  className="store-drawer-nav-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (nextStore) setSelectedStore(nextStore);
+                  }}
+                  aria-label="Next (up Madison)"
+                  title="Next (up Madison)"
+                >
+                  <IconChevronRight size={24} stroke={2} />
+                </button>
+              </div>
             </div>
           </Popup>
         )}
       </Map>
+      {isMobile && selectedStore && (
+        <div
+          className="store-popup-mobile"
+          role="dialog"
+          aria-label={selectedStore.name}
+        >
+          <div className="store-popup-mobile-inner">
+            <button
+              type="button"
+              className="store-popup-mobile-close"
+              onClick={() => setSelectedStore(null)}
+              aria-label="Close"
+            >
+              <IconX size={24} stroke={2} />
+            </button>
+            <StoreTooltipBody store={selectedStore} />
+            <div className="store-popup-footer">
+              <div className="store-drawer-nav">
+                <button
+                  type="button"
+                  className="store-drawer-nav-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (prevStore) setSelectedStore(prevStore);
+                  }}
+                  aria-label="Previous (down Madison)"
+                  title="Previous (down Madison)"
+                >
+                  <IconChevronLeft size={24} stroke={2} />
+                </button>
+                <button
+                  type="button"
+                  className="store-drawer-nav-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (nextStore) setSelectedStore(nextStore);
+                  }}
+                  aria-label="Next (up Madison)"
+                  title="Next (up Madison)"
+                >
+                  <IconChevronRight size={24} stroke={2} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <CompassControl mapRef={mapInstanceRef} />
     </div>
   );

@@ -264,11 +264,11 @@
   justify-content: center;
 }
 
-/* Popup / tooltip (Option 1) – above pan controls and other map UI */
+/* Popup / tooltip (Option 1) – above compass, zoom, pan, and all map UI */
 .store-popup,
 .mapboxgl-popup.store-popup,
 .maplibregl-popup.store-popup {
-  z-index: 10;
+  z-index: 9999 !important;
 }
 
 .store-popup .mapboxgl-popup-content,
@@ -278,10 +278,60 @@
   padding: 1rem;
   min-width: 260px;
   max-width: min(320px, calc(100vw - 2rem));
+  width: max-content;
   max-height: min(70vh, 400px);
   overflow-y: auto;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+}
+
+/* Mobile: bottom-of-map popup (above everything) */
+.store-popup-mobile {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  padding: 0 1rem;
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  pointer-events: auto;
+}
+
+.store-popup-mobile-inner {
+  position: relative;
+  font-family: "Theinhardt Pan", sans-serif;
+  font-weight: 400;
+  background: #fff;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  padding-top: 2.5rem;
+  padding-right: 2.75rem;
+  max-height: min(70vh, 400px);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.store-popup-mobile-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #333;
+  cursor: pointer;
+}
+
+.store-popup-mobile-close:hover {
+  background: #f0f0f0;
 }
 
 .store-tooltip {
@@ -363,6 +413,13 @@
 
 .store-tooltip-vip a:hover {
   text-decoration: underline;
+}
+
+/* Popup footer – nav arrows (Option 1 map) */
+.store-popup-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
 }
 
 /* VIP copy in drawer – in footer above arrows */
