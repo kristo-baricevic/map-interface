@@ -17,10 +17,10 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
 });
 
-app.use(express.static(path.resolve("../../client/dist")));
+app.use(express.static(path.resolve("client/dist")));
 
 app.get("*", (_req, res) => {
-  res.sendFile(path.resolve("../../client/dist/index.html"));
+  res.sendFile(path.resolve("client/dist/index.html"));
 });
 
 app.listen(PORT, () => {
