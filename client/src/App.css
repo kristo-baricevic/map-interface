@@ -264,7 +264,13 @@
   justify-content: center;
 }
 
-/* Popup / tooltip content (MapLibre/Mapbox) */
+/* Popup / tooltip (Option 1) – above pan controls and other map UI */
+.store-popup,
+.mapboxgl-popup.store-popup,
+.maplibregl-popup.store-popup {
+  z-index: 10;
+}
+
 .store-popup .mapboxgl-popup-content,
 .store-popup .maplibregl-popup-content {
   font-family: "Theinhardt Pan", sans-serif;
@@ -339,6 +345,44 @@
   text-decoration: underline;
 }
 
+/* VIP copy in popup tooltip – separated from store info */
+.store-tooltip-vip {
+  margin: 1.25rem 0 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid #e5e5e5;
+  font-size: 0.875rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+.store-tooltip-vip a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.store-tooltip-vip a:hover {
+  text-decoration: underline;
+}
+
+/* VIP copy in drawer – in footer above arrows */
+.store-drawer-vip {
+  margin: 0 0 1rem;
+  padding: 0;
+  font-size: 0.875rem;
+  color: #444;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.store-drawer-vip a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.store-drawer-vip a:hover {
+  text-decoration: underline;
+}
+
 /* Option 2: drawer overlays the panel (sibling of map-container), full height below header */
 .store-drawer {
   position: absolute;
@@ -392,7 +436,7 @@
 
 .store-drawer-footer {
   flex-shrink: 0;
-  padding-top: 1rem;
+  padding: 1.25rem 0 1rem;
   border-top: 1px solid #eee;
   background: #fff;
 }

@@ -420,15 +420,15 @@ export default function MapViewMapbox({
             />
           </Marker>
         ))}
-        {/* 
+
         <div
           className="map-floral-frame"
           aria-hidden
           style={{
             position: "absolute",
-            top: 0,
-            right: 48,
-            width: "min(240px, 38vw)",
+            top: -20,
+            left: -20,
+            width: "min(200px, 38vw)",
             height: "auto",
             pointerEvents: "none",
             zIndex: 1,
@@ -436,7 +436,7 @@ export default function MapViewMapbox({
           }}
         >
           <img
-            src="/flowers-frame.png"
+            src="/butterfly.png"
             alt=""
             className="map-floral-frame-img"
             style={{
@@ -449,7 +449,7 @@ export default function MapViewMapbox({
               background: "transparent",
             }}
           />
-        </div> */}
+        </div>
         {selectedStore && popupLngLat && (
           <Popup
             longitude={popupLngLat.lng}
@@ -508,6 +508,13 @@ export default function MapViewMapbox({
                   </a>
                 </p>
               )}
+              <p className="store-tooltip-vip">
+                Get your Spring Down Madison VIP Pass{" "}
+                <a href="https://92ny.org" target="_blank" rel="noopener noreferrer">
+                  here
+                </a>{" "}
+                to unlock exclusive experiences &amp; shopping incentives. Proceeds support The 92nd Street Y, New York.
+              </p>
             </div>
           </Popup>
         )}

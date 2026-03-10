@@ -96,7 +96,11 @@ const INITIAL_VIEW_STATE = {
 };
 const MARKER_ICON_SIZE = 32;
 
-function CompassControl({ mapRef }: { mapRef: React.RefObject<MapboxMap | null> }) {
+function CompassControl({
+  mapRef,
+}: {
+  mapRef: React.RefObject<MapboxMap | null>;
+}) {
   const [dragging, setDragging] = useState(false);
   const dragRef = useRef<{
     startX: number;
@@ -186,16 +190,36 @@ function PanControlsMapbox() {
 
   return (
     <div className="map-pan-controls" role="group" aria-label="Pan map">
-      <button type="button" className="map-pan-btn map-pan-up" onClick={() => pan(0, -PAN_PX)} aria-label="Pan up (up the street)">
+      <button
+        type="button"
+        className="map-pan-btn map-pan-up"
+        onClick={() => pan(0, -PAN_PX)}
+        aria-label="Pan up (up the street)"
+      >
         <IconChevronUp size={20} stroke={2} />
       </button>
-      <button type="button" className="map-pan-btn map-pan-left" onClick={() => pan(-PAN_PX, 0)} aria-label="Pan left">
+      <button
+        type="button"
+        className="map-pan-btn map-pan-left"
+        onClick={() => pan(-PAN_PX, 0)}
+        aria-label="Pan left"
+      >
         <IconChevronLeft size={20} stroke={2} />
       </button>
-      <button type="button" className="map-pan-btn map-pan-right" onClick={() => pan(PAN_PX, 0)} aria-label="Pan right">
+      <button
+        type="button"
+        className="map-pan-btn map-pan-right"
+        onClick={() => pan(PAN_PX, 0)}
+        aria-label="Pan right"
+      >
         <IconChevronRight size={20} stroke={2} />
       </button>
-      <button type="button" className="map-pan-btn map-pan-down" onClick={() => pan(0, PAN_PX)} aria-label="Pan down (down the street)">
+      <button
+        type="button"
+        className="map-pan-btn map-pan-down"
+        onClick={() => pan(0, PAN_PX)}
+        aria-label="Pan down (down the street)"
+      >
         <IconChevronDown size={20} stroke={2} />
       </button>
     </div>
@@ -290,11 +314,13 @@ export default function MapViewMapboxDrawer({
     ? storesByMadison.findIndex((s) => s.id === selectedStore.id)
     : -1;
   const prevStore =
-    currentIndex > 0 ? storesByMadison[currentIndex - 1]! : storesByMadison[storesByMadison.length - 1] ?? null;
+    currentIndex > 0
+      ? storesByMadison[currentIndex - 1]!
+      : (storesByMadison[storesByMadison.length - 1] ?? null);
   const nextStore =
     currentIndex >= 0 && currentIndex < storesByMadison.length - 1
       ? storesByMadison[currentIndex + 1]!
-      : storesByMadison[0] ?? null;
+      : (storesByMadison[0] ?? null);
 
   const handleMapClick = useCallback(() => {
     setSelectedStore(null);
@@ -336,7 +362,40 @@ export default function MapViewMapboxDrawer({
           onLoad={handleMapLoad}
           reuseMaps={false}
         >
-          <NavigationControl position="top-right" showCompass={false} showZoom />
+          <div
+            className="map-floral-frame"
+            aria-hidden
+            style={{
+              position: "absolute",
+              top: -20,
+              left: -20,
+              width: "min(200px, 38vw)",
+              height: "auto",
+              pointerEvents: "none",
+              zIndex: 1,
+              background: "transparent",
+            }}
+          >
+            <img
+              src="/butterfly.png"
+              alt=""
+              className="map-floral-frame-img"
+              style={{
+                display: "block",
+                width: "100%",
+                height: "auto",
+                transform: "scaleX(-1)",
+                objectFit: "contain",
+                objectPosition: "top right",
+                background: "transparent",
+              }}
+            />
+          </div>
+          <NavigationControl
+            position="top-right"
+            showCompass={false}
+            showZoom
+          />
           <PanControlsMapbox />
           {stores.map((store) => (
             <Marker
@@ -352,7 +411,9 @@ export default function MapViewMapboxDrawer({
                 store={store}
                 isSelected={selectedStore?.id === store.id}
                 onSelect={() =>
-                  setSelectedStore(selectedStore?.id === store.id ? null : store)
+                  setSelectedStore(
+                    selectedStore?.id === store.id ? null : store,
+                  )
                 }
               />
             </Marker>
@@ -376,77 +437,85 @@ export default function MapViewMapboxDrawer({
               <IconX size={24} stroke={2} />
             </button>
           </div>
+
           {selectedStore && (
             <div className="store-drawer-body">
               <div className="store-tooltip store-drawer-content">
                 <h3 className="store-tooltip-name">{selectedStore.name}</h3>
-              <p className="store-tooltip-address">{selectedStore.address}</p>
-              <p className="store-tooltip-hours">{selectedStore.hours}</p>
-              <p className="store-tooltip-deal">{selectedStore.deal}</p>
-              {(selectedStore.instagram ?? selectedStore.facebook) && (
-                <p className="store-tooltip-social">
-                  {selectedStore.instagram && (
+                <p className="store-tooltip-address">{selectedStore.address}</p>
+                <p className="store-tooltip-hours">{selectedStore.hours}</p>
+                <p className="store-tooltip-deal">{selectedStore.deal}</p>
+                {(selectedStore.instagram ?? selectedStore.facebook) && (
+                  <p className="store-tooltip-social">
+                    {selectedStore.instagram && (
+                      <a
+                        href={`https://www.instagram.com/${selectedStore.instagram.replace(/^@/, "")}/`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Instagram: ${selectedStore.instagram}`}
+                      >
+                        <IconBrandInstagram size={20} stroke={1.5} />
+                        <span>{selectedStore.instagram}</span>
+                      </a>
+                    )}
+                    {selectedStore.facebook && (
+                      <a
+                        href={`https://www.facebook.com/${selectedStore.facebook}/`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Facebook: ${selectedStore.facebook}`}
+                      >
+                        <IconBrandFacebook size={20} stroke={1.5} />
+                        <span>{selectedStore.facebook}</span>
+                      </a>
+                    )}
+                  </p>
+                )}
+                {(selectedStore.iconUrl ?? selectedStore.icon) && (
+                  <p className="store-tooltip-link">
                     <a
-                      href={`https://www.instagram.com/${selectedStore.instagram.replace(/^@/, "")}/`}
+                      href={
+                        selectedStore.iconUrl ??
+                        getLocalIconUrl(selectedStore.icon!)
+                      }
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label={`Instagram: ${selectedStore.instagram}`}
                     >
-                      <IconBrandInstagram size={20} stroke={1.5} />
-                      <span>{selectedStore.instagram}</span>
+                      File / link
                     </a>
-                  )}
-                  {selectedStore.facebook && (
-                    <a
-                      href={`https://www.facebook.com/${selectedStore.facebook}/`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Facebook: ${selectedStore.facebook}`}
-                    >
-                      <IconBrandFacebook size={20} stroke={1.5} />
-                      <span>{selectedStore.facebook}</span>
-                    </a>
-                  )}
-                </p>
-              )}
-              {(selectedStore.iconUrl ?? selectedStore.icon) && (
-                <p className="store-tooltip-link">
-                  <a
-                    href={
-                      selectedStore.iconUrl ??
-                      getLocalIconUrl(selectedStore.icon!)
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    File / link
-                  </a>
-                </p>
-              )}
+                  </p>
+                )}
               </div>
             </div>
           )}
           {selectedStore && (
             <div className="store-drawer-footer">
+              <p className="store-drawer-vip">
+                Get your Spring Down Madison VIP Pass{" "}
+                <a href="https://92ny.org" target="_blank" rel="noopener noreferrer">
+                  here
+                </a>{" "}
+                to unlock exclusive experiences &amp; shopping incentives. Proceeds support The 92nd Street Y, New York.
+              </p>
               <div className="store-drawer-nav">
-              <button
-                type="button"
-                className="store-drawer-nav-btn"
-                onClick={() => prevStore && setSelectedStore(prevStore)}
-                aria-label="Previous (down Madison)"
-                title="Previous (down Madison)"
-              >
-                <IconChevronLeft size={24} stroke={2} />
-              </button>
-              <button
-                type="button"
-                className="store-drawer-nav-btn"
-                onClick={() => nextStore && setSelectedStore(nextStore)}
-                aria-label="Next (up Madison)"
-                title="Next (up Madison)"
-              >
-                <IconChevronRight size={24} stroke={2} />
-              </button>
+                <button
+                  type="button"
+                  className="store-drawer-nav-btn"
+                  onClick={() => prevStore && setSelectedStore(prevStore)}
+                  aria-label="Previous (down Madison)"
+                  title="Previous (down Madison)"
+                >
+                  <IconChevronLeft size={24} stroke={2} />
+                </button>
+                <button
+                  type="button"
+                  className="store-drawer-nav-btn"
+                  onClick={() => nextStore && setSelectedStore(nextStore)}
+                  aria-label="Next (up Madison)"
+                  title="Next (up Madison)"
+                >
+                  <IconChevronRight size={24} stroke={2} />
+                </button>
               </div>
             </div>
           )}
