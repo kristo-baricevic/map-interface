@@ -1,7 +1,7 @@
 {
   "name": "map-interface",
   "private": true,
-  "packageManager": "pnpm@9",
+  "packageManager": "pnpm@8.15.7",
   "engines": {
     "node": "20.x"
   },
