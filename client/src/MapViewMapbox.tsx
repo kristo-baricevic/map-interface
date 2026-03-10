@@ -191,15 +191,15 @@ function PanControlsMapbox() {
       <button
         type="button"
         className="map-pan-btn map-pan-up"
-        onClick={() => pan(0, PAN_PX)}
-        aria-label="Pan up"
+        onClick={() => pan(0, -PAN_PX)}
+        aria-label="Pan up (up the street)"
       >
         <IconChevronUp size={20} stroke={2} />
       </button>
       <button
         type="button"
         className="map-pan-btn map-pan-left"
-        onClick={() => pan(PAN_PX, 0)}
+        onClick={() => pan(-PAN_PX, 0)}
         aria-label="Pan left"
       >
         <IconChevronLeft size={20} stroke={2} />
@@ -207,7 +207,7 @@ function PanControlsMapbox() {
       <button
         type="button"
         className="map-pan-btn map-pan-right"
-        onClick={() => pan(-PAN_PX, 0)}
+        onClick={() => pan(PAN_PX, 0)}
         aria-label="Pan right"
       >
         <IconChevronRight size={20} stroke={2} />
@@ -215,8 +215,8 @@ function PanControlsMapbox() {
       <button
         type="button"
         className="map-pan-btn map-pan-down"
-        onClick={() => pan(0, -PAN_PX)}
-        aria-label="Pan down"
+        onClick={() => pan(0, PAN_PX)}
+        aria-label="Pan down (down the street)"
       >
         <IconChevronDown size={20} stroke={2} />
       </button>
