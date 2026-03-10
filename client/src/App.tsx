@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-// import MapView from './MapView'; // local map – commented out, Mapbox only for now
+import { useEffect, useMemo, useState } from "react";
 import MapViewMapbox from "./MapViewMapbox";
+import MapViewMapboxDrawer from "./MapViewMapboxDrawer";
 import type { Store } from "./types";
+import { staggerOverlappingStores } from "./utils/staggerStores";
 
 /** Load stores: try API first, then fall back to local /stores.json. */
 async function loadStores(): Promise<Store[]> {
@@ -34,9 +35,12 @@ async function loadMapboxToken(): Promise<string> {
   return "";
 }
 
+type MapOption = 1 | 2;
+
 export default function App() {
   const [stores, setStores] = useState<Store[]>([]);
   const [mapboxToken, setMapboxToken] = useState<string>("");
+  const [mapOption, setMapOption] = useState<MapOption>(1);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -61,6 +65,8 @@ export default function App() {
     };
   }, []);
 
+  const displayStores = useMemo(() => staggerOverlappingStores(stores), [stores]);
+
   if (loading) {
     return (
       <div className="app-loading">
@@ -83,19 +89,46 @@ export default function App() {
     <main className="app">
       <header className="app-header">
         <div className="app-header-row">
-          <img
-            src="https://www.92ny.org/getmedia/cc83767a-db0c-486a-abe5-54ef56da7c91/logo_1.svg"
-            alt="92nd Street Y"
-            className="app-header-logo"
-          />
-          <h1 className="app-title">Spring Down Madison</h1>
+          <div className="app-header-left">
+            <img
+              src="https://www.92ny.org/getmedia/cc83767a-db0c-486a-abe5-54ef56da7c91/logo_1.svg"
+              alt="92nd Street Y"
+              className="app-header-logo"
+            />
+            <h1 className="app-title">Spring Down Madison</h1>
+          </div>
+          <div className="app-option-pills" role="tablist" aria-label="Map view">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mapOption === 1}
+            className={`app-option-pill ${mapOption === 1 ? "app-option-pill-active" : ""}`}
+            onClick={() => setMapOption(1)}
+          >
+            Option 1
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mapOption === 2}
+            className={`app-option-pill ${mapOption === 2 ? "app-option-pill-active" : ""}`}
+            onClick={() => setMapOption(2)}
+          >
+            Option 2
+          </button>
+          </div>
         </div>
-        <p className="app-subtitle">Tap a pin for store details</p>
+        <p className="app-subtitle">
+          {mapOption === 1 ? "Tap a pin for store details" : "Tap a pin to open the drawer"}
+        </p>
       </header>
 
       <div id="map-panel" className="app-map-panel">
-        {canUseMapbox && (
-          <MapViewMapbox mapboxToken={mapboxToken} stores={stores} />
+        {canUseMapbox && mapOption === 1 && (
+          <MapViewMapbox mapboxToken={mapboxToken} stores={displayStores} />
+        )}
+        {canUseMapbox && mapOption === 2 && (
+          <MapViewMapboxDrawer mapboxToken={mapboxToken} stores={displayStores} />
         )}
         {!canUseMapbox && (
           <div className="app-map-unavailable">

@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import Map, { Marker, Popup, NavigationControl, useMap } from "react-map-gl";
+import { useCallback, useMemo, useRef, useState } from "react";
+import Map, { Marker, NavigationControl, useMap } from "react-map-gl";
 import {
   IconChevronUp,
   IconChevronDown,
@@ -36,6 +36,7 @@ import {
   IconBarbell,
   IconScissors,
   IconCompass,
+  IconX,
   IconBrandInstagram,
   IconBrandFacebook,
 } from "@tabler/icons-react";
@@ -48,7 +49,6 @@ import {
   DEFAULT_MARKER_ICON,
 } from "./types";
 
-/** Tabler icon name → component for map markers (accepts size, stroke). */
 const TABLER_ICONS = {
   Coffee: IconCoffee,
   BuildingStore: IconBuildingStore,
@@ -82,21 +82,21 @@ const TABLER_ICONS = {
   Scissors: IconScissors,
 } as Record<string, React.ComponentType<{ size?: number; stroke?: number }>>;
 
-/** Carnegie Hill: 86th–98th St, Fifth Ave–Third Ave (Upper East Side). */
 const CARNEGIE_HILL_CENTER = { lng: -73.95607, lat: 40.784726 };
 const INITIAL_ZOOM = 15;
 const PAN_PX = 80;
-/** Pixel height of marker icon; used to offset popup when shown above. */
-const MARKER_PIXEL_HEIGHT = 40;
-/** Fraction of viewport width: beyond these the tooltip flips to the side to avoid being cut off. */
-const POPUP_EDGE_MARGIN = 0.25;
+const MANHATTAN_GRID_BEARING = 29;
+const INITIAL_VIEW_STATE = {
+  longitude: CARNEGIE_HILL_CENTER.lng,
+  latitude: CARNEGIE_HILL_CENTER.lat,
+  zoom: INITIAL_ZOOM,
+  bearing: MANHATTAN_GRID_BEARING,
+  pitch: 0,
+  padding: { top: 0, bottom: 0, left: 0, right: 0 },
+};
+const MARKER_ICON_SIZE = 32;
 
-/** Custom compass: click and drag to rotate (bearing) and tilt (pitch) the map. */
-function CompassControl({
-  mapRef,
-}: {
-  mapRef: React.RefObject<MapboxMap | null>;
-}) {
+function CompassControl({ mapRef }: { mapRef: React.RefObject<MapboxMap | null> }) {
   const [dragging, setDragging] = useState(false);
   const dragRef = useRef<{
     startX: number;
@@ -146,6 +146,7 @@ function CompassControl({
     <div
       role="group"
       aria-label="Compass: drag to rotate and tilt map"
+      className="map-compass-drawer"
       style={{
         position: "absolute",
         top: 80,
@@ -157,7 +158,6 @@ function CompassControl({
         alignItems: "center",
         justifyContent: "center",
         background: "#fff",
-        border: "none",
         borderRadius: 4,
         boxShadow: "0 0 0 2px rgba(0,0,0,.1)",
         cursor: dragging ? "grabbing" : "grab",
@@ -175,10 +175,8 @@ function CompassControl({
   );
 }
 
-/** Pan arrows overlay (Mapbox). useMap() returns { current } (map ref), not { map }. */
 function PanControlsMapbox() {
   const { current: mapRef } = useMap();
-
   const pan = useCallback(
     (dx: number, dy: number) => {
       mapRef?.panBy([dx, dy], { duration: 150 });
@@ -188,48 +186,21 @@ function PanControlsMapbox() {
 
   return (
     <div className="map-pan-controls" role="group" aria-label="Pan map">
-      <button
-        type="button"
-        className="map-pan-btn map-pan-up"
-        onClick={() => pan(0, PAN_PX)}
-        aria-label="Pan up"
-      >
+      <button type="button" className="map-pan-btn map-pan-up" onClick={() => pan(0, PAN_PX)} aria-label="Pan up">
         <IconChevronUp size={20} stroke={2} />
       </button>
-      <button
-        type="button"
-        className="map-pan-btn map-pan-left"
-        onClick={() => pan(PAN_PX, 0)}
-        aria-label="Pan left"
-      >
+      <button type="button" className="map-pan-btn map-pan-left" onClick={() => pan(PAN_PX, 0)} aria-label="Pan left">
         <IconChevronLeft size={20} stroke={2} />
       </button>
-      <button
-        type="button"
-        className="map-pan-btn map-pan-right"
-        onClick={() => pan(-PAN_PX, 0)}
-        aria-label="Pan right"
-      >
+      <button type="button" className="map-pan-btn map-pan-right" onClick={() => pan(-PAN_PX, 0)} aria-label="Pan right">
         <IconChevronRight size={20} stroke={2} />
       </button>
-      <button
-        type="button"
-        className="map-pan-btn map-pan-down"
-        onClick={() => pan(0, -PAN_PX)}
-        aria-label="Pan down"
-      >
+      <button type="button" className="map-pan-btn map-pan-down" onClick={() => pan(0, -PAN_PX)} aria-label="Pan down">
         <IconChevronDown size={20} stroke={2} />
       </button>
     </div>
   );
 }
-
-interface MapViewMapboxProps {
-  mapboxToken: string;
-  stores: Store[];
-}
-
-const MARKER_ICON_SIZE = 32;
 
 function StoreMarkerMapbox({
   store,
@@ -294,76 +265,41 @@ function StoreMarkerMapbox({
   );
 }
 
-/** Manhattan's grid is ~29° east of true north; rotate map so avenues run straight up/down. */
-const MANHATTAN_GRID_BEARING = 29;
+interface MapViewMapboxDrawerProps {
+  mapboxToken: string;
+  stores: Store[];
+}
 
-const INITIAL_VIEW_STATE = {
-  longitude: CARNEGIE_HILL_CENTER.lng,
-  latitude: CARNEGIE_HILL_CENTER.lat,
-  zoom: INITIAL_ZOOM,
-  bearing: MANHATTAN_GRID_BEARING,
-  pitch: 0,
-  padding: { top: 0, bottom: 0, left: 0, right: 0 },
-};
+/** Stores ordered south to north along Madison (by lat, then lng). */
+function useStoresByMadison(stores: Store[]): Store[] {
+  return useMemo(
+    () => [...stores].sort((a, b) => a.lat - b.lat || a.lng - b.lng),
+    [stores],
+  );
+}
 
-export default function MapViewMapbox({
+export default function MapViewMapboxDrawer({
   mapboxToken,
   stores,
-}: MapViewMapboxProps) {
+}: MapViewMapboxDrawerProps) {
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
-  const [popupAnchor, setPopupAnchor] = useState<
-    | "top"
-    | "bottom"
-    | "top-left"
-    | "top-right"
-    | "bottom-left"
-    | "bottom-right"
-    | "left"
-    | "right"
-  >("bottom");
-  const [popupLngLat, setPopupLngLat] = useState<{
-    lng: number;
-    lat: number;
-  } | null>(null);
   const mapInstanceRef = useRef<MapboxMap | null>(null);
+  const storesByMadison = useStoresByMadison(stores);
 
-  /** Position tooltip so it never covers the icon and doesn’t get cut off at map edges. */
-  useEffect(() => {
-    if (!selectedStore || !mapInstanceRef.current) return;
-    const map = mapInstanceRef.current;
-    const point = map.project([selectedStore.lng, selectedStore.lat]);
-    const container = map.getContainer();
-    const width = container?.clientWidth ?? 400;
-    const height = container?.clientHeight ?? 400;
-    const inTopHalf = point.y < height / 2;
-    const inLeftZone = point.x < width * POPUP_EDGE_MARGIN;
-    const inRightZone = point.x > width * (1 - POPUP_EDGE_MARGIN);
-    let anchor: typeof popupAnchor;
-    if (inLeftZone) {
-      anchor = inTopHalf ? "top-left" : "bottom-left";
-    } else if (inRightZone) {
-      anchor = inTopHalf ? "top-right" : "bottom-right";
-    } else {
-      anchor = inTopHalf ? "top" : "bottom";
-    }
-    setPopupAnchor(anchor);
-    const anchorIsAbove =
-      anchor === "bottom" ||
-      anchor === "bottom-left" ||
-      anchor === "bottom-right";
-    if (anchorIsAbove) {
-      const topOfIcon = map.unproject([point.x, point.y - MARKER_PIXEL_HEIGHT]);
-      setPopupLngLat({ lng: topOfIcon.lng, lat: topOfIcon.lat });
-    } else {
-      setPopupLngLat({ lng: selectedStore.lng, lat: selectedStore.lat });
-    }
-  }, [selectedStore]);
+  const currentIndex = selectedStore
+    ? storesByMadison.findIndex((s) => s.id === selectedStore.id)
+    : -1;
+  const prevStore =
+    currentIndex > 0 ? storesByMadison[currentIndex - 1]! : storesByMadison[storesByMadison.length - 1] ?? null;
+  const nextStore =
+    currentIndex >= 0 && currentIndex < storesByMadison.length - 1
+      ? storesByMadison[currentIndex + 1]!
+      : storesByMadison[0] ?? null;
 
   const handleMapClick = useCallback(() => {
     setSelectedStore(null);
   }, []);
 
-  /** Store map ref for compass, force grid bearing, and remove POI label layers. */
   const handleMapLoad = useCallback((e: { target: MapboxMap }) => {
     const map = e.target;
     mapInstanceRef.current = map;
@@ -383,88 +319,67 @@ export default function MapViewMapbox({
       try {
         map.removeLayer(id);
       } catch {
-        // ignore if already removed
+        // ignore
       }
     });
   }, []);
 
   return (
-    <div className="map-container">
-      <Map
-        mapboxAccessToken={mapboxToken}
-        initialViewState={INITIAL_VIEW_STATE}
-        style={{ width: "100%", height: "100%" }}
-        mapStyle="mapbox://styles/mapbox/streets-v12"
-        onClick={handleMapClick}
-        onLoad={handleMapLoad}
-        reuseMaps={false}
-      >
-        <NavigationControl position="top-right" showCompass={false} showZoom />
-        <PanControlsMapbox />
-        {stores.map((store) => (
-          <Marker
-            key={store.id}
-            longitude={store.lng}
-            latitude={store.lat}
-            anchor="bottom"
-            onClick={(e: { originalEvent?: Event }) =>
-              e.originalEvent?.stopPropagation()
-            }
-          >
-            <StoreMarkerMapbox
-              store={store}
-              isSelected={selectedStore?.id === store.id}
-              onSelect={() =>
-                setSelectedStore(selectedStore?.id === store.id ? null : store)
-              }
-            />
-          </Marker>
-        ))}
-        {/* 
-        <div
-          className="map-floral-frame"
-          aria-hidden
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 48,
-            width: "min(240px, 38vw)",
-            height: "auto",
-            pointerEvents: "none",
-            zIndex: 1,
-            background: "transparent",
-          }}
+    <>
+      <div className="map-container">
+        <Map
+          mapboxAccessToken={mapboxToken}
+          initialViewState={INITIAL_VIEW_STATE}
+          style={{ width: "100%", height: "100%" }}
+          mapStyle="mapbox://styles/mapbox/streets-v12"
+          onClick={handleMapClick}
+          onLoad={handleMapLoad}
+          reuseMaps={false}
         >
-          <img
-            src="/flowers-frame.png"
-            alt=""
-            className="map-floral-frame-img"
-            style={{
-              display: "block",
-              width: "100%",
-              height: "auto",
-              transform: "scaleX(-1)",
-              objectFit: "contain",
-              objectPosition: "top right",
-              background: "transparent",
-            }}
-          />
-        </div> */}
-        {selectedStore && popupLngLat && (
-          <Popup
-            longitude={popupLngLat.lng}
-            latitude={popupLngLat.lat}
-            anchor={popupAnchor}
-            onClose={() => {
-              setSelectedStore(null);
-              setPopupLngLat(null);
-            }}
-            closeButton
-            closeOnClick={false}
-            className="store-popup"
-          >
-            <div className="store-tooltip">
-              <h3 className="store-tooltip-name">{selectedStore.name}</h3>
+          <NavigationControl position="top-right" showCompass={false} showZoom />
+          <PanControlsMapbox />
+          {stores.map((store) => (
+            <Marker
+              key={store.id}
+              longitude={store.lng}
+              latitude={store.lat}
+              anchor="bottom"
+              onClick={(e: { originalEvent?: Event }) =>
+                e.originalEvent?.stopPropagation()
+              }
+            >
+              <StoreMarkerMapbox
+                store={store}
+                isSelected={selectedStore?.id === store.id}
+                onSelect={() =>
+                  setSelectedStore(selectedStore?.id === store.id ? null : store)
+                }
+              />
+            </Marker>
+          ))}
+        </Map>
+        <CompassControl mapRef={mapInstanceRef} />
+      </div>
+      <aside
+        className={`store-drawer ${selectedStore ? "store-drawer-open" : ""}`}
+        aria-label="Store details"
+        aria-hidden={!selectedStore}
+      >
+        <div className="store-drawer-inner">
+          <div className="store-drawer-header">
+            <button
+              type="button"
+              className="store-drawer-close"
+              onClick={() => setSelectedStore(null)}
+              aria-label="Close"
+            >
+              <IconX size={24} stroke={2} />
+            </button>
+          </div>
+          {selectedStore && (
+            <div className="store-drawer-body">
+              <div className="store-tooltip store-drawer-content">
+                <h3 className="store-tooltip-name">{selectedStore.name}</h3>
               <p className="store-tooltip-address">{selectedStore.address}</p>
               <p className="store-tooltip-hours">{selectedStore.hours}</p>
               <p className="store-tooltip-deal">{selectedStore.deal}</p>
@@ -508,11 +423,35 @@ export default function MapViewMapbox({
                   </a>
                 </p>
               )}
+              </div>
             </div>
-          </Popup>
-        )}
-      </Map>
-      <CompassControl mapRef={mapInstanceRef} />
-    </div>
+          )}
+          {selectedStore && (
+            <div className="store-drawer-footer">
+              <div className="store-drawer-nav">
+              <button
+                type="button"
+                className="store-drawer-nav-btn"
+                onClick={() => prevStore && setSelectedStore(prevStore)}
+                aria-label="Previous (down Madison)"
+                title="Previous (down Madison)"
+              >
+                <IconChevronLeft size={24} stroke={2} />
+              </button>
+              <button
+                type="button"
+                className="store-drawer-nav-btn"
+                onClick={() => nextStore && setSelectedStore(nextStore)}
+                aria-label="Next (up Madison)"
+                title="Next (up Madison)"
+              >
+                <IconChevronRight size={24} stroke={2} />
+              </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </aside>
+    </>
   );
 }

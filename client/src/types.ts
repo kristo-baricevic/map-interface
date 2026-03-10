@@ -10,6 +10,10 @@ export interface Store {
   iconUrl?: string;
   /** Tabler icon name (e.g. "Coffee") – shown on map when set. */
   iconTabler?: string;
+  /** Instagram handle (e.g. @alc_ltd) – linked in popup/drawer. */
+  instagram?: string;
+  /** Facebook handle or page name – linked in popup/drawer. */
+  facebook?: string;
   lng: number;
   lat: number;
 }

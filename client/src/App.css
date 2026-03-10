@@ -1,5 +1,21 @@
 /* Mobile-first layout */
 
+/* Theinhardt Pan – Heavy (header) and Regular (popups). Fonts in public/fonts/ */
+@font-face {
+  font-family: 'Theinhardt Pan';
+  src: url('/fonts/Theinhardt-Pan-Heavy/Theinhardt-Pan-Heavy.woff2') format('woff2'),
+       url('/fonts/Theinhardt-Pan-Heavy/Theinhardt-Pan-Heavy.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Theinhardt Pan';
+  src: url('/fonts/Theinhardt-Pan-Regular/Theinhardt-Pan-Regular.woff2') format('woff2'),
+       url('/fonts/Theinhardt-Pan-Regular/Theinhardt-Pan-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
 .app {
   display: flex;
   flex-direction: column;
@@ -8,7 +24,8 @@
   flex: 1;
   min-height: 0;
   height: 100%;
-  font-family: "Theinhardt Pan", sans-serif !important;
+  font-family: "Theinhardt Pan", sans-serif;
+  background: #fad487;
 }
 
 .app-header {
@@ -21,6 +38,8 @@
   padding-left: max(1rem, env(safe-area-inset-left));
   padding-right: max(1rem, env(safe-area-inset-right));
   padding-top: max(0.75rem, env(safe-area-inset-top));
+  font-family: "Theinhardt Pan", sans-serif;
+  font-weight: 900;
 }
 
 .app-header-row {
@@ -29,6 +48,45 @@
   justify-content: space-between;
   gap: 0.75rem;
   flex-wrap: wrap;
+}
+
+.app-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.app-option-pills {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.app-option-pill {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8125rem;
+  font-family: "Theinhardt Pan", sans-serif;
+  font-weight: 400;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 999px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.app-option-pill:hover {
+  background: #f5f5f5;
+}
+
+.app-option-pill-active {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+}
+
+.app-option-pill-active:hover {
+  background: #333;
+  color: #fff;
 }
 
 .app-header-logo {
@@ -40,7 +98,8 @@
 .app-title {
   margin: 0;
   font-size: 1.25rem;
-  font-weight: 700;
+  font-family: "Theinhardt Pan", sans-serif;
+  font-weight: 900;
   color: #1a1a1a;
 }
 
@@ -64,6 +123,7 @@
   background: #e5e5e5;
   color: #1a1a1a;
 }
+
 .app-map-nav-btn.active {
   background: #0d6efd;
   color: #fff;
@@ -89,6 +149,7 @@
   align-items: center;
   position: relative;
   min-width: 90%;
+  margin-bottom: 10px;
 }
 
 .app-map-wrap {
@@ -117,6 +178,8 @@
   width: 100%;
   position: relative;
   background: #e0e0e0;
+  border: 3px solid #1a1a1a;
+  border-radius: 10px;
 }
 
 .map-container .maplibregl-map,
@@ -124,6 +187,7 @@
   width: 100% !important;
   height: 100% !important;
   min-height: 200px;
+  border-radius: 10px;
 }
 
 /* Floral frame overlay: on top of map, blend so light/checkered areas show map through */
@@ -203,14 +267,19 @@
 /* Popup / tooltip content (MapLibre/Mapbox) */
 .store-popup .mapboxgl-popup-content,
 .store-popup .maplibregl-popup-content {
+  font-family: "Theinhardt Pan", sans-serif;
+  font-weight: 400;
   padding: 1rem;
   min-width: 260px;
   max-width: min(320px, calc(100vw - 2rem));
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  
 }
 
 .store-tooltip {
+  font-family: "Theinhardt Pan", sans-serif;
+  font-weight: 400;
   font-size: 0.9375rem;
 }
 
@@ -232,7 +301,28 @@
 
 .store-tooltip-deal {
   font-weight: 600;
+  color: #982062;
+}
+
+.store-tooltip-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+}
+
+.store-tooltip-social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #444;
+  text-decoration: none;
+}
+
+.store-tooltip-social a:hover {
   color: #0d6efd;
+  text-decoration: underline;
 }
 
 .store-tooltip-link {
@@ -248,6 +338,95 @@
 .store-tooltip-link a:hover {
   text-decoration: underline;
 }
+
+/* Option 2: drawer overlays the panel (sibling of map-container), full height below header */
+.store-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(320px, 90vw);
+  max-width: 100%;
+  z-index: 20;
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform 0.25s ease-out, visibility 0s 0.25s;
+  pointer-events: none;
+}
+
+.store-drawer-open {
+  visibility: visible;
+  transition: transform 0.25s ease-out, visibility 0s 0s;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.store-drawer-inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  padding-top: 0.5rem;
+}
+
+.store-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-shrink: 0;
+}
+
+.store-drawer-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.store-drawer-content {
+  margin: 0;
+}
+
+.store-drawer-footer {
+  flex-shrink: 0;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  background: #fff;
+}
+
+.store-drawer-nav {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+}
+
+.store-drawer-nav-btn,
+.store-drawer-close {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #333;
+  cursor: pointer;
+}
+
+.store-drawer-nav-btn:hover,
+.store-drawer-close:hover {
+  background: #f0f0f0;
+}
+
+.store-drawer-close {
+  margin-left: auto;
+}
+
 
 .app-map-unavailable {
   position: absolute;
