@@ -178,7 +178,11 @@ function StoreTooltipBody({ store }: { store: Store }) {
       )}
       <p className="store-tooltip-vip">
         Get your Spring Down Madison VIP Pass{" "}
-        <a href="https://92ny.org" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://www.92ny.org/support-92ny/m/madisonave?utm_source=qr_code&utm_medium=flyer&utm_campaign=madave&utm_content=madave"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           here
         </a>{" "}
         to unlock exclusive experiences &amp; shopping incentives. Proceeds

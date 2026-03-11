@@ -568,7 +568,7 @@ export default function MapViewMapboxDrawer({
               <p className="store-drawer-vip">
                 Get your Spring Down Madison VIP Pass{" "}
                 <a
-                  href="https://92ny.org"
+                  href="https://www.92ny.org/support-92ny/m/madisonave?utm_source=qr_code&utm_medium=flyer&utm_campaign=madave&utm_content=madave"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
