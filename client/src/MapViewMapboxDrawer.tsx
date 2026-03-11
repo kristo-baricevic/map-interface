@@ -84,7 +84,6 @@ const TABLER_ICONS = {
 
 const CARNEGIE_HILL_CENTER = { lng: -73.95607, lat: 40.784726 };
 const INITIAL_ZOOM = 15;
-const PAN_PX = 80;
 const MANHATTAN_GRID_BEARING = 29;
 const INITIAL_VIEW_STATE = {
   longitude: CARNEGIE_HILL_CENTER.lng,
@@ -94,7 +93,16 @@ const INITIAL_VIEW_STATE = {
   pitch: 0,
   padding: { top: 0, bottom: 0, left: 0, right: 0 },
 };
-const MARKER_ICON_SIZE = 32;
+/** Size (px) of icon markers when zoomed out. */
+const ICON_MARKER_SIZE = 40;
+/** Size (px) of Tabler icon inside the icon marker. */
+const ICON_INNER_SIZE = 32;
+/** Size (px) of logo markers (selected store, or all stores when zoomed in). */
+const LOGO_MARKER_SIZE = 72;
+/** Padding (px) inside logo markers so logos don't touch the edge. */
+const LOGO_MARKER_PADDING = 4;
+/** Zoom at or above which all markers switch from icons to logos. */
+const LOGO_ZOOM_THRESHOLD = 15.3;
 
 function CompassControl({
   mapRef,
@@ -179,11 +187,18 @@ function CompassControl({
   );
 }
 
+/** Pan arrows overlay. Up/down pan by the full viewport height so the topmost icon becomes the bottommost. */
 function PanControlsMapbox() {
   const { current: mapRef } = useMap();
   const pan = useCallback(
     (dx: number, dy: number) => {
-      mapRef?.panBy([dx, dy], { duration: 150 });
+      if (!mapRef) return;
+      const container = (
+        mapRef as unknown as { getContainer(): HTMLElement }
+      ).getContainer();
+      const h = container?.clientHeight ?? 400;
+      const w = container?.clientWidth ?? 400;
+      mapRef.panBy([dx * w, dy * h], { duration: 400 });
     },
     [mapRef],
   );
@@ -193,7 +208,7 @@ function PanControlsMapbox() {
       <button
         type="button"
         className="map-pan-btn map-pan-up"
-        onClick={() => pan(0, -PAN_PX)}
+        onClick={() => pan(0, -1)}
         aria-label="Pan up (up the street)"
       >
         <IconChevronUp size={20} stroke={2} />
@@ -201,7 +216,7 @@ function PanControlsMapbox() {
       <button
         type="button"
         className="map-pan-btn map-pan-left"
-        onClick={() => pan(-PAN_PX, 0)}
+        onClick={() => pan(-1, 0)}
         aria-label="Pan left"
       >
         <IconChevronLeft size={20} stroke={2} />
@@ -209,7 +224,7 @@ function PanControlsMapbox() {
       <button
         type="button"
         className="map-pan-btn map-pan-right"
-        onClick={() => pan(PAN_PX, 0)}
+        onClick={() => pan(1, 0)}
         aria-label="Pan right"
       >
         <IconChevronRight size={20} stroke={2} />
@@ -217,7 +232,7 @@ function PanControlsMapbox() {
       <button
         type="button"
         className="map-pan-btn map-pan-down"
-        onClick={() => pan(0, PAN_PX)}
+        onClick={() => pan(0, 1)}
         aria-label="Pan down (down the street)"
       >
         <IconChevronDown size={20} stroke={2} />
@@ -230,17 +245,26 @@ function StoreMarkerMapbox({
   store,
   onSelect,
   isSelected,
+  showLogo,
 }: {
   store: Store;
   onSelect: () => void;
   isSelected: boolean;
+  showLogo: boolean;
 }) {
   const [useDefaultIcon, setUseDefaultIcon] = useState(false);
+  const [logoLoadFailed, setLogoLoadFailed] = useState(false);
+  const logoLoadedRef = useRef(false);
   const iconSrc = useDefaultIcon
     ? getLocalIconUrl(DEFAULT_MARKER_ICON)
     : getStoreMarkerIconUrl(store);
   const TablerIcon =
     store.iconTabler != null ? TABLER_ICONS[store.iconTabler] : undefined;
+  const hasLogo = Boolean(store.logoUrl) && !logoLoadFailed;
+  const displayLogo = showLogo && hasLogo;
+
+  const size = displayLogo ? LOGO_MARKER_SIZE : ICON_MARKER_SIZE;
+  const padding = displayLogo ? LOGO_MARKER_PADDING : 0;
 
   return (
     <button
@@ -254,35 +278,58 @@ function StoreMarkerMapbox({
       style={{
         border: isSelected ? "3px solid #0d6efd" : "none",
         borderRadius: "50%",
-        padding: 0,
-        background: "transparent",
+        padding,
+        width: size,
+        height: size,
+        boxSizing: "border-box",
+        overflow: "hidden",
+        backgroundColor: "#fff",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
         cursor: "pointer",
+        transition: "width 0.2s, height 0.2s, padding 0.2s",
       }}
     >
-      {TablerIcon ? (
+      {displayLogo ? (
+        <img
+          src={store.logoUrl}
+          alt=""
+          onLoad={() => {
+            logoLoadedRef.current = true;
+          }}
+          onError={() => {
+            if (!logoLoadedRef.current) setLogoLoadFailed(true);
+          }}
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+          }}
+        />
+      ) : TablerIcon ? (
         <span
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: 40,
-            height: 40,
+            width: "100%",
+            height: "100%",
             color: "#333",
-            backgroundColor: "#fff",
-            borderRadius: "50%",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
           }}
         >
-          <TablerIcon size={MARKER_ICON_SIZE} stroke={1.8} />
+          <TablerIcon size={ICON_INNER_SIZE} stroke={1.8} />
         </span>
       ) : (
         <img
           src={iconSrc}
           alt=""
-          width={40}
-          height={40}
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+          }}
           onError={() => setUseDefaultIcon(true)}
-          style={{ display: "block", objectFit: "contain" }}
         />
       )}
     </button>
@@ -309,6 +356,8 @@ export default function MapViewMapboxDrawer({
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
   /** Last store selected (by click or nav); keeps that marker highlighted when drawer is closed. */
   const [highlightedStore, setHighlightedStore] = useState<Store | null>(null);
+  const [zoomLevel, setZoomLevel] = useState(INITIAL_ZOOM);
+  const zoomedIn = zoomLevel >= LOGO_ZOOM_THRESHOLD;
   const mapInstanceRef = useRef<MapboxMap | null>(null);
   const storesByMadison = useStoresByMadison(stores);
 
@@ -367,6 +416,7 @@ export default function MapViewMapboxDrawer({
           mapStyle="mapbox://styles/mapbox/streets-v12"
           onClick={handleMapClick}
           onLoad={handleMapLoad}
+          onZoom={(e) => setZoomLevel(e.viewState.zoom)}
           reuseMaps={false}
         >
           <div
@@ -404,27 +454,33 @@ export default function MapViewMapboxDrawer({
             showZoom
           />
           <PanControlsMapbox />
-          {stores.map((store) => (
-            <Marker
-              key={store.id}
-              longitude={store.lng}
-              latitude={store.lat}
-              anchor="bottom"
-              onClick={(e: { originalEvent?: Event }) =>
-                e.originalEvent?.stopPropagation()
-              }
-            >
-              <StoreMarkerMapbox
-                store={store}
-                isSelected={(selectedStore ?? highlightedStore)?.id === store.id}
-                onSelect={() =>
-                  handleSelectStore(
-                    selectedStore?.id === store.id ? null : store,
-                  )
+          {stores.map((store) => {
+            const selected =
+              (selectedStore ?? highlightedStore)?.id === store.id;
+            return (
+              <Marker
+                key={store.id}
+                longitude={store.lng}
+                latitude={store.lat}
+                anchor="bottom"
+                style={{ zIndex: selected ? 10 : 1 }}
+                onClick={(e: { originalEvent?: Event }) =>
+                  e.originalEvent?.stopPropagation()
                 }
-              />
-            </Marker>
-          ))}
+              >
+                <StoreMarkerMapbox
+                  store={store}
+                  isSelected={selected}
+                  showLogo={zoomedIn || selectedStore?.id === store.id}
+                  onSelect={() =>
+                    handleSelectStore(
+                      selectedStore?.id === store.id ? null : store,
+                    )
+                  }
+                />
+              </Marker>
+            );
+          })}
         </Map>
         <CompassControl mapRef={mapInstanceRef} />
       </div>
@@ -448,10 +504,22 @@ export default function MapViewMapboxDrawer({
           {selectedStore && (
             <div className="store-drawer-body">
               <div className="store-tooltip store-drawer-content">
+                {selectedStore.logoUrl && (
+                  <img
+                    src={selectedStore.logoUrl}
+                    alt={`${selectedStore.name} logo`}
+                    style={{
+                      display: "block",
+                      maxWidth: 80,
+                      maxHeight: 80,
+                      objectFit: "contain",
+                      margin: "0 auto 8px",
+                    }}
+                  />
+                )}
                 <h3 className="store-tooltip-name">{selectedStore.name}</h3>
                 <p className="store-tooltip-address">{selectedStore.address}</p>
                 <p className="store-tooltip-hours">{selectedStore.hours}</p>
-                <p className="store-tooltip-deal">{selectedStore.deal}</p>
                 {(selectedStore.instagram ?? selectedStore.facebook) && (
                   <p className="store-tooltip-social">
                     {selectedStore.instagram && (
@@ -499,10 +567,15 @@ export default function MapViewMapboxDrawer({
             <div className="store-drawer-footer">
               <p className="store-drawer-vip">
                 Get your Spring Down Madison VIP Pass{" "}
-                <a href="https://92ny.org" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://92ny.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   here
                 </a>{" "}
-                to unlock exclusive experiences &amp; shopping incentives. Proceeds support The 92nd Street Y, New York.
+                to unlock exclusive experiences &amp; shopping incentives.
+                Proceeds support The 92nd Street Y, New York.
               </p>
               <div className="store-drawer-nav">
                 <button

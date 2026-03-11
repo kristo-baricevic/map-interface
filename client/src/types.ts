@@ -10,6 +10,8 @@ export interface Store {
   iconUrl?: string;
   /** Tabler icon name (e.g. "Coffee") – shown on map when set. */
   iconTabler?: string;
+  /** Path to store logo under /assets/logos/ (e.g. "/assets/logos/ALC.png"). */
+  logoUrl?: string;
   /** Instagram handle (e.g. @alc_ltd) – linked in popup/drawer. */
   instagram?: string;
   /** Facebook handle or page name – linked in popup/drawer. */

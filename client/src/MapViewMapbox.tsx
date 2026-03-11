@@ -86,9 +86,18 @@ const TABLER_ICONS = {
 /** Carnegie Hill: 86th–98th St, Fifth Ave–Third Ave (Upper East Side). */
 const CARNEGIE_HILL_CENTER = { lng: -73.95607, lat: 40.784726 };
 const INITIAL_ZOOM = 15;
-const PAN_PX = 80;
-/** Pixel height of marker icon; used to offset popup when shown above. */
-const MARKER_PIXEL_HEIGHT = 40;
+/** Size (px) of icon markers when zoomed out. Matches Option 2. */
+const ICON_MARKER_SIZE = 40;
+/** Size (px) of Tabler icon inside the icon marker. */
+const ICON_INNER_SIZE = 32;
+/** Size (px) of logo markers (selected store, or all stores when zoomed in). */
+const LOGO_MARKER_SIZE = 72;
+/** Padding (px) inside logo markers so logos don't touch the edge. */
+const LOGO_MARKER_PADDING = 4;
+/** Zoom at or above which all markers switch from icons to logos. */
+const LOGO_ZOOM_THRESHOLD = 15.3;
+/** Pixel height of marker; used to offset popup when shown above. */
+const MARKER_PIXEL_HEIGHT = LOGO_MARKER_SIZE;
 /** Padding (px) from map container edge so popup is never flush against it. */
 const POPUP_CONTAINER_PADDING = 12;
 /** Estimated popup dimensions for fit checks – use CSS max so we never assume it's smaller than it is. */
@@ -110,7 +119,9 @@ function useStoresByMadison(stores: Store[]): Store[] {
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" ? window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH_PX}px)`).matches : false
+    typeof window !== "undefined"
+      ? window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH_PX}px)`).matches
+      : false,
   );
   useEffect(() => {
     const mql = window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH_PX}px)`);
@@ -128,7 +139,6 @@ function StoreTooltipBody({ store }: { store: Store }) {
       <h3 className="store-tooltip-name">{store.name}</h3>
       <p className="store-tooltip-address">{store.address}</p>
       <p className="store-tooltip-hours">{store.hours}</p>
-      <p className="store-tooltip-deal">{store.deal}</p>
       {(store.instagram ?? store.facebook) && (
         <p className="store-tooltip-social">
           {store.instagram && (
@@ -171,7 +181,8 @@ function StoreTooltipBody({ store }: { store: Store }) {
         <a href="https://92ny.org" target="_blank" rel="noopener noreferrer">
           here
         </a>{" "}
-        to unlock exclusive experiences &amp; shopping incentives. Proceeds support The 92nd Street Y, New York.
+        to unlock exclusive experiences &amp; shopping incentives. Proceeds
+        support The 92nd Street Y, New York.
       </p>
     </div>
   );
@@ -261,13 +272,19 @@ function CompassControl({
   );
 }
 
-/** Pan arrows overlay (Mapbox). useMap() returns { current } (map ref), not { map }. */
+/** Pan arrows overlay. Up/down pan by the full viewport height so the topmost icon becomes the bottommost. */
 function PanControlsMapbox() {
   const { current: mapRef } = useMap();
 
   const pan = useCallback(
     (dx: number, dy: number) => {
-      mapRef?.panBy([dx, dy], { duration: 150 });
+      if (!mapRef) return;
+      const container = (
+        mapRef as unknown as { getContainer(): HTMLElement }
+      ).getContainer();
+      const h = container?.clientHeight ?? 400;
+      const w = container?.clientWidth ?? 400;
+      mapRef.panBy([dx * w, dy * h], { duration: 400 });
     },
     [mapRef],
   );
@@ -277,7 +294,7 @@ function PanControlsMapbox() {
       <button
         type="button"
         className="map-pan-btn map-pan-up"
-        onClick={() => pan(0, -PAN_PX)}
+        onClick={() => pan(0, -1)}
         aria-label="Pan up (up the street)"
       >
         <IconChevronUp size={20} stroke={2} />
@@ -285,7 +302,7 @@ function PanControlsMapbox() {
       <button
         type="button"
         className="map-pan-btn map-pan-left"
-        onClick={() => pan(-PAN_PX, 0)}
+        onClick={() => pan(-1, 0)}
         aria-label="Pan left"
       >
         <IconChevronLeft size={20} stroke={2} />
@@ -293,7 +310,7 @@ function PanControlsMapbox() {
       <button
         type="button"
         className="map-pan-btn map-pan-right"
-        onClick={() => pan(PAN_PX, 0)}
+        onClick={() => pan(1, 0)}
         aria-label="Pan right"
       >
         <IconChevronRight size={20} stroke={2} />
@@ -301,7 +318,7 @@ function PanControlsMapbox() {
       <button
         type="button"
         className="map-pan-btn map-pan-down"
-        onClick={() => pan(0, PAN_PX)}
+        onClick={() => pan(0, 1)}
         aria-label="Pan down (down the street)"
       >
         <IconChevronDown size={20} stroke={2} />
@@ -315,23 +332,30 @@ interface MapViewMapboxProps {
   stores: Store[];
 }
 
-const MARKER_ICON_SIZE = 32;
-
 function StoreMarkerMapbox({
   store,
   onSelect,
   isSelected,
+  showLogo,
 }: {
   store: Store;
   onSelect: () => void;
   isSelected: boolean;
+  showLogo: boolean;
 }) {
   const [useDefaultIcon, setUseDefaultIcon] = useState(false);
+  const [logoLoadFailed, setLogoLoadFailed] = useState(false);
+  const logoLoadedRef = useRef(false);
   const iconSrc = useDefaultIcon
     ? getLocalIconUrl(DEFAULT_MARKER_ICON)
     : getStoreMarkerIconUrl(store);
   const TablerIcon =
     store.iconTabler != null ? TABLER_ICONS[store.iconTabler] : undefined;
+  const hasLogo = Boolean(store.logoUrl) && !logoLoadFailed;
+  const displayLogo = showLogo && hasLogo;
+
+  const size = displayLogo ? LOGO_MARKER_SIZE : ICON_MARKER_SIZE;
+  const padding = displayLogo ? LOGO_MARKER_PADDING : 0;
 
   return (
     <button
@@ -345,35 +369,58 @@ function StoreMarkerMapbox({
       style={{
         border: isSelected ? "3px solid #0d6efd" : "none",
         borderRadius: "50%",
-        padding: 0,
-        background: "transparent",
+        padding,
+        width: size,
+        height: size,
+        boxSizing: "border-box",
+        overflow: "hidden",
+        backgroundColor: "#fff",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
         cursor: "pointer",
+        transition: "width 0.2s, height 0.2s, padding 0.2s",
       }}
     >
-      {TablerIcon ? (
+      {displayLogo ? (
+        <img
+          src={store.logoUrl}
+          alt=""
+          onLoad={() => {
+            logoLoadedRef.current = true;
+          }}
+          onError={() => {
+            if (!logoLoadedRef.current) setLogoLoadFailed(true);
+          }}
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+          }}
+        />
+      ) : TablerIcon ? (
         <span
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: 40,
-            height: 40,
+            width: "100%",
+            height: "100%",
             color: "#333",
-            backgroundColor: "#fff",
-            borderRadius: "50%",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
           }}
         >
-          <TablerIcon size={MARKER_ICON_SIZE} stroke={1.8} />
+          <TablerIcon size={ICON_INNER_SIZE} stroke={1.8} />
         </span>
       ) : (
         <img
           src={iconSrc}
           alt=""
-          width={40}
-          height={40}
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+          }}
           onError={() => setUseDefaultIcon(true)}
-          style={{ display: "block", objectFit: "contain" }}
         />
       )}
     </button>
@@ -399,6 +446,8 @@ export default function MapViewMapbox({
   const isMobile = useIsMobile();
   const storesByMadison = useStoresByMadison(stores);
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+  const [zoomLevel, setZoomLevel] = useState(INITIAL_ZOOM);
+  const zoomedIn = zoomLevel >= LOGO_ZOOM_THRESHOLD;
   const [popupAnchor, setPopupAnchor] = useState<
     | "top"
     | "bottom"
@@ -451,8 +500,10 @@ export default function MapViewMapbox({
     const preferBelow = fitsBelow;
     const showAbove = !preferBelow && fitsAbove;
 
-    const useLeft = spaceRight < halfW || (spaceLeft < halfW && spaceLeft < spaceRight);
-    const useRight = spaceLeft < halfW || (spaceRight < halfW && spaceRight < spaceLeft);
+    const useLeft =
+      spaceRight < halfW || (spaceLeft < halfW && spaceLeft < spaceRight);
+    const useRight =
+      spaceLeft < halfW || (spaceRight < halfW && spaceRight < spaceLeft);
 
     let anchor: typeof popupAnchor;
     if (showAbove) {
@@ -470,9 +521,19 @@ export default function MapViewMapbox({
     ): { left: number; right: number; top: number; bottom: number } {
       switch (a) {
         case "top":
-          return { left: px - w / 2, right: px + w / 2, top: py, bottom: py + h };
+          return {
+            left: px - w / 2,
+            right: px + w / 2,
+            top: py,
+            bottom: py + h,
+          };
         case "bottom":
-          return { left: px - w / 2, right: px + w / 2, top: py - h, bottom: py };
+          return {
+            left: px - w / 2,
+            right: px + w / 2,
+            top: py - h,
+            bottom: py,
+          };
         case "top-left":
           return { left: px, right: px + w, top: py, bottom: py + h };
         case "top-right":
@@ -482,7 +543,12 @@ export default function MapViewMapbox({
         case "bottom-right":
           return { left: px - w, right: px, top: py - h, bottom: py };
         default:
-          return { left: px - w / 2, right: px + w / 2, top: py, bottom: py + h };
+          return {
+            left: px - w / 2,
+            right: px + w / 2,
+            top: py,
+            bottom: py + h,
+          };
       }
     }
 
@@ -490,7 +556,9 @@ export default function MapViewMapbox({
       anchor === "bottom" ||
       anchor === "bottom-left" ||
       anchor === "bottom-right";
-    const anchorPointY = anchorIsAbove ? point.y - MARKER_PIXEL_HEIGHT : point.y;
+    const anchorPointY = anchorIsAbove
+      ? point.y - MARKER_PIXEL_HEIGHT
+      : point.y;
 
     const rect = popupRect(point.x, anchorPointY, popupW, popupH, anchor);
     const minX = pad + margin;
@@ -513,7 +581,10 @@ export default function MapViewMapbox({
     const setPopupState = () => {
       setPopupAnchor(anchor);
       if (anchorIsAbove) {
-        const topOfIcon = map.unproject([point.x, point.y - MARKER_PIXEL_HEIGHT]);
+        const topOfIcon = map.unproject([
+          point.x,
+          point.y - MARKER_PIXEL_HEIGHT,
+        ]);
         setPopupLngLat({ lng: topOfIcon.lng, lat: topOfIcon.lat });
       } else {
         setPopupLngLat({ lng: selectedStore.lng, lat: selectedStore.lat });
@@ -562,9 +633,15 @@ export default function MapViewMapbox({
     return () => cancelAnimationFrame(id);
   }, [selectedStore, isMobile]);
 
-  const handleMapClick = useCallback(() => {
-    setSelectedStore(null);
-  }, []);
+  const handleMapClick = useCallback(
+    (e: { originalEvent?: { target?: EventTarget | null } }) => {
+      // Don't close tooltip when click was on a store marker (map can fire click for overlay)
+      const target = e?.originalEvent?.target as HTMLElement | null | undefined;
+      if (target?.closest?.(".store-marker")) return;
+      setSelectedStore(null);
+    },
+    [],
+  );
 
   /** Store map ref for compass, force grid bearing, and remove POI label layers. */
   const handleMapLoad = useCallback((e: { target: MapboxMap }) => {
@@ -600,29 +677,33 @@ export default function MapViewMapbox({
         mapStyle="mapbox://styles/mapbox/streets-v12"
         onClick={handleMapClick}
         onLoad={handleMapLoad}
+        onZoom={(e) => setZoomLevel(e.viewState.zoom)}
         reuseMaps={false}
       >
         <NavigationControl position="top-right" showCompass={false} showZoom />
         <PanControlsMapbox />
-        {stores.map((store) => (
-          <Marker
-            key={store.id}
-            longitude={store.lng}
-            latitude={store.lat}
-            anchor="bottom"
-            onClick={(e: { originalEvent?: Event }) =>
-              e.originalEvent?.stopPropagation()
-            }
-          >
-            <StoreMarkerMapbox
-              store={store}
-              isSelected={selectedStore?.id === store.id}
-              onSelect={() =>
-                setSelectedStore(selectedStore?.id === store.id ? null : store)
+        {stores.map((store) => {
+          const selected = selectedStore?.id === store.id;
+          return (
+            <Marker
+              key={store.id}
+              longitude={store.lng}
+              latitude={store.lat}
+              anchor="bottom"
+              style={{ zIndex: selected ? 10 : 1 }}
+              onClick={(e: { originalEvent?: Event }) =>
+                e.originalEvent?.stopPropagation()
               }
-            />
-          </Marker>
-        ))}
+            >
+              <StoreMarkerMapbox
+                store={store}
+                isSelected={selected}
+                showLogo={zoomedIn || selected}
+                onSelect={() => setSelectedStore(selected ? null : store)}
+              />
+            </Marker>
+          );
+        })}
 
         <div
           className="map-floral-frame"
