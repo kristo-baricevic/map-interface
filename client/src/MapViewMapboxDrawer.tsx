@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { Marker, NavigationControl, useMap } from "react-map-gl";
 import {
   IconChevronUp,
@@ -377,6 +377,35 @@ export default function MapViewMapboxDrawer({
     setSelectedStore(store);
     if (store) setHighlightedStore(store);
   }, []);
+
+  useEffect(() => {
+    if (!selectedStore || !mapInstanceRef.current) return;
+    const map = mapInstanceRef.current;
+    const container = map.getContainer();
+    if (!container) return;
+
+    const id = requestAnimationFrame(() => {
+      const m = mapInstanceRef.current;
+      if (!m) return;
+      const point = m.project([selectedStore.lng, selectedStore.lat]);
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      const pad = 80;
+
+      const inView =
+        point.x >= pad &&
+        point.x <= w - pad &&
+        point.y >= pad &&
+        point.y <= h - pad;
+
+      if (!inView) {
+        const dx = point.x - w / 2;
+        const dy = point.y - h / 2;
+        m.panBy([dx, dy], { duration: 400 });
+      }
+    });
+    return () => cancelAnimationFrame(id);
+  }, [selectedStore]);
 
   const handleMapClick = useCallback(() => {
     setSelectedStore(null);
