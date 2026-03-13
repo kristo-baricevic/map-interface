@@ -27,9 +27,12 @@ body {
   flex-direction: column;
 }
 
-/* Mapbox overrides for mobile tap targets */
-.mapboxgl-ctrl-attrib {
-  font-size: 10px;
+/* Mapbox / MapLibre: hide attribution and logo watermarks */
+.mapboxgl-ctrl-attrib,
+.mapboxgl-ctrl-logo,
+.maplibregl-ctrl-attrib,
+a.maplibregl-ctrl-logo {
+  display: none !important;
 }
 .mapboxgl-popup-close-button {
   font-size: 20px;

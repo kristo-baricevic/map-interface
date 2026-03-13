@@ -670,6 +670,7 @@ export default function MapViewMapbox({
         initialViewState={INITIAL_VIEW_STATE}
         style={{ width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/streets-v12"
+        attributionControl={false}
         onClick={handleMapClick}
         onLoad={handleMapLoad}
         onZoom={(e) => setZoomLevel(e.viewState.zoom)}

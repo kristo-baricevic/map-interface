@@ -504,6 +504,7 @@ export default function MapViewMapboxDrawer({
           initialViewState={INITIAL_VIEW_STATE}
           style={{ width: "100%", height: "100%" }}
           mapStyle="mapbox://styles/mapbox/streets-v12"
+          attributionControl={false}
           onClick={handleMapClick}
           onLoad={handleMapLoad}
           onZoom={(e) => setZoomLevel(e.viewState.zoom)}
@@ -542,7 +543,7 @@ export default function MapViewMapboxDrawer({
             />{" "}
           </div>
           <div
-            className="map-floral-frame"
+            className="map-floral-frame map-floral-frame-92ny"
             aria-hidden
             style={{
               position: "absolute",
@@ -569,6 +570,38 @@ export default function MapViewMapboxDrawer({
                 background: "transparent",
               }}
             />
+          </div>
+          <div
+            className="map-floral-frame map-floral-frame-greenery"
+            aria-hidden
+            style={{
+              position: "absolute",
+              bottom: -20,
+              right: -20,
+              width: "min(300px, 38vw)",
+              height: "auto",
+              pointerEvents: "none",
+              zIndex: 1,
+              background: "transparent",
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+            }}
+          >
+            <img
+              src="/greenery.png"
+              alt=""
+              className="map-floral-frame-img"
+              style={{
+                display: "block",
+                width: "100%",
+                height: "auto",
+                // transform: "scaleX(-1)",
+                objectFit: "contain",
+                objectPosition: "top right",
+                background: "transparent",
+              }}
+            />{" "}
           </div>
           <NavigationControl
             position="top-right"
@@ -731,9 +764,7 @@ export default function MapViewMapboxDrawer({
                   href="https://www.92ny.org/support-92ny/m/madisonave?utm_source=qr_code&utm_medium=flyer&utm_campaign=madave&utm_content=madave"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() =>
-                    trackStoreClick(selectedStore, "drawer_vip")
-                  }
+                  onClick={() => trackStoreClick(selectedStore, "drawer_vip")}
                 >
                   here
                 </a>{" "}
