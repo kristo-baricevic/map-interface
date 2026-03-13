@@ -150,8 +150,6 @@
   position: relative;
   min-width: 90%;
   margin-bottom: 10px;
-  width: 100%;
-  max-width: 100%;
 }
 
 .app-map-wrap {
@@ -207,6 +205,8 @@
   }
   .app-map-panel {
     min-width: 0;
+    width: 100%;
+    max-width: 100%;
     padding-left: max(0.5rem, env(safe-area-inset-left));
     padding-right: max(0.5rem, env(safe-area-inset-right));
     box-sizing: border-box;
