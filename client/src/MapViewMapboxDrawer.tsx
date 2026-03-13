@@ -48,6 +48,7 @@ import {
   getStoreMarkerIconUrl,
   DEFAULT_MARKER_ICON,
 } from "./types";
+import { trackStoreClick } from "./trackStoreClick";
 
 /** Map icon URL (path) to display category for the legend. */
 const ICON_URL_TO_CATEGORY: Record<string, string> = {
@@ -601,11 +602,13 @@ export default function MapViewMapboxDrawer({
                   store={store}
                   isSelected={selected}
                   showLogo={zoomedIn || selectedStore?.id === store.id}
-                  onSelect={() =>
+                  onSelect={() => {
+                    if (selectedStore?.id !== store.id)
+                      trackStoreClick(store, "map_marker");
                     handleSelectStore(
                       selectedStore?.id === store.id ? null : store,
-                    )
-                  }
+                    );
+                  }}
                 />
               </Marker>
             );
@@ -693,6 +696,9 @@ export default function MapViewMapboxDrawer({
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`Instagram: ${selectedStore.instagram}`}
+                        onClick={() =>
+                          trackStoreClick(selectedStore, "drawer_instagram")
+                        }
                       >
                         <IconBrandInstagram size={20} stroke={1.5} />
                         <span>{selectedStore.instagram}</span>
@@ -704,6 +710,9 @@ export default function MapViewMapboxDrawer({
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`Facebook: ${selectedStore.facebook}`}
+                        onClick={() =>
+                          trackStoreClick(selectedStore, "drawer_facebook")
+                        }
                       >
                         <IconBrandFacebook size={20} stroke={1.5} />
                         <span>{selectedStore.facebook}</span>
@@ -722,6 +731,9 @@ export default function MapViewMapboxDrawer({
                   href="https://www.92ny.org/support-92ny/m/madisonave?utm_source=qr_code&utm_medium=flyer&utm_campaign=madave&utm_content=madave"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    trackStoreClick(selectedStore, "drawer_vip")
+                  }
                 >
                   here
                 </a>{" "}

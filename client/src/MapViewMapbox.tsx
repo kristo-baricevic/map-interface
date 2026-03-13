@@ -48,6 +48,7 @@ import {
   getStoreMarkerIconUrl,
   DEFAULT_MARKER_ICON,
 } from "./types";
+import { trackStoreClick } from "./trackStoreClick";
 
 /** Tabler icon name → component for map markers (accepts size, stroke). */
 const TABLER_ICONS = {
@@ -693,7 +694,10 @@ export default function MapViewMapbox({
                 store={store}
                 isSelected={selected}
                 showLogo={zoomedIn || selected}
-                onSelect={() => setSelectedStore(selected ? null : store)}
+                onSelect={() => {
+                  if (!selected) trackStoreClick(store, "map_marker");
+                  setSelectedStore(selected ? null : store);
+                }}
               />
             </Marker>
           );

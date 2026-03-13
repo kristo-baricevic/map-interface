@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import storesRouter from "./routes/stores.js";
 import mapboxRouter from "./routes/mapbox.js";
+import storeClickRouter from "./routes/storeClick.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /**
@@ -19,11 +20,13 @@ const isProduction = process.env.NODE_ENV === "production";
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
+app.set("trust proxy", 1);
 app.use(cors());
 app.use(express.json());
 
 app.use("/api/stores", storesRouter);
 app.use("/api/mapbox", mapboxRouter);
+app.use("/api/store-click", storeClickRouter);
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
