@@ -54,7 +54,7 @@ import { trackStoreClick } from "./trackStoreClick";
 const ICON_URL_TO_CATEGORY: Record<string, string> = {
   "/assets/new-icons/Shirt--Streamline-Flex.svg": "Apparel",
   "/assets/new-icons/Object-Diamond-Ring--Streamline-Nova (1).png": "Jewelry",
-  "/assets/new-icons/Candle--Streamline-Atlas.svg": "Candles & Home",
+  "/assets/new-icons/Candle--Streamline-Atlas.svg": "Home Goods",
   "/assets/new-icons/Blazer--Streamline-Ultimate.png": "Jackets & Outerwear",
   "/assets/new-icons/Baby-Carriage--Streamline-Font-Awesome.svg": "Kids & Baby",
   "/assets/new-icons/Wine-Bottle--Streamline-Font-Awesome.svg":
@@ -516,7 +516,7 @@ export default function MapViewMapboxDrawer({
             style={{
               position: "absolute",
               top: 7,
-              left: -14,
+              left: 10,
               width: "min(200px, 38vw)",
               height: "auto",
               pointerEvents: "none",
@@ -528,6 +528,20 @@ export default function MapViewMapboxDrawer({
             }}
           >
             <img
+              src="/butterfly-with-branding.png"
+              alt=""
+              className="map-floral-frame-img"
+              style={{
+                display: "block",
+                width: "100%",
+                height: "auto",
+                // transform: "scaleX(-1)",
+                objectFit: "contain",
+                objectPosition: "top right",
+                background: "transparent",
+              }}
+            />{" "}
+            {/* <img
               src="/butterfly.png"
               alt=""
               className="map-floral-frame-img"
@@ -540,23 +554,24 @@ export default function MapViewMapboxDrawer({
                 objectPosition: "top right",
                 background: "transparent",
               }}
-            />{" "}
+            />{" "} */}
           </div>
-          <div
+          {/* <div
             className="map-floral-frame map-floral-frame-92ny"
             aria-hidden
             style={{
               position: "absolute",
-              top: 12,
+              top: -10,
               left: 30,
-              width: "min(200px, 38vw)",
+              width: "auto",
               height: "auto",
               pointerEvents: "none",
               zIndex: 1,
               background: "transparent",
               display: "flex",
-              flexDirection: "column",
-              gap: 12,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 0,
             }}
           >
             <img
@@ -564,13 +579,24 @@ export default function MapViewMapboxDrawer({
               alt=""
               style={{
                 display: "block",
-                width: "min(120px, 25vw)",
-                height: "auto",
+                width: "min(80px, 25vw)",
+                height: "min(80px, 25vw)",
                 objectFit: "contain",
                 background: "transparent",
               }}
             />
-          </div>
+            <img
+              src="/assets/logos/Madison Avenue BID logo.png"
+              alt=""
+              style={{
+                display: "block",
+                width: "min(120px, 25vw)",
+                height: "min(120px, 25vw)",
+                objectFit: "contain",
+                background: "transparent",
+              }}
+            />
+          </div> */}
           <div
             className="map-floral-frame map-floral-frame-greenery"
             aria-hidden

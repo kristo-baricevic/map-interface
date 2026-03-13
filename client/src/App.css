@@ -26,6 +26,7 @@
   height: 100%;
   font-family: "Theinhardt Pan", sans-serif;
   background: #fad487;
+  padding-top: 12px;
 }
 
 .app-header {
@@ -214,9 +215,6 @@
   .map-container {
     min-width: 0;
   }
-  .map-floral-frame-92ny {
-    left: 25px !important;
-  }
   .map-floral-frame-greenery {
     bottom: -20 !important;
     right: -20 !important;
@@ -274,8 +272,8 @@
 /* Legend button (bottom right on map) */
 .map-legend-btn {
   position: absolute;
-  right: 0.5rem;
-  bottom: 0.5rem;
+  left: 2.4rem;
+  bottom: 1.25rem;
   z-index: 2;
   padding: 0.4rem 0.75rem;
   font-size: 0.8125rem;

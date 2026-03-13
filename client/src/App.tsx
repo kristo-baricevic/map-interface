@@ -61,7 +61,10 @@ export default function App() {
     };
   }, []);
 
-  const displayStores = useMemo(() => staggerOverlappingStores(stores), [stores]);
+  const displayStores = useMemo(
+    () => staggerOverlappingStores(stores),
+    [stores],
+  );
 
   if (loading) {
     return (
@@ -83,7 +86,7 @@ export default function App() {
 
   return (
     <main className="app">
-      <header className="app-header">
+      {/* <header className="app-header">
         <div className="app-header-row">
           <div className="app-header-left">
             <img
@@ -95,11 +98,14 @@ export default function App() {
           </div>
         </div>
         <p className="app-subtitle">Tap a pin to open the drawer</p>
-      </header>
+      </header> */}
 
       <div id="map-panel" className="app-map-panel">
         {canUseMapbox && (
-          <MapViewMapboxDrawer mapboxToken={mapboxToken} stores={displayStores} />
+          <MapViewMapboxDrawer
+            mapboxToken={mapboxToken}
+            stores={displayStores}
+          />
         )}
         {!canUseMapbox && (
           <div className="app-map-unavailable">
