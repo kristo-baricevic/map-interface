@@ -243,6 +243,111 @@
   background: #e8e8e8;
 }
 
+/* Legend button (bottom right on map) */
+.map-legend-btn {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  z-index: 2;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #333;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.map-legend-btn:hover {
+  background: #f5f5f5;
+}
+.map-legend-btn:active {
+  background: #e8e8e8;
+}
+
+/* Legend modal */
+.map-legend-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+.map-legend-modal {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  max-width: 320px;
+  width: 100%;
+  max-height: 85vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.map-legend-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+.map-legend-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+.map-legend-close {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: #555;
+  cursor: pointer;
+}
+.map-legend-close:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+.map-legend-list {
+  margin: 0;
+  padding: 0.75rem 1.25rem 1.25rem;
+  list-style: none;
+  overflow: auto;
+}
+.map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.map-legend-item:last-child {
+  border-bottom: none;
+}
+.map-legend-icon {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.map-legend-category {
+  font-size: 0.9375rem;
+  color: #333;
+}
+
 /* MapLibre navigation control (zoom + compass) – ensure it’s visible */
 .maplibregl-ctrl-group {
   border-radius: 4px;

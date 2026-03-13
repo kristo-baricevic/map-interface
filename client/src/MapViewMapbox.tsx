@@ -165,17 +165,7 @@ function StoreTooltipBody({ store }: { store: Store }) {
           )}
         </p>
       )}
-      {(store.iconUrl ?? store.icon) && (
-        <p className="store-tooltip-link">
-          <a
-            href={store.iconUrl ?? getLocalIconUrl(store.icon!)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            File / link
-          </a>
-        </p>
-      )}
+
       <p className="store-tooltip-vip">
         Get your Spring Down Madison VIP Pass{" "}
         <a
@@ -714,7 +704,7 @@ export default function MapViewMapbox({
           aria-hidden
           style={{
             position: "absolute",
-            top: -20,
+            top: -40,
             left: -20,
             width: "min(200px, 38vw)",
             height: "auto",

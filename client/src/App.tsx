@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import MapViewMapbox from "./MapViewMapbox";
 import MapViewMapboxDrawer from "./MapViewMapboxDrawer";
 import type { Store } from "./types";
 import { staggerOverlappingStores } from "./utils/staggerStores";
@@ -35,12 +34,9 @@ async function loadMapboxToken(): Promise<string> {
   return "";
 }
 
-type MapOption = 1 | 2;
-
 export default function App() {
   const [stores, setStores] = useState<Store[]>([]);
   const [mapboxToken, setMapboxToken] = useState<string>("");
-  const [mapOption, setMapOption] = useState<MapOption>(1);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -97,37 +93,12 @@ export default function App() {
             />
             <h1 className="app-title">Spring Down Madison</h1>
           </div>
-          <div className="app-option-pills" role="tablist" aria-label="Map view">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mapOption === 1}
-            className={`app-option-pill ${mapOption === 1 ? "app-option-pill-active" : ""}`}
-            onClick={() => setMapOption(1)}
-          >
-            Option 1
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mapOption === 2}
-            className={`app-option-pill ${mapOption === 2 ? "app-option-pill-active" : ""}`}
-            onClick={() => setMapOption(2)}
-          >
-            Option 2
-          </button>
-          </div>
         </div>
-        <p className="app-subtitle">
-          {mapOption === 1 ? "Tap a pin for store details" : "Tap a pin to open the drawer"}
-        </p>
+        <p className="app-subtitle">Tap a pin to open the drawer</p>
       </header>
 
       <div id="map-panel" className="app-map-panel">
-        {canUseMapbox && mapOption === 1 && (
-          <MapViewMapbox mapboxToken={mapboxToken} stores={displayStores} />
-        )}
-        {canUseMapbox && mapOption === 2 && (
+        {canUseMapbox && (
           <MapViewMapboxDrawer mapboxToken={mapboxToken} stores={displayStores} />
         )}
         {!canUseMapbox && (

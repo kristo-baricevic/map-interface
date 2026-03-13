@@ -49,6 +49,27 @@ import {
   DEFAULT_MARKER_ICON,
 } from "./types";
 
+/** Map icon URL (path) to display category for the legend. */
+const ICON_URL_TO_CATEGORY: Record<string, string> = {
+  "/assets/new-icons/Shirt--Streamline-Flex.svg": "Apparel",
+  "/assets/new-icons/Object-Diamond-Ring--Streamline-Nova (1).png": "Jewelry",
+  "/assets/new-icons/Candle--Streamline-Atlas.svg": "Candles & Home",
+  "/assets/new-icons/Blazer--Streamline-Ultimate.png": "Jackets & Outerwear",
+  "/assets/new-icons/Baby-Carriage--Streamline-Font-Awesome.svg": "Kids & Baby",
+  "/assets/new-icons/Wine-Bottle--Streamline-Font-Awesome.svg":
+    "Wine & Spirits",
+  "/assets/new-icons/Perfume--Streamline-Solar-Ar.svg": "Perfume & Fragrance",
+  "/assets/new-icons/Office-Building-2--Streamline-Sharp-Remix.svg":
+    "Office & Organization",
+  "/assets/new-icons/Hanging-Frame--Streamline-Atlas.svg": "Art & Museum",
+  "/assets/new-icons/Chocolate--Streamline-Sharp.png": "Chocolate & Candy",
+  "/assets/new-icons/Lipstick--Streamline-Core-Remix.svg": "Beauty & Skincare",
+  "/assets/new-icons/Handbag-Fill--Streamline-Remix-Fill.svg":
+    "Bags & Accessories",
+  "/assets/new-icons/Scissors-2--Streamline-Ultimate.svg": "Salon & Services",
+  "/assets/new-icons/Glasses-Sun-Circle--Streamline-Ultimate.png": "Eyewear",
+};
+
 const TABLER_ICONS = {
   Coffee: IconCoffee,
   BuildingStore: IconBuildingStore,
@@ -253,6 +274,7 @@ function StoreMarkerMapbox({
   showLogo: boolean;
 }) {
   const [useDefaultIcon, setUseDefaultIcon] = useState(false);
+  const [iconUrlLoadFailed, setIconUrlLoadFailed] = useState(false);
   const [logoLoadFailed, setLogoLoadFailed] = useState(false);
   const logoLoadedRef = useRef(false);
   const iconSrc = useDefaultIcon
@@ -262,6 +284,8 @@ function StoreMarkerMapbox({
     store.iconTabler != null ? TABLER_ICONS[store.iconTabler] : undefined;
   const hasLogo = Boolean(store.logoUrl) && !logoLoadFailed;
   const displayLogo = showLogo && hasLogo;
+  /** Prefer new-icons (iconUrl) over Tabler icon when set and loading succeeded. */
+  const useIconImage = Boolean(store.iconUrl) && !iconUrlLoadFailed;
 
   const size = displayLogo ? LOGO_MARKER_SIZE : ICON_MARKER_SIZE;
   const padding = displayLogo ? LOGO_MARKER_PADDING : 0;
@@ -306,6 +330,28 @@ function StoreMarkerMapbox({
             objectFit: "contain",
           }}
         />
+      ) : useIconImage ? (
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <img
+            src={store.iconUrl}
+            alt=""
+            style={{
+              display: "block",
+              width: ICON_INNER_SIZE,
+              height: ICON_INNER_SIZE,
+              objectFit: "contain",
+            }}
+            onError={() => setIconUrlLoadFailed(true)}
+          />
+        </span>
       ) : TablerIcon ? (
         <span
           style={{
@@ -357,9 +403,23 @@ export default function MapViewMapboxDrawer({
   /** Last store selected (by click or nav); keeps that marker highlighted when drawer is closed. */
   const [highlightedStore, setHighlightedStore] = useState<Store | null>(null);
   const [zoomLevel, setZoomLevel] = useState(INITIAL_ZOOM);
+  const [legendOpen, setLegendOpen] = useState(false);
   const zoomedIn = zoomLevel >= LOGO_ZOOM_THRESHOLD;
   const mapInstanceRef = useRef<MapboxMap | null>(null);
   const storesByMadison = useStoresByMadison(stores);
+
+  /** Unique icon + category entries for the legend (from stores that have iconUrl). */
+  const legendEntries = useMemo((): { iconUrl: string; category: string }[] => {
+    const byUrl: Record<string, string> = {};
+    for (const store of stores) {
+      if (store.iconUrl) {
+        byUrl[store.iconUrl] = ICON_URL_TO_CATEGORY[store.iconUrl] ?? "Other";
+      }
+    }
+    return Object.entries(byUrl)
+      .map(([iconUrl, category]) => ({ iconUrl, category }))
+      .sort((a, b) => a.category.localeCompare(b.category));
+  }, [stores]);
 
   const currentIndex = selectedStore
     ? storesByMadison.findIndex((s) => s.id === selectedStore.id)
@@ -453,13 +513,16 @@ export default function MapViewMapboxDrawer({
             aria-hidden
             style={{
               position: "absolute",
-              top: -20,
-              left: -20,
+              top: 7,
+              left: -14,
               width: "min(200px, 38vw)",
               height: "auto",
               pointerEvents: "none",
               zIndex: 1,
               background: "transparent",
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
             }}
           >
             <img
@@ -475,6 +538,35 @@ export default function MapViewMapboxDrawer({
                 objectPosition: "top right",
                 background: "transparent",
               }}
+            />{" "}
+          </div>
+          <div
+            className="map-floral-frame"
+            aria-hidden
+            style={{
+              position: "absolute",
+              top: 12,
+              left: 30,
+              width: "min(200px, 38vw)",
+              height: "auto",
+              pointerEvents: "none",
+              zIndex: 1,
+              background: "transparent",
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+            }}
+          >
+            <img
+              src="/assets/logos/92NY logo.png"
+              alt=""
+              style={{
+                display: "block",
+                width: "min(120px, 25vw)",
+                height: "auto",
+                objectFit: "contain",
+                background: "transparent",
+              }}
             />
           </div>
           <NavigationControl
@@ -483,6 +575,14 @@ export default function MapViewMapboxDrawer({
             showZoom
           />
           <PanControlsMapbox />
+          <button
+            type="button"
+            className="map-legend-btn"
+            onClick={() => setLegendOpen(true)}
+            aria-label="Open legend"
+          >
+            Legend
+          </button>
           {stores.map((store) => {
             const selected =
               (selectedStore ?? highlightedStore)?.id === store.id;
@@ -513,6 +613,42 @@ export default function MapViewMapboxDrawer({
         </Map>
         <CompassControl mapRef={mapInstanceRef} />
       </div>
+      {legendOpen && (
+        <div
+          className="map-legend-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="map-legend-title"
+          onClick={() => setLegendOpen(false)}
+        >
+          <div
+            className="map-legend-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="map-legend-header">
+              <h2 id="map-legend-title" className="map-legend-title">
+                Legend
+              </h2>
+              <button
+                type="button"
+                className="map-legend-close"
+                onClick={() => setLegendOpen(false)}
+                aria-label="Close legend"
+              >
+                <IconX size={24} stroke={2} />
+              </button>
+            </div>
+            <ul className="map-legend-list">
+              {legendEntries.map(({ iconUrl, category }) => (
+                <li key={iconUrl} className="map-legend-item">
+                  <img src={iconUrl} alt="" className="map-legend-icon" />
+                  <span className="map-legend-category">{category}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
       <aside
         className={`store-drawer ${selectedStore ? "store-drawer-open" : ""}`}
         aria-label="Store details"
@@ -573,20 +709,6 @@ export default function MapViewMapboxDrawer({
                         <span>{selectedStore.facebook}</span>
                       </a>
                     )}
-                  </p>
-                )}
-                {(selectedStore.iconUrl ?? selectedStore.icon) && (
-                  <p className="store-tooltip-link">
-                    <a
-                      href={
-                        selectedStore.iconUrl ??
-                        getLocalIconUrl(selectedStore.icon!)
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      File / link
-                    </a>
                   </p>
                 )}
               </div>
