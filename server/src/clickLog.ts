@@ -1,7 +1,11 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const LOG_DIR = process.env.CLICK_LOG_DIR ?? path.join(process.cwd(), "logs");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+/** Logs next to the server app (e.g. server/logs when run from server/dist). Override with CLICK_LOG_DIR. */
+const LOG_DIR =
+  process.env.CLICK_LOG_DIR ?? path.join(__dirname, "..", "logs");
 
 function getLogPath(): string {
   const now = new Date();

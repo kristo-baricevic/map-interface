@@ -4,7 +4,7 @@ Clicks on store markers and drawer links are logged append-only to disk for mark
 
 ## Log files
 
-- **Location**: `logs/` under the server working directory (override with `CLICK_LOG_DIR`).
+- **Location**: `logs/` next to the server app (e.g. `server/logs/` when running from `server/dist/`). This does not depend on the process working directory. Override with **`CLICK_LOG_DIR`** (absolute path recommended on deployment if the app directory is read-only, e.g. `/var/log/myapp` or a mounted volume).
 - **Naming**: `store_clicks_YYYY_MM.log` (one file per month).
 - **Format**: One JSON object per line (NDJSON). Fields:
   - `storeId`, `storeName`, `button`, `t` (ms), `ip`, `visitorId`, `userAgent`
