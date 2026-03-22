@@ -761,6 +761,11 @@
 }
 
 /* Visually larger logo without changing slot height (slot clips overflow). */
+.store-drawer-content .store-drawer-logo--scale-up-frame {
+  transform: scale(1.12) translateX(-6px);
+  transform-origin: left center;
+}
+
 .store-drawer-content .store-drawer-logo--scale-up {
   transform: scale(1.22);
   transform-origin: left center;

@@ -126,8 +126,18 @@ const LOGO_MARKER_PADDING = 4;
 /** Zoom at or above which all markers switch from icons to logos. */
 const LOGO_ZOOM_THRESHOLD = 15.3;
 
-/** Drawer: scale logo up inside the fixed slot (does not move copy). Exact `Store.name`. */
+/** Drawer: stronger scale inside fixed slot (does not move copy). Exact `Store.name`. */
 const DRAWER_LOGO_SCALE_UP_STORE_NAMES = new Set<string>(["PAUL MORELLI"]);
+
+function drawerLogoImgClassName(storeName: string): string {
+  if (DRAWER_LOGO_SCALE_UP_STORE_NAMES.has(storeName)) {
+    return "store-drawer-logo store-drawer-logo--scale-up";
+  }
+  if (storeName === "FRAME") {
+    return "store-drawer-logo store-drawer-logo--scale-up-frame";
+  }
+  return "store-drawer-logo";
+}
 
 function CompassControl({
   mapRef,
@@ -673,11 +683,7 @@ export default function MapViewMapboxDrawer({
                     <img
                       src={selectedStore.logoUrl}
                       alt={`${selectedStore.name} logo`}
-                      className={
-                        DRAWER_LOGO_SCALE_UP_STORE_NAMES.has(selectedStore.name)
-                          ? "store-drawer-logo store-drawer-logo--scale-up"
-                          : "store-drawer-logo"
-                      }
+                      className={drawerLogoImgClassName(selectedStore.name)}
                     />
                   ) : (
                     <div
