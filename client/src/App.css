@@ -198,6 +198,68 @@
 .map-floral-frame img {
   background: transparent !important;
 }
+
+/* Stacked logos + butterfly: position/size by breakpoint */
+.map-floral-frame-stacked-logos {
+  position: absolute;
+  top: 7px;
+  left: 55px;
+  width: min(200px, 38vw);
+  height: auto;
+  pointer-events: none;
+  z-index: 1;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.map-floral-frame-stacked-logos .map-floral-frame-img {
+  display: block;
+  width: 50%;
+  height: auto;
+  object-fit: contain;
+  object-position: top right;
+}
+.map-floral-frame-butterfly {
+  position: absolute;
+  top: 100px;
+  left: 20px;
+  width: min(200px, 38vw);
+  height: auto;
+  pointer-events: none;
+  z-index: 1;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.map-floral-frame-butterfly .map-floral-frame-img {
+  display: block;
+  width: 90%;
+  height: auto;
+  object-fit: contain;
+  object-position: top right;
+}
+@media (max-width: 1024px) and (min-width: 768px) {
+  .map-floral-frame-stacked-logos {
+    top: 6px;
+    left: 36px;
+    width: min(176px, 32vw);
+    gap: 10px;
+  }
+  .map-floral-frame-stacked-logos .map-floral-frame-img {
+    width: 48%;
+  }
+  .map-floral-frame-butterfly {
+    top: 86px;
+    left: 12px;
+    width: min(176px, 32vw);
+    gap: 10px;
+  }
+  .map-floral-frame-butterfly .map-floral-frame-img {
+    width: 82%;
+  }
+}
 @media (max-width: 767px) {
   .app {
     overflow-x: hidden;
@@ -219,6 +281,24 @@
     bottom: -20 !important;
     right: -20 !important;
     width: min(300px, 70vw) !important;
+  }
+  .map-floral-frame-stacked-logos {
+    top: 4px;
+    left: max(30px, env(safe-area-inset-left));
+    width: min(200px, 70vw);
+    gap: 6px;
+  }
+  .map-floral-frame-stacked-logos .map-floral-frame-img {
+    width: 44%;
+  }
+  .map-floral-frame-butterfly {
+    top: 90px;
+    left: max(20px, env(safe-area-inset-left));
+    width: min(142px, 40vw);
+    gap: 6px;
+  }
+  .map-floral-frame-butterfly .map-floral-frame-img {
+    width: 72%;
   }
 }
 .map-floral-frame-img {
@@ -633,6 +713,57 @@
 
 .store-drawer-content {
   margin: 0;
+}
+
+/*
+ * Fixed-size slot for every store: name/address always start at the same vertical position.
+ * Logo scales inside (object-fit: contain); missing logo uses the same placeholder height.
+ */
+.store-drawer-content .store-drawer-logo-slot {
+  --store-drawer-logo-size: 184px;
+  display: grid;
+  grid-template: 1fr / 1fr;
+  place-items: center start;
+  flex-shrink: 0;
+  width: var(--store-drawer-logo-size);
+  height: var(--store-drawer-logo-size);
+  min-height: var(--store-drawer-logo-size);
+  max-height: var(--store-drawer-logo-size);
+  margin: 0 0 8px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.store-drawer-content .store-drawer-logo-placeholder {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  pointer-events: none;
+}
+
+/* Stays within the slot; vertically centered, flush left (no % overflow hacks). */
+.store-drawer-content .store-drawer-logo {
+  display: block;
+  grid-column: 1;
+  grid-row: 1;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  box-sizing: border-box;
+  object-fit: contain;
+  margin: 0;
+  /* Prevent rare intrinsic-size quirks from stretching the slot. */
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Visually larger logo without changing slot height (slot clips overflow). */
+.store-drawer-content .store-drawer-logo--scale-up {
+  transform: scale(1.22);
+  transform-origin: left center;
 }
 
 .store-drawer-footer {

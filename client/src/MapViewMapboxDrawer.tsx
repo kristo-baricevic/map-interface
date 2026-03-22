@@ -126,6 +126,9 @@ const LOGO_MARKER_PADDING = 4;
 /** Zoom at or above which all markers switch from icons to logos. */
 const LOGO_ZOOM_THRESHOLD = 15.3;
 
+/** Drawer: scale logo up inside the fixed slot (does not move copy). Exact `Store.name`. */
+const DRAWER_LOGO_SCALE_UP_STORE_NAMES = new Set<string>(["PAUL MORELLI"]);
+
 function CompassControl({
   mapRef,
 }: {
@@ -511,92 +514,26 @@ export default function MapViewMapboxDrawer({
           reuseMaps={false}
         >
           <div
-            className="map-floral-frame"
+            className="map-floral-frame map-floral-frame-stacked-logos"
             aria-hidden
-            style={{
-              position: "absolute",
-              top: 7,
-              left: 10,
-              width: "min(200px, 38vw)",
-              height: "auto",
-              pointerEvents: "none",
-              zIndex: 1,
-              background: "transparent",
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
-            }}
           >
             <img
-              src="/butterfly-with-branding.png"
+              src="/stacked_logos.png"
               alt=""
               className="map-floral-frame-img"
-              style={{
-                display: "block",
-                width: "100%",
-                height: "auto",
-                // transform: "scaleX(-1)",
-                objectFit: "contain",
-                objectPosition: "top right",
-                background: "transparent",
-              }}
-            />{" "}
-            {/* <img
-              src="/butterfly.png"
-              alt=""
-              className="map-floral-frame-img"
-              style={{
-                display: "block",
-                width: "100%",
-                height: "auto",
-                transform: "scaleX(-1)",
-                objectFit: "contain",
-                objectPosition: "top right",
-                background: "transparent",
-              }}
-            />{" "} */}
+            />
           </div>
-          {/* <div
-            className="map-floral-frame map-floral-frame-92ny"
+          <div
+            className="map-floral-frame map-floral-frame-butterfly"
             aria-hidden
-            style={{
-              position: "absolute",
-              top: -10,
-              left: 30,
-              width: "auto",
-              height: "auto",
-              pointerEvents: "none",
-              zIndex: 1,
-              background: "transparent",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 0,
-            }}
           >
             <img
-              src="/assets/logos/92NY logo.png"
+              src="/animated_butterfly.png"
               alt=""
-              style={{
-                display: "block",
-                width: "min(80px, 25vw)",
-                height: "min(80px, 25vw)",
-                objectFit: "contain",
-                background: "transparent",
-              }}
+              className="map-floral-frame-img"
             />
-            <img
-              src="/assets/logos/Madison Avenue BID logo.png"
-              alt=""
-              style={{
-                display: "block",
-                width: "min(120px, 25vw)",
-                height: "min(120px, 25vw)",
-                objectFit: "contain",
-                background: "transparent",
-              }}
-            />
-          </div> */}
+          </div>
+         
           <div
             className="map-floral-frame map-floral-frame-greenery"
             aria-hidden
@@ -731,19 +668,24 @@ export default function MapViewMapboxDrawer({
           {selectedStore && (
             <div className="store-drawer-body">
               <div className="store-tooltip store-drawer-content">
-                {selectedStore.logoUrl && (
-                  <img
-                    src={selectedStore.logoUrl}
-                    alt={`${selectedStore.name} logo`}
-                    style={{
-                      display: "block",
-                      maxWidth: 80,
-                      maxHeight: 80,
-                      objectFit: "contain",
-                      margin: "0 auto 8px",
-                    }}
-                  />
-                )}
+                <div className="store-drawer-logo-slot">
+                  {selectedStore.logoUrl ? (
+                    <img
+                      src={selectedStore.logoUrl}
+                      alt={`${selectedStore.name} logo`}
+                      className={
+                        DRAWER_LOGO_SCALE_UP_STORE_NAMES.has(selectedStore.name)
+                          ? "store-drawer-logo store-drawer-logo--scale-up"
+                          : "store-drawer-logo"
+                      }
+                    />
+                  ) : (
+                    <div
+                      className="store-drawer-logo-placeholder"
+                      aria-hidden
+                    />
+                  )}
+                </div>
                 <h3 className="store-tooltip-name">{selectedStore.name}</h3>
                 <p className="store-tooltip-address">{selectedStore.address}</p>
                 <p className="store-tooltip-hours">{selectedStore.hours}</p>
