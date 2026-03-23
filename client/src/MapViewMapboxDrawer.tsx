@@ -104,14 +104,11 @@ const TABLER_ICONS = {
   Scissors: IconScissors,
 } as Record<string, React.ComponentType<{ size?: number; stroke?: number }>>;
 
-const CARNEGIE_HILL_CENTER = { lng: -73.95607, lat: 40.784726 };
 const INITIAL_ZOOM = 15;
 const MANHATTAN_GRID_BEARING = 29;
-const INITIAL_TOP_STORE_PADDING = 72;
-const E85TH_STREET_ANCHOR = { lng: -73.9593, lat: 40.7797 };
 const INITIAL_VIEW_STATE = {
-  longitude: CARNEGIE_HILL_CENTER.lng,
-  latitude: CARNEGIE_HILL_CENTER.lat,
+  longitude: -73.9666,
+  latitude: 40.7704,
   zoom: INITIAL_ZOOM,
   bearing: MANHATTAN_GRID_BEARING,
   pitch: 0,
@@ -422,7 +419,6 @@ export default function MapViewMapboxDrawer({
   const [legendOpen, setLegendOpen] = useState(false);
   const zoomedIn = zoomLevel >= LOGO_ZOOM_THRESHOLD;
   const mapInstanceRef = useRef<MapboxMap | null>(null);
-  const initialPositionedRef = useRef(false);
   const storesByMadison = useStoresByMadison(stores);
 
   /** Unique icon + category entries for the legend (from stores that have iconUrl). */
@@ -510,19 +506,6 @@ export default function MapViewMapboxDrawer({
         // ignore
       }
     });
-
-    // On first load, anchor around E 85th Street near the top edge.
-    if (!initialPositionedRef.current) {
-      const align = () => {
-        const point = map.project([E85TH_STREET_ANCHOR.lng, E85TH_STREET_ANCHOR.lat]);
-        const dy = INITIAL_TOP_STORE_PADDING - point.y;
-        if (Number.isFinite(dy) && Math.abs(dy) > 1) {
-          map.panBy([0, dy], { duration: 0 });
-        }
-        initialPositionedRef.current = true;
-      };
-      map.once("idle", align);
-    }
   }, []);
 
   return (
@@ -559,7 +542,7 @@ export default function MapViewMapboxDrawer({
               className="map-floral-frame-img"
             />
           </div>
-         
+
           <div
             className="map-floral-frame map-floral-frame-greenery"
             aria-hidden
@@ -712,7 +695,9 @@ export default function MapViewMapboxDrawer({
                 <p className="store-tooltip-address">{selectedStore.address}</p>
                 <p className="store-tooltip-hours">{selectedStore.hours}</p>
                 {selectedStore.adCopy && (
-                  <p className="store-tooltip-ad-copy">{selectedStore.adCopy}</p>
+                  <p className="store-tooltip-ad-copy">
+                    {selectedStore.adCopy}
+                  </p>
                 )}
                 {(selectedStore.instagram ?? selectedStore.facebook) && (
                   <p className="store-tooltip-social">
