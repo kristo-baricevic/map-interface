@@ -107,6 +107,7 @@ const TABLER_ICONS = {
 const CARNEGIE_HILL_CENTER = { lng: -73.95607, lat: 40.784726 };
 const INITIAL_ZOOM = 15;
 const MANHATTAN_GRID_BEARING = 29;
+const INITIAL_TOP_STORE_PADDING = 72;
 const INITIAL_VIEW_STATE = {
   longitude: CARNEGIE_HILL_CENTER.lng,
   latitude: CARNEGIE_HILL_CENTER.lat,
@@ -420,7 +421,17 @@ export default function MapViewMapboxDrawer({
   const [legendOpen, setLegendOpen] = useState(false);
   const zoomedIn = zoomLevel >= LOGO_ZOOM_THRESHOLD;
   const mapInstanceRef = useRef<MapboxMap | null>(null);
+  const initialPositionedRef = useRef(false);
   const storesByMadison = useStoresByMadison(stores);
+  const topmostStore = useMemo(
+    () =>
+      stores.reduce<Store | null>(
+        (current, store) =>
+          !current || store.lat > current.lat ? store : current,
+        null,
+      ),
+    [stores],
+  );
 
   /** Unique icon + category entries for the legend (from stores that have iconUrl). */
   const legendEntries = useMemo((): { iconUrl: string; category: string }[] => {
@@ -507,7 +518,20 @@ export default function MapViewMapboxDrawer({
         // ignore
       }
     });
-  }, []);
+
+    // On first load, shift viewport so the northern-most store sits near the top edge.
+    if (!initialPositionedRef.current && topmostStore) {
+      const align = () => {
+        const point = map.project([topmostStore.lng, topmostStore.lat]);
+        const dy = point.y - INITIAL_TOP_STORE_PADDING;
+        if (Number.isFinite(dy) && Math.abs(dy) > 1) {
+          map.panBy([0, dy], { duration: 0 });
+        }
+        initialPositionedRef.current = true;
+      };
+      map.once("idle", align);
+    }
+  }, [topmostStore]);
 
   return (
     <>
