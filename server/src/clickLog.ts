@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** Logs next to the server app (e.g. server/logs when run from server/dist). Override with CLICK_LOG_DIR. */
-const LOG_DIR =
+export const CLICK_LOG_DIR =
   process.env.CLICK_LOG_DIR ?? path.join(__dirname, "..", "logs");
 
 function getLogPath(): string {
@@ -12,13 +12,13 @@ function getLogPath(): string {
   const y = now.getFullYear();
   const m = String(now.getMonth() + 1).padStart(2, "0");
   const name = `store_clicks_${y}_${m}.log`;
-  return path.join(LOG_DIR, name);
+  return path.join(CLICK_LOG_DIR, name);
 }
 
 /** Ensure logs directory exists. Call once at startup or first write. */
 function ensureLogDir(): void {
   try {
-    fs.mkdirSync(LOG_DIR, { recursive: true });
+    fs.mkdirSync(CLICK_LOG_DIR, { recursive: true });
   } catch {
     // ignore
   }

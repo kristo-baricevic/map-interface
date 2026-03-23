@@ -695,6 +695,9 @@ export default function MapViewMapboxDrawer({
                 <h3 className="store-tooltip-name">{selectedStore.name}</h3>
                 <p className="store-tooltip-address">{selectedStore.address}</p>
                 <p className="store-tooltip-hours">{selectedStore.hours}</p>
+                {selectedStore.adCopy && (
+                  <p className="store-tooltip-ad-copy">{selectedStore.adCopy}</p>
+                )}
                 {(selectedStore.instagram ?? selectedStore.facebook) && (
                   <p className="store-tooltip-social">
                     {selectedStore.instagram && (

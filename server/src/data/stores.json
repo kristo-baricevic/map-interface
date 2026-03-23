@@ -11,7 +11,8 @@
     "instagram": "@alc_ltd",
     "facebook": "ALCltd",
     "lng": -73.9545,
-    "lat": 40.7868
+    "lat": 40.7868,
+    "adCopy": "Women’s fashion brand known for polished staples & modern tailoring. Get the VIP Pass here for GWP + 15% off."
   },
   {
     "id": "store-2",
@@ -25,7 +26,8 @@
     "instagram": "@alexisbittar",
     "facebook": "AlexisBittar",
     "lng": -73.9552,
-    "lat": 40.7858
+    "lat": 40.7858,
+    "adCopy": "Luxury jewelry brand known for bold, sculptural designs. Get the VIP Pass here for 20% off full-price, including antique styles."
   },
   {
     "id": "store-3",
@@ -39,7 +41,8 @@
     "instagram": "@annefontaine",
     "facebook": "AnneFontaineInc",
     "lng": -73.9691,
-    "lat": 40.7668
+    "lat": 40.7668,
+    "adCopy": "Parisian fashion house known for elegant white shirts and refined womenswear. Get the VIP Pass here for GWP."
   },
   {
     "id": "store-4",
@@ -53,7 +56,8 @@
     "instagram": "@baobabcollection",
     "facebook": "BaobabCollection",
     "lng": -73.9544,
-    "lat": 40.7869
+    "lat": 40.7869,
+    "adCopy": "Luxury home fragrance brand known for decorative candles. Get the VIP Pass here for a special gift with purchase."
   },
   {
     "id": "store-5",
@@ -67,7 +71,8 @@
     "instagram": "@beretta_usa",
     "facebook": "1673327322695614",
     "lng": -73.9695,
-    "lat": 40.7662
+    "lat": 40.7662,
+    "adCopy": "Luxury sporting boutique from the historic Italian Beretta brand. Get the VIP Pass here for 15% off firearms and 20% off clothing and accessories."
   },
   {
     "id": "store-6",
@@ -81,7 +86,8 @@
     "instagram": "@bonpoint",
     "facebook": "Bonpoint",
     "lng": -73.9637,
-    "lat": 40.7742
+    "lat": 40.7742,
+    "adCopy": "French children’s fashion house known for luxury clothing and accessories. Get the VIP Pass here for a gift with purchase."
   },
   {
     "id": "store-7",
@@ -95,7 +101,8 @@
     "instagram": "@caminyc",
     "facebook": "mycaminyc",
     "lng": -73.952,
-    "lat": 40.7902
+    "lat": 40.7902,
+    "adCopy": "Contemporary fashion brand known for silk camisoles and wardrobe essentials. Get the VIP Pass here for a free gift with purchase up to $100 value."
   },
   {
     "id": "store-8",
@@ -109,7 +116,8 @@
     "instagram": "@camillawithlove",
     "facebook": "Camillawithlove",
     "lng": -73.9546,
-    "lat": 40.7867
+    "lat": 40.7867,
+    "adCopy": "Australian fashion label known for vibrant prints and resort wear. Get the VIP Pass here for 10% off full-price purchases."
   },
   {
     "id": "store-9",
@@ -158,7 +166,8 @@
     "instagram": "@collezionenewyork",
     "facebook": "collezionenewyork",
     "lng": -73.9644,
-    "lat": 40.7732
+    "lat": 40.7732,
+    "adCopy": "Luxury boutique specializing in rare and collectible wines and spirits. Get the VIP Pass here for 20% off full-price purchases."
   },
   {
     "id": "store-13",
@@ -172,7 +181,8 @@
     "instagram": "@davidwebbjewels",
     "facebook": "davidwebbjewels",
     "lng": -73.9593,
-    "lat": 40.7802
+    "lat": 40.7802,
+    "adCopy": "Iconic American jewelry house known for bold, handcrafted designs. Get the VIP Pass here for a gift with purchase."
   },
   {
     "id": "store-14",
@@ -186,7 +196,8 @@
     "instagram": "@drbarbarasturm",
     "facebook": "DrBarbaraSturm",
     "lng": -73.9557,
-    "lat": 40.7852
+    "lat": 40.7852,
+    "adCopy": "Luxury skincare brand known for science-based skincare. Get the VIP Pass here for $50 off the STURMGLOW™ facial + GWP on $350 spend."
   },
   {
     "id": "store-15",
@@ -200,7 +211,8 @@
     "instagram": "@farmrio",
     "facebook": "farmrioglobal",
     "lng": -73.9538,
-    "lat": 40.7878
+    "lat": 40.7878,
+    "adCopy": "Brazilian fashion brand known for colorful prints. Get the VIP Pass here for a complimentary scarf with $340+ purchase."
   },
   {
     "id": "store-16",
@@ -228,7 +240,8 @@
     "instagram": "@frankandeileen",
     "facebook": "FrankandEileen",
     "lng": -73.9669,
-    "lat": 40.7698
+    "lat": 40.7698,
+    "adCopy": "California-inspired fashion brand known for relaxed luxury shirts. Get the VIP Pass here for GWP."
   },
   {
     "id": "store-18",
@@ -242,7 +255,8 @@
     "instagram": "@generationloveclothing",
     "facebook": "generationloveclothing",
     "lng": -73.9574,
-    "lat": 40.7828
+    "lat": 40.7828,
+    "adCopy": "Women’s fashion brand blending contemporary style with European-inspired glamour. Get the VIP Pass here for GWP + 15% off for new clients."
   },
   {
     "id": "store-19",
@@ -269,7 +283,8 @@
     "instagram": "@granadobrazil",
     "facebook": "GranadoPharmacias1870",
     "lng": -73.9732,
-    "lat": 40.7612
+    "lat": 40.7612,
+    "adCopy": "Brazilian apothecary brand offering botanical beauty products. Get the VIP Pass here for 15% off all purchases."
   },
   {
     "id": "store-21",
@@ -283,7 +298,8 @@
     "instagram": "@jaded_jewels",
     "facebook": "Jaded Jewels",
     "lng": -73.9542,
-    "lat": 40.7872
+    "lat": 40.7872,
+    "adCopy": "Jewelry brand known for modern statement pieces. Get the VIP Pass here for 15% off select designers."
   },
   {
     "id": "store-22",
@@ -297,7 +313,8 @@
     "instagram": "@kimaraahnertmakeupstudio",
     "facebook": "KimaraAhnert",
     "lng": -73.9527,
-    "lat": 40.7892
+    "lat": 40.7892,
+    "adCopy": "Beauty boutique and makeup studio. Get the VIP Pass here for a $92 makeup application (regularly $140)."
   },
   {
     "id": "store-23",
@@ -311,7 +328,8 @@
     "instagram": "@klarabeautylab",
     "facebook": "KlaraBeautyLab",
     "lng": -73.9608,
-    "lat": 40.7808
+    "lat": 40.7808,
+    "adCopy": "Modern skincare studio specializing in advanced treatments. Get the VIP Pass here for the Lumi Glow facial at $400 (regularly $800)."
   },
   {
     "id": "store-24",
@@ -325,7 +343,8 @@
     "instagram": "@lalignenyc",
     "facebook": "LaLigneNyc",
     "lng": -73.9559,
-    "lat": 40.7848
+    "lat": 40.7848,
+    "adCopy": "Women’s fashion brand inspired by timeless French style. Get the VIP Pass here for 15% off your purchase."
   },
   {
     "id": "store-25",
@@ -339,7 +358,8 @@
     "instagram": "@lamaisonduchocolat",
     "facebook": "lamaisonduchocolat",
     "lng": -73.9549,
-    "lat": 40.7862
+    "lat": 40.7862,
+    "adCopy": "Luxury French chocolatier known for artisanal chocolates. Get the VIP Pass here for a complimentary 6-piece gift box with $80+ purchase."
   },
   {
     "id": "store-26",
@@ -367,7 +387,8 @@
     "instagram": "@marinabjewelry",
     "facebook": "marinabjewelry",
     "lng": -73.971,
-    "lat": 40.7642
+    "lat": 40.7642,
+    "adCopy": "Fine jewelry house known for Italian design. Get the VIP Pass here for GWP."
   },
   {
     "id": "store-28",
@@ -381,7 +402,8 @@
     "instagram": "@memor_museum",
     "facebook": "Memor Museum",
     "lng": -73.9513,
-    "lat": 40.7912
+    "lat": 40.7912,
+    "adCopy": "Art and cultural exhibition space. Get the VIP Pass here for complimentary admission for two + tour, gift, and 10% off merchandise."
   },
   {
     "id": "store-29",
@@ -395,7 +417,8 @@
     "instagram": "@nardosdesign",
     "facebook": "nardosdesign",
     "lng": -73.963,
-    "lat": 40.7752
+    "lat": 40.7752,
+    "adCopy": "Luxury fashion house specializing in couture and eveningwear. Get the VIP Pass here for private styling + GWP."
   },
   {
     "id": "store-30",
@@ -409,7 +432,8 @@
     "instagram": "@parfumsdemarly",
     "facebook": "parfumsdemarly",
     "lng": -73.9637,
-    "lat": 40.7742
+    "lat": 40.7742,
+    "adCopy": "Luxury fragrance house inspired by French perfumery. Get the VIP Pass here for a personalized consultation + deluxe 5ml fragrance with purchase."
   },
   {
     "id": "store-31",
@@ -437,7 +461,8 @@
     "instagram": "@paulmorellistudio",
     "facebook": "PaulMorelli.Designs",
     "lng": -73.9684,
-    "lat": 40.7678
+    "lat": 40.7678,
+    "adCopy": "Fine jewelry house known for modern craftsmanship. Get the VIP Pass here for 10% off $20,000+ purchases."
   },
   {
     "id": "store-33",
@@ -451,7 +476,8 @@
     "instagram": "@ramybrook",
     "facebook": "RamyBrook",
     "lng": -73.9545,
-    "lat": 40.7868
+    "lat": 40.7868,
+    "adCopy": "New York fashion brand known for feminine clothing. Get the VIP Pass here for wine, prosecco, and light refreshments."
   },
   {
     "id": "store-34",
@@ -465,7 +491,8 @@
     "instagram": "@rubinchapelle",
     "facebook": "RUBINCHAPELLE",
     "lng": -73.9574,
-    "lat": 40.7828
+    "lat": 40.7828,
+    "adCopy": "Fashion brand known for refined artisan clothing. Get the VIP Pass here for complimentary customization (value $350)."
   },
   {
     "id": "store-35",
@@ -479,7 +506,8 @@
     "instagram": "@stephenrusselljewelry",
     "facebook": "stephenrusselljewelry",
     "lng": -73.9571,
-    "lat": 40.7832
+    "lat": 40.7832,
+    "adCopy": "Luxury jewelry boutique specializing in rare vintage and estate jewelry. Get the VIP Pass here for 10% off."
   },
   {
     "id": "store-36",
@@ -493,7 +521,8 @@
     "instagram": "@susan_alexandra",
     "facebook": "susanalexandrajewelry",
     "lng": -73.953,
-    "lat": 40.7888
+    "lat": 40.7888,
+    "adCopy": "New York accessories brand known for colorful beaded bags. Get the VIP Pass here for 10% off + a complimentary Tiny Joy charm."
   },
   {
     "id": "store-37",
@@ -506,7 +535,8 @@
     "instagram": "@wellnessplusstudio",
     "facebook": "wellnessplusstudio",
     "lng": -73.9564,
-    "lat": 40.7842
+    "lat": 40.7842,
+    "adCopy": "Wellness center offering modern health treatments. Get the VIP Pass here for a complimentary assessment."
   },
   {
     "id": "store-38",
@@ -520,7 +550,8 @@
     "instagram": "@zitomerpharmacy",
     "facebook": "zitomer",
     "lng": -73.9571,
-    "lat": 40.7832
+    "lat": 40.7832,
+    "adCopy": "Upper East Side beauty and apothecary boutique. Get the VIP Pass here for 10% off."
   },
   {
     "id": "store-39",

@@ -2,9 +2,14 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import dotenv from "dotenv";
 import storesRouter from "./routes/stores.js";
 import mapboxRouter from "./routes/mapbox.js";
 import storeClickRouter from "./routes/storeClick.js";
+import adminRouter from "./routes/admin.js";
+
+dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
+dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /**
@@ -23,10 +28,12 @@ const PORT = process.env.PORT ?? 3000;
 app.set("trust proxy", 1);
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/stores", storesRouter);
 app.use("/api/mapbox", mapboxRouter);
 app.use("/api/store-click", storeClickRouter);
+app.use("/admin", adminRouter);
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true });

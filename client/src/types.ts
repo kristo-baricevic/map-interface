@@ -4,6 +4,8 @@ export interface Store {
   address: string;
   hours: string;
   deal: string;
+  /** Marketing copy shown in the side drawer. */
+  adCopy?: string;
   /** Local icon name from assets (e.g. "cafe" → /assets/icons/cafe.svg). Use this when using mapbox-assets. */
   icon?: string;
   /** URL to PNG/svg for the pindrop (used if icon is not set). */

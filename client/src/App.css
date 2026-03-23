@@ -573,6 +573,7 @@
 .store-tooltip-address,
 .store-tooltip-hours,
 .store-tooltip-deal,
+.store-tooltip-ad-copy,
 .store-tooltip-link {
   margin: 0.25rem 0;
   color: #444;
@@ -582,6 +583,10 @@
 .store-tooltip-deal {
   font-weight: 600;
   color: #982062;
+}
+
+.store-tooltip-ad-copy {
+  margin-top: 0.5rem;
 }
 
 .store-tooltip-social {
