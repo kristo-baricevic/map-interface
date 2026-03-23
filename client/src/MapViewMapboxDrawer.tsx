@@ -108,6 +108,7 @@ const CARNEGIE_HILL_CENTER = { lng: -73.95607, lat: 40.784726 };
 const INITIAL_ZOOM = 15;
 const MANHATTAN_GRID_BEARING = 29;
 const INITIAL_TOP_STORE_PADDING = 72;
+const E85TH_STREET_ANCHOR = { lng: -73.9593, lat: 40.7797 };
 const INITIAL_VIEW_STATE = {
   longitude: CARNEGIE_HILL_CENTER.lng,
   latitude: CARNEGIE_HILL_CENTER.lat,
@@ -423,15 +424,6 @@ export default function MapViewMapboxDrawer({
   const mapInstanceRef = useRef<MapboxMap | null>(null);
   const initialPositionedRef = useRef(false);
   const storesByMadison = useStoresByMadison(stores);
-  const topmostStore = useMemo(
-    () =>
-      stores.reduce<Store | null>(
-        (current, store) =>
-          !current || store.lat > current.lat ? store : current,
-        null,
-      ),
-    [stores],
-  );
 
   /** Unique icon + category entries for the legend (from stores that have iconUrl). */
   const legendEntries = useMemo((): { iconUrl: string; category: string }[] => {
@@ -519,10 +511,10 @@ export default function MapViewMapboxDrawer({
       }
     });
 
-    // On first load, shift viewport so the northern-most store sits near the top edge.
-    if (!initialPositionedRef.current && topmostStore) {
+    // On first load, anchor around E 85th Street near the top edge.
+    if (!initialPositionedRef.current) {
       const align = () => {
-        const point = map.project([topmostStore.lng, topmostStore.lat]);
+        const point = map.project([E85TH_STREET_ANCHOR.lng, E85TH_STREET_ANCHOR.lat]);
         const dy = INITIAL_TOP_STORE_PADDING - point.y;
         if (Number.isFinite(dy) && Math.abs(dy) > 1) {
           map.panBy([0, dy], { duration: 0 });
@@ -531,7 +523,7 @@ export default function MapViewMapboxDrawer({
       };
       map.once("idle", align);
     }
-  }, [topmostStore]);
+  }, []);
 
   return (
     <>
