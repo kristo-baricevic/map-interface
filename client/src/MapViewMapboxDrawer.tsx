@@ -523,7 +523,7 @@ export default function MapViewMapboxDrawer({
     if (!initialPositionedRef.current && topmostStore) {
       const align = () => {
         const point = map.project([topmostStore.lng, topmostStore.lat]);
-        const dy = point.y - INITIAL_TOP_STORE_PADDING;
+        const dy = INITIAL_TOP_STORE_PADDING - point.y;
         if (Number.isFinite(dy) && Math.abs(dy) > 1) {
           map.panBy([0, dy], { duration: 0 });
         }
