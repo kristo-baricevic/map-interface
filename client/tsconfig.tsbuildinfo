@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/mapview.tsx","./src/mapviewmapbox.tsx","./src/main.tsx","./src/types.ts","./src/vite-env.d.ts"],"version":"5.9.3"}
+{"root":["./src/app.tsx","./src/mapviewmapbox.tsx","./src/mapviewmapboxdrawer.tsx","./src/main.tsx","./src/trackstoreclick.ts","./src/types.ts","./src/vite-env.d.ts","./src/utils/staggerstores.ts"],"version":"5.9.3"}
