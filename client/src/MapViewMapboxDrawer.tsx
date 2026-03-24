@@ -126,6 +126,8 @@ const LOGO_MARKER_SIZE = 72;
 const LOGO_MARKER_PADDING = 4;
 /** Zoom at or above which all markers switch from icons to logos. */
 const LOGO_ZOOM_THRESHOLD = 15.3;
+const VIP_PASS_URL =
+  "https://www.92ny.org/support-92ny/m/madisonave?utm_source=qr_code&utm_medium=flyer&utm_campaign=madave&utm_content=madave";
 
 /** Drawer: stronger scale inside fixed slot (does not move copy). Exact `Store.name`. */
 const DRAWER_LOGO_SCALE_UP_STORE_NAMES = new Set<string>(["PAUL MORELLI"]);
@@ -135,6 +137,38 @@ function drawerLogoImgClassName(storeName: string): string {
     return "store-drawer-logo store-drawer-logo--scale-up";
   }
   return "store-drawer-logo";
+}
+
+function renderAdCopyWithVipLink(adCopy: string, store: Store) {
+  const vipPhraseRegex = /(Get the VIP Pass\s+)(HERE)(\b)/i;
+  const match = adCopy.match(vipPhraseRegex);
+  if (!match || match.index == null) return adCopy;
+
+  const before = adCopy.slice(0, match.index);
+  const phraseBeforeHere = match[1] ?? "";
+  const hereWord = match[2] ?? "HERE";
+  const afterBoundaryIndex =
+    match.index +
+    phraseBeforeHere.length +
+    hereWord.length +
+    (match[3]?.length ?? 0);
+  const after = adCopy.slice(afterBoundaryIndex);
+
+  return (
+    <>
+      {before}
+      {phraseBeforeHere}
+      <a
+        href={VIP_PASS_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => trackStoreClick(store, "drawer_vip")}
+      >
+        {hereWord}
+      </a>
+      {after}
+    </>
+  );
 }
 
 function CompassControl({
@@ -743,7 +777,10 @@ export default function MapViewMapboxDrawer({
                 <p className="store-tooltip-hours">{selectedStore.hours}</p>
                 {selectedStore.adCopy && (
                   <p className="store-tooltip-ad-copy">
-                    {selectedStore.adCopy}
+                    {renderAdCopyWithVipLink(
+                      selectedStore.adCopy,
+                      selectedStore,
+                    )}
                   </p>
                 )}
                 {(selectedStore.instagram ?? selectedStore.facebook) && (
@@ -783,19 +820,6 @@ export default function MapViewMapboxDrawer({
           )}
           {selectedStore && (
             <div className="store-drawer-footer">
-              <p className="store-drawer-vip">
-                Get your Spring Down Madison VIP Pass{" "}
-                <a
-                  href="https://www.92ny.org/support-92ny/m/madisonave?utm_source=qr_code&utm_medium=flyer&utm_campaign=madave&utm_content=madave"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => trackStoreClick(selectedStore, "drawer_vip")}
-                >
-                  here
-                </a>{" "}
-                to unlock exclusive experiences &amp; shopping incentives.
-                Proceeds support The 92nd Street Y, New York.
-              </p>
               <div className="store-drawer-nav">
                 <button
                   type="button"
