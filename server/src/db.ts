@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import type { Store } from './types.js';
@@ -9,4 +9,14 @@ const STORES_PATH = join(__dirname, 'data', 'stores.json');
 export function getStores(): Store[] {
   const raw = readFileSync(STORES_PATH, 'utf-8');
   return JSON.parse(raw) as Store[];
+}
+
+export function updateStoreCoords(id: string, lng: number, lat: number): Store | null {
+  const stores = getStores();
+  const store = stores.find((s) => s.id === id);
+  if (!store) return null;
+  store.lng = lng;
+  store.lat = lat;
+  writeFileSync(STORES_PATH, JSON.stringify(stores, null, 2) + '\n', 'utf-8');
+  return store;
 }

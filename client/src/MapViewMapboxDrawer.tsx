@@ -69,6 +69,8 @@ const ICON_URL_TO_CATEGORY: Record<string, string> = {
     "Bags & Accessories",
   "/assets/new-icons/Scissors-2--Streamline-Ultimate.svg": "Salon & Services",
   "/assets/new-icons/Glasses-Sun-Circle--Streamline-Ultimate.png": "Eyewear",
+  "/assets/new-icons/Restaurant-Fill--Streamline-Rounded-Fill-Streamline-Material-Free.svg":
+    "Restaurant",
 };
 
 const TABLER_ICONS = {
@@ -131,9 +133,6 @@ const DRAWER_LOGO_SCALE_UP_STORE_NAMES = new Set<string>(["PAUL MORELLI"]);
 function drawerLogoImgClassName(storeName: string): string {
   if (DRAWER_LOGO_SCALE_UP_STORE_NAMES.has(storeName)) {
     return "store-drawer-logo store-drawer-logo--scale-up";
-  }
-  if (storeName === "FRAME") {
-    return "store-drawer-logo store-drawer-logo--scale-up-frame";
   }
   return "store-drawer-logo";
 }
@@ -280,11 +279,13 @@ function StoreMarkerMapbox({
   onSelect,
   isSelected,
   showLogo,
+  editMode = false,
 }: {
   store: Store;
   onSelect: () => void;
   isSelected: boolean;
   showLogo: boolean;
+  editMode?: boolean;
 }) {
   const [useDefaultIcon, setUseDefaultIcon] = useState(false);
   const [iconUrlLoadFailed, setIconUrlLoadFailed] = useState(false);
@@ -304,100 +305,116 @@ function StoreMarkerMapbox({
   const padding = displayLogo ? LOGO_MARKER_PADDING : 0;
 
   return (
-    <button
-      type="button"
-      className="store-marker"
-      onClick={(e) => {
-        e.stopPropagation();
-        onSelect();
-      }}
-      aria-label={store.name}
-      style={{
-        border: isSelected ? "3px solid #0d6efd" : "none",
-        borderRadius: "50%",
-        padding,
-        width: size,
-        height: size,
-        boxSizing: "border-box",
-        overflow: "hidden",
-        backgroundColor: "#fff",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-        cursor: "pointer",
-        transition: "width 0.2s, height 0.2s, padding 0.2s",
-      }}
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      {displayLogo ? (
-        <img
-          src={store.logoUrl}
-          alt=""
-          onLoad={() => {
-            logoLoadedRef.current = true;
-          }}
-          onError={() => {
-            if (!logoLoadedRef.current) setLogoLoadFailed(true);
-          }}
-          style={{
-            display: "block",
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-          }}
-        />
-      ) : useIconImage ? (
-        <span
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: "100%",
-          }}
-        >
+      <button
+        type="button"
+        className="store-marker"
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelect();
+        }}
+        aria-label={store.name}
+        style={{
+          border: isSelected
+            ? "3px solid #0d6efd"
+            : editMode
+              ? "2px dashed #f59e0b"
+              : "none",
+          borderRadius: "50%",
+          padding,
+          width: size,
+          height: size,
+          boxSizing: "border-box",
+          overflow: "hidden",
+          backgroundColor: "#fff",
+          boxShadow: editMode
+            ? "0 0 0 2px rgba(245,158,11,0.3), 0 1px 3px rgba(0,0,0,0.2)"
+            : "0 1px 3px rgba(0,0,0,0.2)",
+          cursor: editMode ? "grab" : "pointer",
+          transition: "width 0.2s, height 0.2s, padding 0.2s",
+        }}
+      >
+        {displayLogo ? (
           <img
-            src={store.iconUrl}
+            src={store.logoUrl}
+            alt=""
+            onLoad={() => {
+              logoLoadedRef.current = true;
+            }}
+            onError={() => {
+              if (!logoLoadedRef.current) setLogoLoadFailed(true);
+            }}
+            style={{
+              display: "block",
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+            }}
+          />
+        ) : useIconImage ? (
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <img
+              src={store.iconUrl}
+              alt=""
+              style={{
+                display: "block",
+                width: ICON_INNER_SIZE,
+                height: ICON_INNER_SIZE,
+                objectFit: "contain",
+              }}
+              onError={() => setIconUrlLoadFailed(true)}
+            />
+          </span>
+        ) : TablerIcon ? (
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              height: "100%",
+              color: "#333",
+            }}
+          >
+            <TablerIcon size={ICON_INNER_SIZE} stroke={1.8} />
+          </span>
+        ) : (
+          <img
+            src={iconSrc}
             alt=""
             style={{
               display: "block",
-              width: ICON_INNER_SIZE,
-              height: ICON_INNER_SIZE,
+              width: "100%",
+              height: "100%",
               objectFit: "contain",
             }}
-            onError={() => setIconUrlLoadFailed(true)}
+            onError={() => setUseDefaultIcon(true)}
           />
-        </span>
-      ) : TablerIcon ? (
-        <span
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: "100%",
-            color: "#333",
-          }}
-        >
-          <TablerIcon size={ICON_INNER_SIZE} stroke={1.8} />
-        </span>
-      ) : (
-        <img
-          src={iconSrc}
-          alt=""
-          style={{
-            display: "block",
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-          }}
-          onError={() => setUseDefaultIcon(true)}
-        />
+        )}
+      </button>
+      {editMode && (
+        <span className="store-marker-edit-label">{store.name}</span>
       )}
-    </button>
+    </div>
   );
 }
 
 interface MapViewMapboxDrawerProps {
   mapboxToken: string;
   stores: Store[];
+  editMode?: boolean;
+  onEditModeToggle?: () => void;
+  onStoreMove?: (id: string, lng: number, lat: number) => void;
 }
 
 /** Stores ordered south to north along Madison (by lat, then lng). */
@@ -411,6 +428,9 @@ function useStoresByMadison(stores: Store[]): Store[] {
 export default function MapViewMapboxDrawer({
   mapboxToken,
   stores,
+  editMode = false,
+  onEditModeToggle,
+  onStoreMove,
 }: MapViewMapboxDrawerProps) {
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
   /** Last store selected (by click or nav); keeps that marker highlighted when drawer is closed. */
@@ -589,6 +609,21 @@ export default function MapViewMapboxDrawer({
           >
             Legend
           </button>
+          {/* {onEditModeToggle && (
+            <button
+              type="button"
+              className={`map-edit-btn${editMode ? " map-edit-btn--active" : ""}`}
+              onClick={onEditModeToggle}
+              aria-label={editMode ? "Exit edit mode" : "Enter edit mode"}
+            >
+              {editMode ? "Done Editing" : "Edit Pins"}
+            </button>
+          )}
+          {editMode && (
+            <div className="map-edit-banner">
+              Drag pins to reposition &middot; coordinates save automatically
+            </div>
+          )} */}
           {stores.map((store) => {
             const selected =
               (selectedStore ?? highlightedStore)?.id === store.id;
@@ -598,22 +633,34 @@ export default function MapViewMapboxDrawer({
                 longitude={store.lng}
                 latitude={store.lat}
                 anchor="bottom"
-                style={{ zIndex: selected ? 10 : 1 }}
+                draggable={editMode}
+                style={{
+                  zIndex: selected ? 10 : 1,
+                  cursor: editMode ? "grab" : "pointer",
+                }}
                 onClick={(e: { originalEvent?: Event }) =>
                   e.originalEvent?.stopPropagation()
                 }
+                onDragEnd={(e) => {
+                  if (editMode && onStoreMove && e.lngLat) {
+                    onStoreMove(store.id, e.lngLat.lng, e.lngLat.lat);
+                  }
+                }}
               >
                 <StoreMarkerMapbox
                   store={store}
                   isSelected={selected}
                   showLogo={zoomedIn || selectedStore?.id === store.id}
                   onSelect={() => {
-                    if (selectedStore?.id !== store.id)
-                      trackStoreClick(store, "map_marker");
-                    handleSelectStore(
-                      selectedStore?.id === store.id ? null : store,
-                    );
+                    if (!editMode) {
+                      if (selectedStore?.id !== store.id)
+                        trackStoreClick(store, "map_marker");
+                      handleSelectStore(
+                        selectedStore?.id === store.id ? null : store,
+                      );
+                    }
                   }}
+                  editMode={editMode}
                 />
               </Marker>
             );

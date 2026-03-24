@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import MapViewMapboxDrawer from "./MapViewMapboxDrawer";
 import type { Store } from "./types";
-import { staggerOverlappingStores } from "./utils/staggerStores";
 
 /** Load stores: try API first, then fall back to local /stores.json. */
 async function loadStores(): Promise<Store[]> {
@@ -34,11 +33,25 @@ async function loadMapboxToken(): Promise<string> {
   return "";
 }
 
+async function patchStoreCoords(id: string, lng: number, lat: number): Promise<boolean> {
+  try {
+    const res = await fetch(`/api/stores/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lng, lat }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 export default function App() {
   const [stores, setStores] = useState<Store[]>([]);
   const [mapboxToken, setMapboxToken] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -61,9 +74,14 @@ export default function App() {
     };
   }, []);
 
-  const displayStores = useMemo(
-    () => staggerOverlappingStores(stores),
-    [stores],
+  const handleStoreMove = useCallback(
+    (id: string, lng: number, lat: number) => {
+      setStores((prev) =>
+        prev.map((s) => (s.id === id ? { ...s, lng, lat } : s)),
+      );
+      patchStoreCoords(id, lng, lat);
+    },
+    [],
   );
 
   if (loading) {
@@ -104,7 +122,10 @@ export default function App() {
         {canUseMapbox && (
           <MapViewMapboxDrawer
             mapboxToken={mapboxToken}
-            stores={displayStores}
+            stores={stores}
+            editMode={editMode}
+            onEditModeToggle={() => setEditMode((v) => !v)}
+            onStoreMove={handleStoreMove}
           />
         )}
         {!canUseMapbox && (
