@@ -55,7 +55,7 @@ export default function App() {
   const [mapboxToken, setMapboxToken] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [editMode, setEditMode] = useState(false);
+  // const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -127,7 +127,7 @@ export default function App() {
           <MapViewMapboxDrawer
             mapboxToken={mapboxToken}
             stores={stores}
-            editMode={editMode}
+            // editMode={editMode}
             // onEditModeToggle={() => setEditMode((v) => !v)}
             onStoreMove={handleStoreMove}
           />

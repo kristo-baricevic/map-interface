@@ -10,8 +10,8 @@
     "logoUrl": "/assets/logos/ALC.png",
     "instagram": "@alc_ltd",
     "facebook": "ALCltd",
-    "lng": -73.9545,
-    "lat": 40.7868,
+    "lng": -73.962268,
+    "lat": 40.775825,
     "adCopy": "Women’s fashion brand known for polished staples & modern tailoring. Get the VIP Pass here for GWP + 15% off."
   },
   {
@@ -25,8 +25,8 @@
     "logoUrl": "/assets/logos/AlexisBittar.png",
     "instagram": "@alexisbittar",
     "facebook": "AlexisBittar",
-    "lng": -73.9552,
-    "lat": 40.7858,
+    "lng": -73.962796,
+    "lat": 40.775153,
     "adCopy": "Luxury jewelry brand known for bold, sculptural designs. Get the VIP Pass here for 20% off full-price, including antique styles."
   },
   {
@@ -40,8 +40,8 @@
     "logoUrl": "/assets/logos/AnneFontaine.png",
     "instagram": "@annefontaine",
     "facebook": "AnneFontaineInc",
-    "lng": -73.9691,
-    "lat": 40.7668,
+    "lng": -73.969152,
+    "lat": 40.766432,
     "adCopy": "Parisian fashion house known for elegant white shirts and refined womenswear. Get the VIP Pass here for GWP."
   },
   {
@@ -55,8 +55,8 @@
     "logoUrl": "/assets/logos/Baobab.png",
     "instagram": "@baobabcollection",
     "facebook": "BaobabCollection",
-    "lng": -73.9544,
-    "lat": 40.7869,
+    "lng": -73.962268,
+    "lat": 40.775825,
     "adCopy": "Luxury home fragrance brand known for decorative candles. Get the VIP Pass here for a special gift with purchase."
   },
   {
@@ -70,8 +70,8 @@
     "logoUrl": "/assets/logos/BerettaGallery.png",
     "instagram": "@beretta_usa",
     "facebook": "1673327322695614",
-    "lng": -73.9695,
-    "lat": 40.7662,
+    "lng": -73.969573,
+    "lat": 40.766457,
     "adCopy": "Luxury sporting boutique from the historic Italian Beretta brand. Get the VIP Pass here for 15% off firearms and 20% off clothing and accessories."
   },
   {
@@ -85,8 +85,8 @@
     "logoUrl": "/assets/logos/Bonpoint.png",
     "instagram": "@bonpoint",
     "facebook": "Bonpoint",
-    "lng": -73.9637,
-    "lat": 40.7742,
+    "lng": -73.967266,
+    "lat": 40.768897,
     "adCopy": "French children’s fashion house known for luxury clothing and accessories. Get the VIP Pass here for a gift with purchase."
   },
   {
@@ -100,8 +100,8 @@
     "logoUrl": "/assets/logos/Cami NYC Logo.png",
     "instagram": "@caminyc",
     "facebook": "mycaminyc",
-    "lng": -73.952,
-    "lat": 40.7902,
+    "lng": -73.959771,
+    "lat": 40.779155,
     "adCopy": "Contemporary fashion brand known for silk camisoles and wardrobe essentials. Get the VIP Pass here for a free gift with purchase up to $100 value."
   },
   {
@@ -115,44 +115,9 @@
     "logoUrl": "/assets/logos/Camilla.png",
     "instagram": "@camillawithlove",
     "facebook": "Camillawithlove",
-    "lng": -73.9546,
-    "lat": 40.7867,
+    "lng": -73.962268,
+    "lat": 40.775825,
     "adCopy": "Australian fashion label known for vibrant prints and resort wear. Get the VIP Pass here for 10% off full-price purchases."
-  },
-  {
-    "id": "store-9",
-    "name": "CAMILLA DIETZ BERGERON LTD.",
-    "address": "818 Madison Avenue, 4th Floor, New York, NY",
-    "hours": "By appointment",
-    "deal": "Private viewings available",
-    "iconTabler": "Diamond",
-    "iconUrl": "/assets/new-icons/Object-Diamond-Ring--Streamline-Nova (1).png",
-    "lng": -73.9622,
-    "lat": 40.7762
-  },
-  {
-    "id": "store-10",
-    "name": "CAROLINA HERRERA",
-    "address": "954 Madison Avenue, New York, NY",
-    "hours": "Mon–Sat 10am–6pm",
-    "deal": "Personal styling consultation",
-    "iconTabler": "Star",
-    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
-    "instagram": "@carolinaherrera",
-    "facebook": "CarolinaHerreraNY",
-    "lng": -73.9581,
-    "lat": 40.7818
-  },
-  {
-    "id": "store-11",
-    "name": "CH CAROLINA HERRERA",
-    "address": "802 Madison Avenue, New York, NY",
-    "hours": "Mon–Sat 10am–6pm",
-    "deal": "Gift with purchase",
-    "iconTabler": "Shirt",
-    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
-    "lng": -73.9632,
-    "lat": 40.7748
   },
   {
     "id": "store-12",
@@ -165,8 +130,8 @@
     "logoUrl": "/assets/logos/CollezioneNewYork.png",
     "instagram": "@collezionenewyork",
     "facebook": "collezionenewyork",
-    "lng": -73.9644,
-    "lat": 40.7732,
+    "lng": -73.96805,
+    "lat": 40.768452,
     "adCopy": "Luxury boutique specializing in rare and collectible wines and spirits. Get the VIP Pass here for 20% off full-price purchases."
   },
   {
@@ -180,8 +145,8 @@
     "logoUrl": "/assets/logos/David-Webb.png",
     "instagram": "@davidwebbjewels",
     "facebook": "davidwebbjewels",
-    "lng": -73.9593,
-    "lat": 40.7802,
+    "lng": -73.964412,
+    "lat": 40.773432,
     "adCopy": "Iconic American jewelry house known for bold, handcrafted designs. Get the VIP Pass here for a gift with purchase."
   },
   {
@@ -195,8 +160,8 @@
     "logoUrl": "/assets/logos/DrBarbaraSturm.png",
     "instagram": "@drbarbarasturm",
     "facebook": "DrBarbaraSturm",
-    "lng": -73.9557,
-    "lat": 40.7852,
+    "lng": -73.962963,
+    "lat": 40.775568,
     "adCopy": "Luxury skincare brand known for science-based skincare. Get the VIP Pass here for $50 off the STURMGLOW™ facial + GWP on $350 spend."
   },
   {
@@ -210,8 +175,8 @@
     "logoUrl": "/assets/logos/Farmrio.png",
     "instagram": "@farmrio",
     "facebook": "farmrioglobal",
-    "lng": -73.9538,
-    "lat": 40.7878,
+    "lng": -73.961358,
+    "lat": 40.777118,
     "adCopy": "Brazilian fashion brand known for colorful prints. Get the VIP Pass here for a complimentary scarf with $340+ purchase."
   },
   {
@@ -225,8 +190,9 @@
     "logoUrl": "/assets/logos/frame-log.png",
     "instagram": "@theofficialframe",
     "facebook": "FRAME",
-    "lng": -73.9603,
-    "lat": 40.7788
+    "lng": -73.965233,
+    "lat": 40.772386,
+    "adCopy": "20% off plus a tote bag as a gift with purchase, while supplies last."
   },
   {
     "id": "store-17",
@@ -239,8 +205,8 @@
     "logoUrl": "/assets/logos/Frank & Eileen.png",
     "instagram": "@frankandeileen",
     "facebook": "FrankandEileen",
-    "lng": -73.9669,
-    "lat": 40.7698,
+    "lng": -73.968595,
+    "lat": 40.767255,
     "adCopy": "California-inspired fashion brand known for relaxed luxury shirts. Get the VIP Pass here for GWP."
   },
   {
@@ -251,25 +217,12 @@
     "deal": "15% off new arrivals",
     "iconTabler": "Shirt",
     "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
-    "logoUrl": "/assets/logos/Generation Love Logo.png",
+    "logoUrl": "/assets/logos/Generation Love.png",
     "instagram": "@generationloveclothing",
     "facebook": "generationloveclothing",
-    "lng": -73.9574,
-    "lat": 40.7828,
+    "lng": -73.963659,
+    "lat": 40.77391,
     "adCopy": "Women’s fashion brand blending contemporary style with European-inspired glamour. Get the VIP Pass here for GWP + 15% off for new clients."
-  },
-  {
-    "id": "store-19",
-    "name": "GRAFF",
-    "address": "710 Madison Avenue, New York, NY",
-    "hours": "Mon–Sat 10am–6pm",
-    "deal": "Complimentary jewelry care",
-    "iconTabler": "Diamond",
-    "iconUrl": "/assets/new-icons/Object-Diamond-Ring--Streamline-Nova (1).png",
-    "instagram": "@graff",
-    "facebook": "graff",
-    "lng": -73.9703,
-    "lat": 40.7652
   },
   {
     "id": "store-20",
@@ -282,8 +235,8 @@
     "logoUrl": "/assets/logos/Granado.png",
     "instagram": "@granadobrazil",
     "facebook": "GranadoPharmacias1870",
-    "lng": -73.9732,
-    "lat": 40.7612,
+    "lng": -73.971681,
+    "lat": 40.762719,
     "adCopy": "Brazilian apothecary brand offering botanical beauty products. Get the VIP Pass here for 15% off all purchases."
   },
   {
@@ -297,8 +250,8 @@
     "logoUrl": "/assets/logos/Jaded.png",
     "instagram": "@jaded_jewels",
     "facebook": "Jaded Jewels",
-    "lng": -73.9542,
-    "lat": 40.7872,
+    "lng": -73.96185,
+    "lat": 40.77695,
     "adCopy": "Jewelry brand known for modern statement pieces. Get the VIP Pass here for 15% off select designers."
   },
   {
@@ -312,8 +265,8 @@
     "logoUrl": "/assets/logos/Kimara_Ahnert.png",
     "instagram": "@kimaraahnertmakeupstudio",
     "facebook": "KimaraAhnert",
-    "lng": -73.9527,
-    "lat": 40.7892,
+    "lng": -73.960161,
+    "lat": 40.77862,
     "adCopy": "Beauty boutique and makeup studio. Get the VIP Pass here for a $92 makeup application (regularly $140)."
   },
   {
@@ -327,8 +280,8 @@
     "logoUrl": "/assets/logos/klara beuaty lab logo.jpeg",
     "instagram": "@klarabeautylab",
     "facebook": "KlaraBeautyLab",
-    "lng": -73.9608,
-    "lat": 40.7808,
+    "lng": -73.962215,
+    "lat": 40.775253,
     "adCopy": "Modern skincare studio specializing in advanced treatments. Get the VIP Pass here for the Lumi Glow facial at $400 (regularly $800)."
   },
   {
@@ -342,8 +295,8 @@
     "logoUrl": "/assets/logos/LaLigne.png",
     "instagram": "@lalignenyc",
     "facebook": "LaLigneNyc",
-    "lng": -73.9559,
-    "lat": 40.7848,
+    "lng": -73.963047,
+    "lat": 40.775318,
     "adCopy": "Women’s fashion brand inspired by timeless French style. Get the VIP Pass here for 15% off your purchase."
   },
   {
@@ -357,23 +310,9 @@
     "logoUrl": "/assets/logos/LaMaisonduChocolat.png",
     "instagram": "@lamaisonduchocolat",
     "facebook": "lamaisonduchocolat",
-    "lng": -73.9549,
-    "lat": 40.7862,
+    "lng": -73.962625,
+    "lat": 40.77601,
     "adCopy": "Luxury French chocolatier known for artisanal chocolates. Get the VIP Pass here for a complimentary 6-piece gift box with $80+ purchase."
-  },
-  {
-    "id": "store-26",
-    "name": "MACKAGE",
-    "address": "791 Madison Avenue, New York, NY",
-    "hours": "Mon–Sat 10am–6pm, Sun 12pm–5pm",
-    "deal": "15% off outerwear",
-    "iconTabler": "Shirt",
-    "iconUrl": "/assets/new-icons/Blazer--Streamline-Ultimate.png",
-    "logoUrl": "/assets/logos/Mackage.png",
-    "instagram": "@mackage",
-    "facebook": "mackageofficial",
-    "lng": -73.9632,
-    "lat": 40.7748
   },
   {
     "id": "store-27",
@@ -386,8 +325,8 @@
     "logoUrl": "/assets/logos/Marina.png",
     "instagram": "@marinabjewelry",
     "facebook": "marinabjewelry",
-    "lng": -73.971,
-    "lat": 40.7642,
+    "lng": -73.970225,
+    "lat": 40.764852,
     "adCopy": "Fine jewelry house known for Italian design. Get the VIP Pass here for GWP."
   },
   {
@@ -401,8 +340,8 @@
     "logoUrl": "/assets/logos/Memor.png",
     "instagram": "@memor_museum",
     "facebook": "Memor Museum",
-    "lng": -73.9513,
-    "lat": 40.7912,
+    "lng": -73.959913,
+    "lat": 40.779721,
     "adCopy": "Art and cultural exhibition space. Get the VIP Pass here for complimentary admission for two + tour, gift, and 10% off merchandise."
   },
   {
@@ -416,8 +355,8 @@
     "logoUrl": "/assets/logos/Nardos.png",
     "instagram": "@nardosdesign",
     "facebook": "nardosdesign",
-    "lng": -73.963,
-    "lat": 40.7752,
+    "lng": -73.967211,
+    "lat": 40.768936,
     "adCopy": "Luxury fashion house specializing in couture and eveningwear. Get the VIP Pass here for private styling + GWP."
   },
   {
@@ -431,8 +370,8 @@
     "logoUrl": "/assets/logos/parfums-de-marly-rev-removebg-preview.png",
     "instagram": "@parfumsdemarly",
     "facebook": "parfumsdemarly",
-    "lng": -73.9637,
-    "lat": 40.7742,
+    "lng": -73.967761,
+    "lat": 40.768852,
     "adCopy": "Luxury fragrance house inspired by French perfumery. Get the VIP Pass here for a personalized consultation + deluxe 5ml fragrance with purchase."
   },
   {
@@ -446,8 +385,8 @@
     "logoUrl": "/assets/logos/Pasquale-Bruni-700x700-removebg-preview.png",
     "instagram": "@pasqualebruni",
     "facebook": "PasqualeBruniOfficial",
-    "lng": -73.9644,
-    "lat": 40.7732
+    "lng": -73.967675,
+    "lat": 40.76837
   },
   {
     "id": "store-32",
@@ -460,8 +399,8 @@
     "logoUrl": "/assets/logos/Paul Morelli.png",
     "instagram": "@paulmorellistudio",
     "facebook": "PaulMorelli.Designs",
-    "lng": -73.9684,
-    "lat": 40.7678,
+    "lng": -73.969128,
+    "lat": 40.766467,
     "adCopy": "Fine jewelry house known for modern craftsmanship. Get the VIP Pass here for 10% off $20,000+ purchases."
   },
   {
@@ -475,8 +414,8 @@
     "logoUrl": "/assets/logos/RamyBrook.png",
     "instagram": "@ramybrook",
     "facebook": "RamyBrook",
-    "lng": -73.9545,
-    "lat": 40.7868,
+    "lng": -73.962019,
+    "lat": 40.7768,
     "adCopy": "New York fashion brand known for feminine clothing. Get the VIP Pass here for wine, prosecco, and light refreshments."
   },
   {
@@ -490,8 +429,8 @@
     "logoUrl": "/assets/logos/RubinChapelle.png",
     "instagram": "@rubinchapelle",
     "facebook": "RUBINCHAPELLE",
-    "lng": -73.9574,
-    "lat": 40.7828,
+    "lng": -73.963721,
+    "lat": 40.774149,
     "adCopy": "Fashion brand known for refined artisan clothing. Get the VIP Pass here for complimentary customization (value $350)."
   },
   {
@@ -505,8 +444,8 @@
     "logoUrl": "/assets/logos/Stephen-Russel.png",
     "instagram": "@stephenrusselljewelry",
     "facebook": "stephenrusselljewelry",
-    "lng": -73.9571,
-    "lat": 40.7832,
+    "lng": -73.963762,
+    "lat": 40.774321,
     "adCopy": "Luxury jewelry boutique specializing in rare vintage and estate jewelry. Get the VIP Pass here for 10% off."
   },
   {
@@ -520,8 +459,8 @@
     "logoUrl": "/assets/logos/Susan Alexandra.png",
     "instagram": "@susan_alexandra",
     "facebook": "susanalexandrajewelry",
-    "lng": -73.953,
-    "lat": 40.7888,
+    "lng": -73.960973,
+    "lat": 40.778146,
     "adCopy": "New York accessories brand known for colorful beaded bags. Get the VIP Pass here for 10% off + a complimentary Tiny Joy charm."
   },
   {
@@ -534,8 +473,8 @@
     "logoUrl": "/assets/logos/Wellness_plus_studio.png",
     "instagram": "@wellnessplusstudio",
     "facebook": "wellnessplusstudio",
-    "lng": -73.9564,
-    "lat": 40.7842,
+    "lng": -73.963468,
+    "lat": 40.774748,
     "adCopy": "Wellness center offering modern health treatments. Get the VIP Pass here for a complimentary assessment."
   },
   {
@@ -549,8 +488,8 @@
     "logoUrl": "/assets/logos/Zitomer.png",
     "instagram": "@zitomerpharmacy",
     "facebook": "zitomer",
-    "lng": -73.9571,
-    "lat": 40.7832,
+    "lng": -73.963561,
+    "lat": 40.774092,
     "adCopy": "Upper East Side beauty and apothecary boutique. Get the VIP Pass here for 10% off."
   },
   {
@@ -563,8 +502,8 @@
     "logoUrl": "/assets/logos/Madison Avenue BID logo.png",
     "instagram": "@madisonavebid",
     "facebook": "madisonavebid",
-    "lng": -73.96994,
-    "lat": 40.76472
+    "lng": -73.969909,
+    "lat": 40.764778
   },
   {
     "id": "store-40",
@@ -576,7 +515,407 @@
     "logoUrl": "/assets/logos/92NY logo.png",
     "instagram": "@92ndstreety",
     "facebook": "92ndstreety",
-    "lng": -73.9527,
-    "lat": 40.783
+    "lng": -73.952696,
+    "lat": 40.783001
+  },
+  {
+    "id": "store-41",
+    "name": "ALICE + OLIVIA",
+    "address": "755 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "15% discount",
+    "adCopy": "Women’s fashion brand known for colorful, feminine clothing and statement pieces. Get the VIP Pass here for 15% off.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "logoUrl": "/assets/logos/Alice and Olivia.png",
+    "instagram": "@aliceandolivia",
+    "facebook": "aliceandolivia",
+    "lng": -73.968358,
+    "lat": 40.767473
+  },
+  {
+    "id": "store-42",
+    "name": "BAR ITALIA",
+    "address": "768 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 11am–10pm, Sun 11am–9pm",
+    "deal": "1 complimentary glass of Prosecco with the purchase of any entree.",
+    "adCopy": "Italian restaurant and café serving classic dishes in a relaxed trattoria setting. Get the VIP Pass here for a complimentary glass of Prosecco with any entrée.",
+    "iconTabler": "Pizza",
+    "iconUrl": "/assets/new-icons/Restaurant-Fill--Streamline-Rounded-Fill-Streamline-Material-Free.svg",
+    "logoUrl": "/assets/logos/Bar Italia .png",
+    "instagram": "@baritaliamadison",
+    "facebook": "baritaliamadison",
+    "lng": -73.968528,
+    "lat": 40.76792
+  },
+  {
+    "id": "store-43",
+    "name": "D. S. & DURGA",
+    "address": "1070 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Receive a complimentary 7.5ml of our best selling fragrance with any $225+ purchase.",
+    "adCopy": "Brooklyn fragrance house known for narrative-driven perfumes. Get the VIP Pass here for a complimentary 7.5ml fragrance with $225+ purchase.",
+    "iconTabler": "Gift",
+    "iconUrl": "/assets/new-icons/Perfume--Streamline-Solar-Ar.svg",
+    "logoUrl": "/assets/logos/DSDurga.png",
+    "instagram": "@dsanddurga",
+    "facebook": "dsandd",
+    "lng": -73.961494,
+    "lat": 40.777542
+  },
+  {
+    "id": "store-44",
+    "name": "DIPTYQUE",
+    "address": "971 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Partner Card holders are invited to visit Diptyque Madison Avenue and enjoy a personalized fragrance consultation with our team to discover the scents that best reflect their style and personality.",
+    "adCopy": "Luxury fragrance house known for candles, perfumes, and home scent. Get the VIP Pass here for a fragrance consultation + tote with samples on $200+ purchase.",
+    "iconTabler": "Gift",
+    "iconUrl": "/assets/new-icons/Perfume--Streamline-Solar-Ar.svg",
+    "logoUrl": "/assets/logos/Diptyque.png",
+    "instagram": "@diptyque",
+    "facebook": "diptyque",
+    "lng": -73.963455,
+    "lat": 40.774161
+  },
+  {
+    "id": "store-45",
+    "name": "DOEN",
+    "address": "1013 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Gift with purchase",
+    "adCopy": "Women’s fashion brand known for romantic, vintage-inspired clothing. Get the VIP Pass here for gift with purchase.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "logoUrl": "/assets/logos/Doen.png",
+    "instagram": "@shopdoen",
+    "facebook": "shopdoen",
+    "lng": -73.96237,
+    "lat": 40.77572
+  },
+  {
+    "id": "store-46",
+    "name": "EDITIONS DE PARFUMS FRÉDÉRIC MALLE",
+    "address": "1165 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Join us to discovery our scented creations created by some of the world's most notable perfumers. Complimentary sample and gift customizations available in store.",
+    "adCopy": "Prestigious fragrance house known for artistic perfumes. Get the VIP Pass here for a complimentary sample + in-store gift customization.",
+    "iconTabler": "Gift",
+    "iconUrl": "/assets/new-icons/Perfume--Streamline-Solar-Ar.svg",
+    "logoUrl": "/assets/logos/Editions de Parfums Frederic Malle.png",
+    "instagram": "@fredericmalle",
+    "facebook": "FredericMalle",
+    "lng": -73.95881,
+    "lat": 40.780524
+  },
+  {
+    "id": "store-47",
+    "name": "ETRO",
+    "address": "720 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "20% off on full price merchandise.",
+    "adCopy": "Italian luxury fashion brand known for rich fabrics and paisley prints. Get the VIP Pass here for 20% off full-price merchandise.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "logoUrl": "/assets/logos/ETRO.png",
+    "instagram": "@etro",
+    "facebook": "etro",
+    "lng": -73.969501,
+    "lat": 40.766536
+  },
+  {
+    "id": "store-48",
+    "name": "FRANCES VALENTINE",
+    "address": "922 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "We will be offering a store-wide 20% off discount for any Partner Card holders.",
+    "adCopy": "Fashion accessories and clothing brand known for colorful handbags, shoes, and playful design. Get the VIP Pass here for 20% off storewide.",
+    "iconTabler": "ShoppingBag",
+    "iconUrl": "/assets/new-icons/Handbag-Fill--Streamline-Remix-Fill.svg",
+    "logoUrl": "/assets/logos/FrancesValentine.png",
+    "instagram": "@francesvalentine",
+    "facebook": "francesvalentine",
+    "lng": -73.964962,
+    "lat": 40.772698
+  },
+  {
+    "id": "store-49",
+    "name": "GERARD DAREL",
+    "address": "1003 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Enjoy 15% Off during Spring Event (some exclusions will apply). GWP when purchasing 4 or more pieces.",
+    "adCopy": "French women's fashion brand. Get the VIP pass and enjoy 15% off (excluding coats, jackets, suede, leather, handbags & shoes). Receive an additional gift when purchasing four or more pieces.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "instagram": "@gerarddarel",
+    "facebook": "gerarddarel.officiel",
+    "lng": -73.962778,
+    "lat": 40.775166
+  },
+  {
+    "id": "store-50",
+    "name": "IPPOLITA",
+    "address": "721 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Gift with purchase",
+    "adCopy": "Italian fine jewelry brand known for handcrafted gold designs and organic silhouettes. Get the VIP Pass here for GWP.",
+    "iconTabler": "Diamond",
+    "iconUrl": "/assets/new-icons/Object-Diamond-Ring--Streamline-Nova (1).png",
+    "instagram": "@ippolita",
+    "facebook": "IppolitaJewelry",
+    "lng": -73.96907,
+    "lat": 40.766385
+  },
+  {
+    "id": "store-51",
+    "name": "KIRNA ZABÊTE",
+    "address": "943 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "10% off a one time purchase",
+    "adCopy": "Luxury fashion boutique featuring curated designer collections. Get the VIP Pass here for 10% off a one-time purchase.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "logoUrl": "/assets/logos/KirnaZabete_900x900_DIR-700x700-removebg-preview.png",
+    "instagram": "@kirnazabete",
+    "facebook": "KirnaZabete",
+    "lng": -73.96413,
+    "lat": 40.77334
+  },
+  {
+    "id": "store-52",
+    "name": "KWIAT | FRED LEIGHTON",
+    "address": "713 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Be among the first to experience the newly unveiled Kwiat | Fred Leighton flagship townhouse on Madison Avenue.",
+    "adCopy": "Jewelry houses known for exceptional diamonds and vintage jewels. Get the VIP Pass here for a private tour + GWP featuring a cozy blanket, ceramic candle and set of stemless glasses.",
+    "iconTabler": "Diamond",
+    "iconUrl": "/assets/new-icons/Object-Diamond-Ring--Streamline-Nova (1).png",
+    "logoUrl": "/assets/logos/kwiat.png",
+    "instagram": "@kwiat",
+    "facebook": "KwiatJewelry",
+    "lng": -73.969233,
+    "lat": 40.766136
+  },
+  {
+    "id": "store-53",
+    "name": "L'AGENCE",
+    "address": "956 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "10% off the entire purchase",
+    "adCopy": "Contemporary fashion brand known for sophisticated tailoring and elevated wardrobe staples. Get the VIP Pass here for 10% off your purchase.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "logoUrl": "/assets/logos/lagence-square-removebg-preview.png",
+    "instagram": "@lagencefashion",
+    "facebook": "lagencefashion",
+    "lng": -73.96409,
+    "lat": 40.773986
+  },
+  {
+    "id": "store-54",
+    "name": "L'OBJET",
+    "address": "950 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Please present your 92NY Partner Card during the duration of the event to receive 10% off your purchase.",
+    "adCopy": "Luxury design house creating artistic home objects. Get the VIP Pass here for 10% off your purchase.",
+    "iconTabler": "Gift",
+    "iconUrl": "/assets/new-icons/Candle--Streamline-Atlas.svg",
+    "logoUrl": "/assets/logos/L_Objet.png",
+    "instagram": "@lobjet",
+    "facebook": "lobjet",
+    "lng": -73.964281,
+    "lat": 40.773625
+  },
+  {
+    "id": "store-55",
+    "name": "LA GOULUE",
+    "address": "29 East 61st Street, New York, NY",
+    "hours": "Mon–Sat 11:30am–10pm, Sun 11:30am–9pm",
+    "deal": "1 complimentary glass of house champagne per person only with the purchase of 1 entree.",
+    "adCopy": "Classic French restaurant known for traditional bistro cuisine and elegant dining. Get the VIP Pass here for a complimentary glass of house champagne with entrée.",
+    "iconTabler": "Pizza",
+    "iconUrl": "/assets/new-icons/Restaurant-Fill--Streamline-Rounded-Fill-Streamline-Material-Free.svg",
+    "logoUrl": "/assets/logos/La Goulue.png",
+    "instagram": "@lagouluenewyork",
+    "facebook": "lagouluenewyork",
+    "lng": -73.969909,
+    "lat": 40.764778
+  },
+  {
+    "id": "store-56",
+    "name": "LA MAISON VALMONT",
+    "address": "35 East 76th Street, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Receive gift with purchase of $500 or more.",
+    "adCopy": "Luxury beauty boutique offering high-end Swiss skincare and fragrance. Get the VIP Pass here for GWP on $500+ purchase.",
+    "iconTabler": "Heart",
+    "iconUrl": "/assets/new-icons/Lipstick--Streamline-Core-Remix.svg",
+    "logoUrl": "/assets/logos/Valmont Spa.png",
+    "instagram": "@valmontcosmetics",
+    "lng": -73.963155,
+    "lat": 40.774378
+  },
+  {
+    "id": "store-57",
+    "name": "MARINA RINALDI",
+    "address": "815 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Marina Rinaldi Madison Avenue invites you to enjoy $200 off your purchase of $1,000 or more during Spring Down Madison.",
+    "adCopy": "Luxury Italian fashion house specializing in elegant clothing for curvy women. Get the VIP Pass here for $200 off $1,000+ purchase.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "logoUrl": "/assets/logos/MarinaRinaldi.png",
+    "instagram": "@marina.rinaldi",
+    "facebook": "marina.rinaldi",
+    "lng": -73.966965,
+    "lat": 40.769295
+  },
+  {
+    "id": "store-58",
+    "name": "MICHAEL'S LUXURY CONSIGNMENT",
+    "address": "1125 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Please enjoy 15% off your first purchase with Michael's Luxury Consignment as a valued member of Spring Down Madison.",
+    "adCopy": "Consignment boutique offering pre-owned designer fashion and accessories. Get the VIP Pass here for 15% off your first purchase.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "instagram": "@michaelsconsign",
+    "facebook": "michaelsconsign",
+    "lng": -73.95954,
+    "lat": 40.7796
+  },
+  {
+    "id": "store-59",
+    "name": "MORGENTHAL FREDERICS OPTICIANS",
+    "address": "680 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Enjoy $100 off your purchase and complimentary eyewear styling with expert optician care.",
+    "adCopy": "Luxury eyewear boutique known for handcrafted frames. Get the VIP Pass here for $100 off + complimentary styling.",
+    "iconTabler": "ShoppingBag",
+    "iconUrl": "/assets/new-icons/Glasses-Sun-Circle--Streamline-Ultimate.png",
+    "logoUrl": "/assets/logos/Morgenthal Frederics.png",
+    "instagram": "@morgenthalfrederics",
+    "facebook": "morgenthalfrederics",
+    "lng": -73.970487,
+    "lat": 40.765238
+  },
+  {
+    "id": "store-60",
+    "name": "MORGENTHAL FREDERICS OPTICIANS",
+    "address": "944 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Enjoy $100 off your purchase and complimentary eyewear styling with expert optician care.",
+    "adCopy": "Luxury eyewear boutique known for handcrafted frames. Get the VIP Pass here for $100 off + complimentary styling.",
+    "iconTabler": "ShoppingBag",
+    "iconUrl": "/assets/new-icons/Glasses-Sun-Circle--Streamline-Ultimate.png",
+    "logoUrl": "/assets/logos/Morgenthal Frederics.png",
+    "instagram": "@morgenthalfrederics",
+    "facebook": "morgenthalfrederics",
+    "lng": -73.964349,
+    "lat": 40.773522
+  },
+  {
+    "id": "store-61",
+    "name": "ONIA",
+    "address": "1069 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "GIFT WITH $450 PURCHASE",
+    "adCopy": "Fashion brand known for refined swimwear and resort-inspired clothing. Get the VIP Pass here for GWP on $450+ purchase.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "logoUrl": "/assets/logos/Onia.png",
+    "instagram": "@onia",
+    "facebook": "onia",
+    "lng": -73.961131,
+    "lat": 40.777429
+  },
+  {
+    "id": "store-62",
+    "name": "ROMAN K SALON",
+    "address": "1063 Madison Avenue, 2nd Floor, New York, NY",
+    "hours": "Tue–Sat 9am–7pm",
+    "deal": "Enjoy a complimentary hair treatment with any service, along with an exclusive 30% off all retail products.",
+    "adCopy": "Luxury hair salon offering styling services. Get the VIP Pass here for a complimentary treatment + 30% off retail.",
+    "iconTabler": "Scissors",
+    "iconUrl": "/assets/new-icons/Scissors-2--Streamline-Ultimate.svg",
+    "logoUrl": "/assets/logos/Roman K Salon.png",
+    "instagram": "@romanksalon",
+    "facebook": "romanksalon",
+    "lng": -73.96117,
+    "lat": 40.777267
+  },
+  {
+    "id": "store-63",
+    "name": "SEE EYEWEAR",
+    "address": "1100 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "50% off lenses",
+    "adCopy": "Eyewear brand offering fashion-forward prescription glasses and sunglasses. Get the VIP Pass here for 50% off lenses.",
+    "iconTabler": "ShoppingBag",
+    "iconUrl": "/assets/new-icons/Glasses-Sun-Circle--Streamline-Ultimate.png",
+    "logoUrl": "/assets/logos/See Eyewear.png",
+    "instagram": "@seeeyewear",
+    "facebook": "seeeyewear",
+    "lng": -73.960551,
+    "lat": 40.778773
+  },
+  {
+    "id": "store-64",
+    "name": "ST. JOHN",
+    "address": "750 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "20% off full price purchase",
+    "adCopy": "American fashion house known for elegant knitwear. Get the VIP Pass here for 20% off full-price purchases.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "logoUrl": "/assets/logos/st-john-removebg-preview.png",
+    "instagram": "@stjohn",
+    "facebook": "StJohnKnits",
+    "lng": -73.968976,
+    "lat": 40.76734
+  },
+  {
+    "id": "store-65",
+    "name": "ULLA JOHNSON",
+    "address": "849 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Gift with Purchase",
+    "adCopy": "Designer fashion brand known for artisanal fabrics and globally inspired womenswear. Get the VIP Pass here for GWP.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "logoUrl": "/assets/logos/ulla-johnson-square-removebg-preview.png",
+    "instagram": "@ullajohnson",
+    "facebook": "ullajohnson",
+    "lng": -73.966012,
+    "lat": 40.770743
+  },
+  {
+    "id": "store-66",
+    "name": "VALMONT SPA AT THE CARLYLE",
+    "address": "35 East 76th Street, 3rd Floor, New York, NY",
+    "hours": "Mon–Sat 9am–8pm",
+    "deal": "Complimentary Eye collagen upgrade with a 90 min facial booked at the spa.",
+    "adCopy": "Luxury spa offering advanced skincare treatments and wellness services. Get the VIP Pass here for a complimentary eye collagen upgrade with a 90-minute facial.",
+    "iconTabler": "Heart",
+    "iconUrl": "/assets/new-icons/Lipstick--Streamline-Core-Remix.svg",
+    "logoUrl": "/assets/logos/Valmont Spa.png",
+    "instagram": "@rosewoodthecarlyle",
+    "lng": -73.963155,
+    "lat": 40.774378
+  },
+  {
+    "id": "store-67",
+    "name": "ZADIG & VOLTAIRE FLAGSHIP",
+    "address": "845 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Please join us at Zadig and Voltaire for a glass of champagne and be styled by one of our top stylists as we unveil our stunning Spring–Summer 2026 Collection!",
+    "adCopy": "French fashion brand known for rock-inspired clothing. Get the VIP Pass here for champagne + in-store styling.",
+    "iconTabler": "ShoppingBag",
+    "iconUrl": "/assets/new-icons/Handbag-Fill--Streamline-Remix-Fill.svg",
+    "logoUrl": "/assets/logos/ZadigVoltaire.png",
+    "instagram": "@zadigvoltaire",
+    "facebook": "zadigvoltaire",
+    "lng": -73.966092,
+    "lat": 40.770619
   }
 ]
