@@ -33,7 +33,11 @@ async function loadMapboxToken(): Promise<string> {
   return "";
 }
 
-async function patchStoreCoords(id: string, lng: number, lat: number): Promise<boolean> {
+async function patchStoreCoords(
+  id: string,
+  lng: number,
+  lat: number,
+): Promise<boolean> {
   try {
     const res = await fetch(`/api/stores/${encodeURIComponent(id)}`, {
       method: "PATCH",
@@ -124,7 +128,7 @@ export default function App() {
             mapboxToken={mapboxToken}
             stores={stores}
             editMode={editMode}
-            onEditModeToggle={() => setEditMode((v) => !v)}
+            // onEditModeToggle={() => setEditMode((v) => !v)}
             onStoreMove={handleStoreMove}
           />
         )}

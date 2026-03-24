@@ -413,7 +413,7 @@ interface MapViewMapboxDrawerProps {
   mapboxToken: string;
   stores: Store[];
   editMode?: boolean;
-  onEditModeToggle?: () => void;
+  // onEditModeToggle?: () => void;
   onStoreMove?: (id: string, lng: number, lat: number) => void;
 }
 
@@ -429,7 +429,7 @@ export default function MapViewMapboxDrawer({
   mapboxToken,
   stores,
   editMode = false,
-  onEditModeToggle,
+  // onEditModeToggle,
   onStoreMove,
 }: MapViewMapboxDrawerProps) {
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
