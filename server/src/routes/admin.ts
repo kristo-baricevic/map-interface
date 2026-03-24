@@ -336,10 +336,21 @@ function renderTableHtml(
         <label for="store">Store</label>
         <select id="store" name="store">${storeOptions}</select>
       </div>
-      <button type="submit">Apply filters</button>
       ${filtersActive ? `<a href="${clearUrl}"><button type="button">Clear</button></a>` : ""}
       <a href="${downloadUrl}"><button type="button">Download CSV</button></a>
     </form>
+    <script>
+      (function () {
+        const form = document.querySelector(".controls");
+        if (!form) return;
+        const selects = form.querySelectorAll("select");
+        for (const select of selects) {
+          select.addEventListener("change", function () {
+            form.submit();
+          });
+        }
+      })();
+    </script>
     <div class="table-wrap">${content}</div>
   </body>
 </html>`;
