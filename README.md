@@ -10,7 +10,7 @@ Uses **MapLibre GL** with a free OSM-based style and **local assets** from your 
 
 - **Map**: Free [OSM Bright](https://openmaptiles.github.io/osm-bright-gl-style/) style, no API key.
 - **Icons**: SVGs in `client/public/assets/icons/` (cafe, shop, grocery, restaurant, etc.).
-- **Stores**: Loaded from `client/public/stores.json` (or from the API if it’s running).
+- **Stores**: Loaded from `GET /api/stores` (backed by `server/src/data/stores.json`).
 
 From the project root:
 
@@ -18,9 +18,9 @@ From the project root:
 cd client && npm install && npm run dev
 ```
 
-Open http://localhost:5173. No server or token required.
+Open http://localhost:5173. For stores (and Mapbox config) the API must be reachable—prefer `npm run dev` from the repo root, or run the server on port 3000 while using the Vite dev server.
 
-**Store data** in `client/public/stores.json` can use an `icon` field with a local asset name instead of `iconUrl`:
+**Store data** in `server/src/data/stores.json` can use an `icon` field with a local asset name instead of `iconUrl`:
 
 - `"icon": "cafe"` → uses `/assets/icons/cafe.svg`
 - Available names: `arrow`, `bicycle`, `building`, `bus`, `cafe`, `car`, `circle`, `circle-stroked`, `cross`, `diamond`, `grocery`, `heart`, `home`, `jewelry-store`, `parking`, `restaurant`, `rocket`, `shop`, `square`, `star`, `suitcase`, `triangle`.
@@ -36,7 +36,7 @@ npm run dev
 - API: http://localhost:3000  
 - Client: http://localhost:5173 (proxies `/api` to the server)
 
-If the API is up, the app loads stores from `GET /api/stores`; otherwise it falls back to `client/public/stores.json`.
+The app loads stores from `GET /api/stores` only; run the stack from the repo root so Vite proxies `/api` to the server.
 
 ## Using your mapbox-assets folder
 
@@ -50,7 +50,7 @@ Your `style.json` in mapbox-assets uses Mapbox-hosted basemaps and sprites, so i
 
 ## Store schema
 
-Each store (in `stores.json` or API) can have:
+Each store (in `server/src/data/stores.json`, served via the API) can have:
 
 - `id`, `name`, `address`, `hours`, `deal` (text, e.g. `"10% off one drink"`)
 - `lng`, `lat` (numbers)

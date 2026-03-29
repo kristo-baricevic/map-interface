@@ -49,6 +49,7 @@ import {
   DEFAULT_MARKER_ICON,
 } from "./types";
 import { trackStoreClick } from "./trackStoreClick";
+import { staggerOverlappingStores } from "./utils/staggerStores";
 
 /** Map icon URL (path) to display category for the legend. */
 const ICON_URL_TO_CATEGORY: Record<string, string> = {
@@ -140,24 +141,17 @@ function drawerLogoImgClassName(storeName: string): string {
 }
 
 function renderAdCopyWithVipLink(adCopy: string, store: Store) {
-  const vipPhraseRegex = /(Get the VIP Pass\s+)(HERE)(\b)/i;
-  const match = adCopy.match(vipPhraseRegex);
+  const hereRegex = /\bhere\b/i;
+  const match = adCopy.match(hereRegex);
   if (!match || match.index == null) return adCopy;
 
   const before = adCopy.slice(0, match.index);
-  const phraseBeforeHere = match[1] ?? "";
-  const hereWord = match[2] ?? "HERE";
-  const afterBoundaryIndex =
-    match.index +
-    phraseBeforeHere.length +
-    hereWord.length +
-    (match[3]?.length ?? 0);
-  const after = adCopy.slice(afterBoundaryIndex);
+  const hereWord = match[0];
+  const after = adCopy.slice(match.index + hereWord.length);
 
   return (
     <>
       {before}
-      {phraseBeforeHere}
       <a
         href={VIP_PASS_URL}
         target="_blank"
@@ -474,6 +468,19 @@ export default function MapViewMapboxDrawer({
   const zoomedIn = zoomLevel >= LOGO_ZOOM_THRESHOLD;
   const mapInstanceRef = useRef<MapboxMap | null>(null);
   const storesByMadison = useStoresByMadison(stores);
+  /** Map positions for markers: stagger overlaps along Madison; true coords in edit mode (for dragging). */
+  const displayCoordsById = useMemo(() => {
+    const m = new globalThis.Map<string, { lng: number; lat: number }>();
+    if (editMode) {
+      for (const s of stores) m.set(s.id, { lng: s.lng, lat: s.lat });
+      return m;
+    }
+    const staggered = staggerOverlappingStores(stores);
+    stores.forEach((s, i) => {
+      m.set(s.id, { lng: staggered[i]!.lng, lat: staggered[i]!.lat });
+    });
+    return m;
+  }, [stores, editMode]);
 
   /** Unique icon + category entries for the legend (from stores that have iconUrl). */
   const legendEntries = useMemo((): { iconUrl: string; category: string }[] => {
@@ -511,10 +518,13 @@ export default function MapViewMapboxDrawer({
     const container = map.getContainer();
     if (!container) return;
 
+    const coords = displayCoordsById.get(selectedStore.id);
+    if (!coords) return;
+
     const id = requestAnimationFrame(() => {
       const m = mapInstanceRef.current;
       if (!m) return;
-      const point = m.project([selectedStore.lng, selectedStore.lat]);
+      const point = m.project([coords.lng, coords.lat]);
       const w = container.clientWidth;
       const h = container.clientHeight;
       const pad = 80;
@@ -532,7 +542,7 @@ export default function MapViewMapboxDrawer({
       }
     });
     return () => cancelAnimationFrame(id);
-  }, [selectedStore]);
+  }, [selectedStore, displayCoordsById]);
 
   const handleMapClick = useCallback(() => {
     setSelectedStore(null);
@@ -652,20 +662,22 @@ export default function MapViewMapboxDrawer({
             >
               {editMode ? "Done Editing" : "Edit Pins"}
             </button>
-          )}
+          )} */}
           {editMode && (
             <div className="map-edit-banner">
               Drag pins to reposition &middot; coordinates save automatically
             </div>
-          )} */}
+          )}
           {stores.map((store) => {
+            const pos =
+              displayCoordsById.get(store.id) ?? { lng: store.lng, lat: store.lat };
             const selected =
               (selectedStore ?? highlightedStore)?.id === store.id;
             return (
               <Marker
                 key={store.id}
-                longitude={store.lng}
-                latitude={store.lat}
+                longitude={pos.lng}
+                latitude={pos.lat}
                 anchor="bottom"
                 draggable={editMode}
                 style={{

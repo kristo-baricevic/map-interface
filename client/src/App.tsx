@@ -2,21 +2,26 @@ import { useCallback, useEffect, useState } from "react";
 import MapViewMapboxDrawer from "./MapViewMapboxDrawer";
 import type { Store } from "./types";
 
-/** Load stores: try API first, then fall back to local /stores.json. */
+/** Load stores from the API (`server/src/data/stores.json`). */
 async function loadStores(): Promise<Store[]> {
+  let res: Response;
   try {
-    const res = await fetch("/api/stores");
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data)) return data;
-    }
+    res = await fetch("/api/stores");
   } catch {
-    // API not available; use local file
+    throw new Error(
+      "Could not reach the API. Run the dev server from the repo root (npm run dev) so /api is proxied.",
+    );
   }
-  const local = await fetch("/stores.json");
-  if (!local.ok) return [];
-  const data = await local.json();
-  return Array.isArray(data) ? data : [];
+  if (!res.ok) {
+    throw new Error(
+      `Failed to load stores (${res.status}). Ensure the API server is running.`,
+    );
+  }
+  const data = await res.json();
+  if (!Array.isArray(data)) {
+    throw new Error("Invalid stores response from API.");
+  }
+  return data;
 }
 
 /** Load Mapbox token from API (optional). */
@@ -108,20 +113,6 @@ export default function App() {
 
   return (
     <main className="app">
-      {/* <header className="app-header">
-        <div className="app-header-row">
-          <div className="app-header-left">
-            <img
-              src="https://www.92ny.org/getmedia/cc83767a-db0c-486a-abe5-54ef56da7c91/logo_1.svg"
-              alt="92nd Street Y"
-              className="app-header-logo"
-            />
-            <h1 className="app-title">Spring Down Madison</h1>
-          </div>
-        </div>
-        <p className="app-subtitle">Tap a pin to open the drawer</p>
-      </header> */}
-
       <div id="map-panel" className="app-map-panel">
         {canUseMapbox && (
           <MapViewMapboxDrawer
@@ -142,8 +133,8 @@ export default function App() {
         )}
         {stores.length === 0 && canUseMapbox && (
           <p className="app-no-stores-hint">
-            No stores loaded. Add data to <code>public/stores.json</code> or run
-            the API.
+            No stores loaded. Add entries to{" "}
+            <code>server/src/data/stores.json</code>.
           </p>
         )}
       </div>
