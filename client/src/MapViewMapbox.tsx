@@ -155,7 +155,7 @@ function StoreTooltipBody({ store }: { store: Store }) {
           )}
           {store.facebook && (
             <a
-              href={`https://www.facebook.com/${store.facebook}/`}
+              href={`https://www.facebook.com/${store.facebook}${store.facebook.startsWith("profile.php?") ? "" : "/"}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Facebook: ${store.facebook}`}

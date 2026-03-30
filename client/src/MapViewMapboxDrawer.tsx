@@ -815,7 +815,7 @@ export default function MapViewMapboxDrawer({
                     )}
                     {selectedStore.facebook && (
                       <a
-                        href={`https://www.facebook.com/${selectedStore.facebook}/`}
+                        href={`https://www.facebook.com/${selectedStore.facebook}${selectedStore.facebook.startsWith("profile.php?") ? "" : "/"}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`Facebook: ${selectedStore.facebook}`}
