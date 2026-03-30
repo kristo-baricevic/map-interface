@@ -669,8 +669,10 @@ export default function MapViewMapboxDrawer({
             </div>
           )}
           {stores.map((store) => {
-            const pos =
-              displayCoordsById.get(store.id) ?? { lng: store.lng, lat: store.lat };
+            const pos = displayCoordsById.get(store.id) ?? {
+              lng: store.lng,
+              lat: store.lat,
+            };
             const selected =
               (selectedStore ?? highlightedStore)?.id === store.id;
             return (
