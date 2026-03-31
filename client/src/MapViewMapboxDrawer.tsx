@@ -48,6 +48,7 @@ import {
   getStoreMarkerIconUrl,
   DEFAULT_MARKER_ICON,
 } from "./types";
+import { facebookDisplayLabel } from "./facebookDisplayLabel";
 import { trackStoreClick } from "./trackStoreClick";
 import { staggerOverlappingStores } from "./utils/staggerStores";
 
@@ -818,13 +819,13 @@ export default function MapViewMapboxDrawer({
                         href={`https://www.facebook.com/${selectedStore.facebook}${selectedStore.facebook.startsWith("profile.php?") ? "" : "/"}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label={`Facebook: ${selectedStore.facebook}`}
+                        aria-label={`Facebook: ${facebookDisplayLabel(selectedStore.facebook)}`}
                         onClick={() =>
                           trackStoreClick(selectedStore, "drawer_facebook")
                         }
                       >
                         <IconBrandFacebook size={20} stroke={1.5} />
-                        <span>{selectedStore.facebook}</span>
+                        <span>{facebookDisplayLabel(selectedStore.facebook)}</span>
                       </a>
                     )}
                   </p>

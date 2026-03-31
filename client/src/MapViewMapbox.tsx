@@ -48,6 +48,7 @@ import {
   getStoreMarkerIconUrl,
   DEFAULT_MARKER_ICON,
 } from "./types";
+import { facebookDisplayLabel } from "./facebookDisplayLabel";
 import { trackStoreClick } from "./trackStoreClick";
 
 /** Tabler icon name → component for map markers (accepts size, stroke). */
@@ -158,10 +159,10 @@ function StoreTooltipBody({ store }: { store: Store }) {
               href={`https://www.facebook.com/${store.facebook}${store.facebook.startsWith("profile.php?") ? "" : "/"}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Facebook: ${store.facebook}`}
+              aria-label={`Facebook: ${facebookDisplayLabel(store.facebook)}`}
             >
               <IconBrandFacebook size={20} stroke={1.5} />
-              <span>{store.facebook}</span>
+              <span>{facebookDisplayLabel(store.facebook)}</span>
             </a>
           )}
         </p>
