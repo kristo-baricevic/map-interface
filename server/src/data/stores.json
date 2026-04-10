@@ -417,7 +417,7 @@
     "facebook": "RamyBrook",
     "lng": -73.962019,
     "lat": 40.7768,
-    "adCopy": "New York designer brand known for luxurious silks, bold colors, and elegant silhouettes,. Usethe VIP Pass HERE for wine, prosecco, and light refreshments, and an exclusive tote as a gift with purchase."
+    "adCopy": "New York designer brand known for luxurious silks, bold colors, and elegant silhouettes. Use the VIP Pass HERE for 15% off plus wine, prosecco, and light refreshments, and an exclusive tote as a gift with purchase (while supplies last). The Pass can only be used in store."
   },
   {
     "id": "store-34",
@@ -540,7 +540,7 @@
     "address": "768 Madison Avenue, New York, NY",
     "hours": "Mon–Sat 11am–10pm, Sun 11am–9pm",
     "deal": "1 complimentary glass of Prosecco with the purchase of any entree.",
-    "adCopy": "Italian café serving classic dishes in a relaxed setting. Use the VIP Pass HERE for a complimentary glass of Prosecco with any entrée. The Pass can only be used in store.",
+    "adCopy": "Italian café serving classic dishes in a relaxed setting. Use the VIP Pass HERE for a complimentary glass of Prosecco with any entrée. Minimum of 21 years old. The Pass can only be used in store.",
     "iconTabler": "Pizza",
     "iconUrl": "/assets/new-icons/Restaurant-Fill--Streamline-Rounded-Fill-Streamline-Material-Free.svg",
     "logoUrl": "/assets/logos/Bar Italia .png",
@@ -630,7 +630,7 @@
     "address": "922 Madison Avenue, New York, NY",
     "hours": "Mon–Sat 10am–6pm",
     "deal": "We will be offering a store-wide 20% off discount for any Partner Card holders.",
-    "adCopy": "Fashion accessories and clothing brand known for colorful handbags, shoes, and playful design. Use the VIP Pass HERE for 20% off storewide.  The Pass can only be used in store; Alan Anderson Jewelry excluded from offer. Alan Anderson Jewelry excluded from 20% discount.",
+    "adCopy": "Fashion accessories and clothing brand known for colorful handbags, shoes, and playful design. Use the VIP Pass HERE for 20% off storewide.  The Pass can only be used in store; Alan Anderson Jewelry excluded from offer.",
     "iconTabler": "ShoppingBag",
     "iconUrl": "/assets/new-icons/Handbag-Fill--Streamline-Remix-Fill.svg",
     "logoUrl": "/assets/logos/FrancesValentine.png",
@@ -705,7 +705,7 @@
     "address": "956 Madison Avenue, New York, NY",
     "hours": "Mon–Sat 10am–6pm",
     "deal": "10% off the entire purchase",
-    "adCopy": "Contemporary fashion known for refined tailoring & elevated staples. Use the VIP Pass HERE for 10% off. The Pass can only be used in store.",
+    "adCopy": "Contemporary fashion known for refined tailoring & elevated staples. Use the VIP Pass HERE for 10% off. Cannot be combined with other offers. The Pass can only be used in store.",
     "iconTabler": "Shirt",
     "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
     "logoUrl": "/assets/logos/lagence-square-removebg-preview.png",
@@ -735,7 +735,7 @@
     "address": "29 East 61st Street, New York, NY",
     "hours": "Mon–Sat 11:30am–10pm, Sun 11:30am–9pm",
     "deal": "1 complimentary glass of house champagne per person only with the purchase of 1 entree.",
-    "adCopy": "Classic French restaurant. Use the VIP Pass HERE for a complimentary glass of champagne with entrée. The Pass can only be used in store.",
+    "adCopy": "Classic French restaurant. Use the VIP Pass HERE for a complimentary glass of champagne with entrée. Minimum of 21 years old. Card must be presented to employee prior to ordering. The Pass can only be used in store.",
     "iconTabler": "Pizza",
     "iconUrl": "/assets/new-icons/Restaurant-Fill--Streamline-Rounded-Fill-Streamline-Material-Free.svg",
     "logoUrl": "/assets/logos/La Goulue.png",
@@ -936,5 +936,35 @@
     "facebook": "WarrenTricomi",
     "lng": -73.9635619,
     "lat": 40.7740927
+  },
+  {
+    "id": "store-69",
+    "name": "LAFAYETTE 148",
+    "address": "853 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "15% off + a glass of champagne with VIP Pass",
+    "adCopy": "American luxury, defined by uncompromising quality, luxurious materials, and a modern New York sensibility. Use the VIP Pass HERE for 15% off + a glass of champagne. The Pass can only be used in store.",
+    "iconTabler": "ShoppingBag",
+    "iconUrl": "/assets/new-icons/Handbag-Fill--Streamline-Remix-Fill.svg",
+    "logoUrl": "/assets/logos/LAFAYETTE-LOGO-BLK.png",
+    "instagram": "@lafayette148ny",
+    "facebook": "lafayette148ny",
+    "lng": -73.9659772,
+    "lat": 40.77087
+  },
+  {
+    "id": "store-70",
+    "name": "TANYA TAYLOR",
+    "address": "980 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Special gift with purchase (VIP Pass, while supplies last)",
+    "adCopy": "New York based womenswear brand with a mission to create clothing that inspires confidence. Use the VIP Pass HERE for a special gift with any purchase while supplies last. The Pass can only be used in store.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "logoUrl": "/assets/logos/TanyaTaylor.png",
+    "instagram": "@shoptanyataylor",
+    "facebook": "tanyataylornyc",
+    "lng": -73.9634672,
+    "lat": 40.774745
   }
 ]
