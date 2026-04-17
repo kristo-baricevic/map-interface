@@ -966,5 +966,35 @@
     "facebook": "tanyataylornyc",
     "lng": -73.9634672,
     "lat": 40.774745
+  },
+  {
+    "id": "store-71",
+    "name": "SAUER",
+    "address": "800 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "Gift with purchase (VIP Pass)",
+    "adCopy": "Jewelry brand featuring signature Brazilian design, exceptional gemstones, and craftsmanship. Use the VIP Pass HERE for a gift with purchase. The Pass can only be used in store.",
+    "iconTabler": "Diamond",
+    "iconUrl": "/assets/new-icons/Object-Diamond-Ring--Streamline-Nova (1).png",
+    "logoUrl": "/assets/logos/SAUER.png",
+    "instagram": "@sauer",
+    "facebook": "sauer1941",
+    "lng": -73.967677,
+    "lat": 40.7688803
+  },
+  {
+    "id": "store-72",
+    "name": "VERONICA BEARD",
+    "address": "988 Madison Avenue, New York, NY",
+    "hours": "Mon–Sat 10am–6pm",
+    "deal": "10% off with VIP Pass",
+    "adCopy": "Fashion brand known for timeless essentials. Use the VIP Pass HERE for 10% off your purchase. The Pass can only be used in store.",
+    "iconTabler": "Shirt",
+    "iconUrl": "/assets/new-icons/Shirt--Streamline-Flex.svg",
+    "logoUrl": "/assets/logos/Veronica Beard.png",
+    "instagram": "@veronicabeard",
+    "facebook": "VeronicaBeardNY",
+    "lng": -73.9633117,
+    "lat": 40.7749563
   }
 ]
